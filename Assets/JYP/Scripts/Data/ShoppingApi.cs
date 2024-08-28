@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SellingItemFetcher
+public class ShoppingApi
 {
+    
     public List<SellingItem> GetAllSellingItems()
     {
         
@@ -28,4 +29,8 @@ public class SellingItemFetcher
         };
     }
 
+    public void BuyItem(string userId, SellingItem item)
+    {
+        
+    }
 }

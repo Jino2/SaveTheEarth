@@ -10,16 +10,32 @@ public class ShopUIController : MonoBehaviour
     private VisualTreeAsset sellingItemTemplate;
     
     public UIDocument uiDocument;
+
+    private Button closeButton;
     private void Start()
     {
         uiDocument = GetComponent<UIDocument>();
-        var sellingItemListController = new SellingItemListUIController();
-        sellingItemListController.InitList(uiDocument.rootVisualElement, sellingItemTemplate);
     }
 
-    private void OnEnable()
+    public void ShowShopUI()
     {
-        // var sellingItemListController = new SellingItemListUIController();
-        // sellingItemListController.InitList(uiDocument.rootVisualElement, sellingItemTemplate);
+        if (uiDocument.enabled) return;
+        uiDocument.enabled = true;
+        var sellingItemListController = new SellingItemListUIController();
+        closeButton = uiDocument.rootVisualElement.Q<Button>("closeButton");
+        closeButton.clicked += OnCloseButtonClicked;
+        sellingItemListController.InitList(uiDocument.rootVisualElement, sellingItemTemplate);
+    }
+    
+    private void OnCloseButtonClicked()
+    {
+        print("Close button clicked");
+        HideShopUI();
+    }
+    
+    void HideShopUI()
+    {
+        if (!uiDocument.enabled) return;
+        uiDocument.enabled = false;
     }
 }

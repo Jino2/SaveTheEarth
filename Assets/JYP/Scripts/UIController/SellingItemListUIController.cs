@@ -5,14 +5,14 @@ using UnityEngine.UIElements;
 
 public class SellingItemListUIController : MonoBehaviour
 {
-    private SellingItemFetcher sellingItemFetcher = new SellingItemFetcher();
+    private ShoppingApi shoppingApi = new ShoppingApi();
     
     private List<SellingItem> sellingItems;
     private ListView sellingListView;
     
     private void UpdateAllSellingItems()
     {
-        sellingItems = sellingItemFetcher.GetAllSellingItems();
+        sellingItems = shoppingApi.GetAllSellingItems();
     }
     
     public void InitList(VisualElement root, VisualTreeAsset itemTemplate)
