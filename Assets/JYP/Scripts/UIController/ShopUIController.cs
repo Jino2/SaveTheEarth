@@ -17,6 +17,14 @@ public class ShopUIController : MonoBehaviour
         uiDocument = GetComponent<UIDocument>();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            ShopApi.GetTest();
+        }
+    }
+
     public void ShowShopUI()
     {
         if (uiDocument.enabled) return;
