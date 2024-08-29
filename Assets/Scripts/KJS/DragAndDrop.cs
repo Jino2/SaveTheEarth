@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DraAndDrop : MonoBehaviour
+public class DragAndDrop : MonoBehaviour
 {
     public bool draggable;
     public float liftHeight = 0.5f; // 오브젝트가 올라가는 높이 조정 변수
@@ -10,16 +10,16 @@ public class DraAndDrop : MonoBehaviour
     public float scaleSpeed = 0.1f;
     public float minScale = 0.1f;
     public float maxScale = 3.0f;
+    public float moveSpeed = 5f; // 이동 속도 변수 추가
 
     private Rigidbody rb;
+    private Vector3 offset;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -29,32 +29,35 @@ public class DraAndDrop : MonoBehaviour
             if (hit.transform == transform)
             {
                 draggable = true;
-            }
-            if (rb != null)
-            {
-                rb.isKinematic = true;
+                offset = transform.position - GetMouseWorldPosition();
+                if (rb != null)
+                {
+                    rb.isKinematic = true;
+                }
             }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
             draggable = false;
-
-            if (rb != null)
+            var hits = Physics.RaycastAll(transform.position + Vector3.up, Vector3.down, 10f);
+            foreach (var hit in hits)
             {
-                rb.isKinematic = false; // 물리 시뮬레이션 재개
-                rb.velocity = Vector3.zero; // 속도 초기화
-                rb.angularVelocity = Vector3.zero; // 각속도 초기화
+                if (hit.collider.gameObject == transform.gameObject)
+                    continue;
+
+                // 현재 오브젝트의 메쉬의 높이 반을 계산하여 위치 조정
+                float objectHeight = GetComponent<Collider>().bounds.size.y;
+                transform.position = hit.point + Vector3.up * (objectHeight / 2);
+                break;
             }
         }
 
         if (draggable)
         {
-            Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
-
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
-
-            transform.position = new Vector3(worldPosition.x, liftHeight, worldPosition.z);
+            Vector3 mouseWorldPosition = GetMouseWorldPosition() + offset;
+            Vector3 targetPosition = new Vector3(mouseWorldPosition.x, liftHeight, mouseWorldPosition.z);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed * Time.deltaTime); // 이동 속도 적용
 
             // WASD 입력으로 오브젝트 회전
             float horizontal = Input.GetAxis("Horizontal"); // A, D 입력
@@ -102,5 +105,11 @@ public class DraAndDrop : MonoBehaviour
         Physics.Raycast(worldMousePosNear, worldMousePosFar - worldMousePosNear, out hit);
 
         return hit;
+    }
+
+    private Vector3 GetMouseWorldPosition()
+    {
+        Vector3 mouseScreenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
+        return Camera.main.ScreenToWorldPoint(mouseScreenPosition);
     }
 }

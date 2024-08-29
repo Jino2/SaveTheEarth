@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PanelProximityMover : MonoBehaviour
@@ -26,8 +28,8 @@ public class PanelProximityMover : MonoBehaviour
 
     private void Update()
     {
-        // 마우스가 패널의 RectTransform 영역 내에 있는지 확인
-        if (RectTransformUtility.RectangleContainsScreenPoint(targetPanel, Input.mousePosition, canvas.worldCamera))
+        // 마우스가 패널이나 그 자식의 RectTransform 영역 내에 있는지 확인
+        if (IsMouseOverPanelOrChildren())
         {
             if (!isMoved)
             {
@@ -40,7 +42,7 @@ public class PanelProximityMover : MonoBehaviour
         {
             if (isMoved)
             {
-                // 마우스가 패널 밖으로 나갔을 때 목표 위치를 원래 위치로 설정
+                // 마우스가 패널과 그 자식을 모두 벗어났을 때 목표 위치를 원래 위치로 설정
                 targetPosition = originalPosition;
                 isMoved = false;
             }
@@ -48,5 +50,25 @@ public class PanelProximityMover : MonoBehaviour
 
         // 패널을 목표 위치로 부드럽게 이동
         targetPanel.localPosition = Vector3.Lerp(targetPanel.localPosition, targetPosition, Time.deltaTime * moveSpeed);
+    }
+
+    private bool IsMouseOverPanelOrChildren()
+    {
+        // 마우스가 패널 또는 자식 오브젝트의 영역 내에 있는지 체크
+        if (RectTransformUtility.RectangleContainsScreenPoint(targetPanel, Input.mousePosition, canvas.worldCamera))
+        {
+            return true;
+        }
+
+        // 모든 자식 오브젝트를 검사
+        foreach (RectTransform child in targetPanel)
+        {
+            if (RectTransformUtility.RectangleContainsScreenPoint(child, Input.mousePosition, canvas.worldCamera))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
