@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,5 +21,14 @@ public class PlayerMove : PlayerStateBase
 
         cc.Move(dir * moveSpeed * Time.deltaTime);
 
+    }
+
+    void Jump()
+    {
+        // 스페이스바를 누르면 점프한다
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+
+        }
     }
 }
