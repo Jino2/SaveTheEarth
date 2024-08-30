@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - drag
+  - trash
+  - environment
   layers:
   - Default
   - TransparentFX
@@ -37,7 +38,7 @@ TagManager:
   - 
   - 
   - 
-  - Ground
+  - NPC
   m_SortingLayers:
   - name: Default
     uniqueID: 0
