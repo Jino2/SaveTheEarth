@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PhaseController : MonoBehaviour
 {
@@ -8,7 +9,9 @@ public class PhaseController : MonoBehaviour
     public int triggerScore = 100;
 
     // 현재 점수를 추적하는 변수입니다.
-    private int currentScore = 0;
+    public int currentScore = 0;
+
+    public event Action OnUpdateChildObjects;
 
     private void Start()
     {
@@ -42,7 +45,7 @@ public class PhaseController : MonoBehaviour
     }
 
     // 자식 오브젝트들의 상태를 변경하는 메서드입니다.
-    private void UpdateChildObjects()
+    public void UpdateChildObjects()
     {
         foreach (Transform child in transform)
         {
@@ -56,6 +59,7 @@ public class PhaseController : MonoBehaviour
                 // 'environment' 태그가 있는 오브젝트는 비활성화합니다.
                 child.gameObject.SetActive(true);
             }
+            OnUpdateChildObjects?.Invoke();
         }
     }
 }
