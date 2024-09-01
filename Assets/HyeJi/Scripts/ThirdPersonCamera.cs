@@ -1,52 +1,52 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
+    public float rotSpeed = 200f;
     public Transform player;
-    public Vector3 offset;
+    private CinemachineVirtualCamera virtualCamera;
+    private float mouseX;
+    private float mouseY;
 
-    public float rotSpeed = 300;
+    public float minDistance = 1.5f;
+    public float maxDistance = 4f;
+    public float currentDistance;
 
-    private Transform CameraArm;
+    public LayerMask collisionLayers;
 
-    // 플레이어 이동 입력 결과값 저장
-    private Vector3 moveInput;
 
-    // Start is called before the first frame update
     void Start()
     {
-        offset = transform.position - player.position;     
+        virtualCamera = GetComponent<CinemachineVirtualCamera>();
+
+        if( virtualCamera == null)
+        {
+            Debug.LogError("버츄얼카메라내놔");
+        }
+
+        currentDistance = maxDistance;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // 마우스의 입력 받기
-        moveInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
-        LookAround();
-
-        transform.position = player.position + offset;
-        transform.LookAt(player);
-    }
-
-    void LookAround()
-    {
-        Vector3 mouseDelta = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        Vector3 camAngle = CameraArm.rotation.eulerAngles;
-
-        float x = camAngle.x - mouseDelta.y;
-        if( x < 180f)
+        if(player == null)
         {
-            x = Mathf.Clamp(x, -1f, 45f);
-        }
-        else
-        {
-            x = Mathf.Clamp(x, 320f, 361f);
+            return;
         }
 
-        CameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
+        mouseX += Input.GetAxis("Mouse X") * rotSpeed * Time.deltaTime;
+        mouseY -= Input.GetAxis("Mouse Y") * rotSpeed * Time.deltaTime;
+        // 카메라 상하 각도 제한
+        mouseY = Mathf.Clamp(mouseY, -35, 60);
+
+        // RayCasting
+
+
+
+        virtualCamera.transform.position = player.position;
+        virtualCamera.transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
     }
 }
