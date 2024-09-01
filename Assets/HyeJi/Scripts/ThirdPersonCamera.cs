@@ -15,7 +15,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public float maxDistance = 4f;
     public float currentDistance;
 
-    public LayerMask collisionLayers;
+    //public LayerMask collisionLayers;
 
 
     void Start()
@@ -43,8 +43,6 @@ public class ThirdPersonCamera : MonoBehaviour
         mouseY = Mathf.Clamp(mouseY, -35, 60);
 
         // RayCasting
-
-
 
         virtualCamera.transform.position = player.position;
         virtualCamera.transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
