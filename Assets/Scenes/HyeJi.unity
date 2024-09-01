@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 56309737}
   - component: {fileID: 56309736}
   - component: {fileID: 56309738}
+  - component: {fileID: 56309739}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -225,6 +226,31 @@ MonoBehaviour:
   m_Damping: 0
   m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 0
+--- !u!114 &56309739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56309735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2153cdcea3b9d2f43a7bda8fb12cc104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nearOffset: {x: 0, y: 0, z: 0}
+  farOffset: {x: 0, y: 0, z: 0}
+  distance: 5
+  rotSpeed: 300
+  useRotY: 0
+  useRotX: 1
+  player: {fileID: 1171178483}
+  xSpeed: 120
+  ySpeed: 120
+  yminLimit: -20
+  ymaxLimit: 80
+  x: 0
+  y: 0
 --- !u!1 &203844586
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,7 +1748,6 @@ GameObject:
   - component: {fileID: 1171178484}
   - component: {fileID: 1171178485}
   - component: {fileID: 1171178486}
-  - component: {fileID: 1171178487}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1876,24 +1901,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1171178487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1171178479}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2153cdcea3b9d2f43a7bda8fb12cc104, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nearOffset: {x: 0, y: 0, z: 0}
-  farOffset: {x: 0, y: 0, z: 0}
-  distance: 5
-  rotSpeed: 300
-  useRotY: 1
-  useRotX: 0
 --- !u!1 &1332170795
 GameObject:
   m_ObjectHideFlags: 0
