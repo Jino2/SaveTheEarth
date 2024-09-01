@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
     public float xSpeed = 120f;
     public float ySpeed = 120f;
     public float yminLimit = -20f;
-    public float xminLimit = 80f;
+    public float ymaxLimit = 80f;
 
     public float x = 0f;
     public float y = 0f;
@@ -49,19 +49,33 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        // 마우스 움직임 값 받아오기
-        float mx = Input.GetAxis("Mouse X");
-        float my = Input.GetAxis("Mouse Y");
+        if(player)
+        {
+            x += Input.GetAxis("Mouse X") * xSpeed * Time.deltaTime;
+            y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
 
-        // 회전 각도를 누적
-        if (useRotY) rotY += mx * rotSpeed * Time.deltaTime;
-        if (useRotX) rotX += my * rotSpeed * Time.deltaTime;
+            y = ClampAngle(y, yminLimit, ymaxLimit);
 
-        rotX = Mathf.Clamp(rotX, -30, 30);
-        rotY = Mathf.Clamp(rotY, -180, 180);
+            Quaternion rotation = Quaternion.Euler(y, x, 0);
+            Vector3 position = rotation * new Vector3(0, 0, -distance) + player.position;
 
-        transform.rotation = Quaternion.Euler(rotX, rotY, 0);
-        transform.localEulerAngles = new Vector3(-rotX, rotY, 0);
+            transform.rotation = rotation;
+            transform.position = position;
+        }
+
+        //// 마우스 움직임 값 받아오기
+        //float mx = Input.GetAxis("Mouse X");
+        //float my = Input.GetAxis("Mouse Y");
+
+        //// 회전 각도를 누적
+        //if (useRotY) rotY += mx * rotSpeed * Time.deltaTime;
+        //if (useRotX) rotX += my * rotSpeed * Time.deltaTime;
+
+        //rotX = Mathf.Clamp(rotX, -30, 30);
+        //rotY = Mathf.Clamp(rotY, -180, 180);
+
+        //transform.rotation = Quaternion.Euler(rotX, rotY, 0);
+        //transform.localEulerAngles = new Vector3(-rotX, rotY, 0);
 
     }
 
