@@ -32,7 +32,7 @@ public class PhaseController : MonoBehaviour
     private void Update()
     {
         // 마우스 클릭을 감지하고 점수를 증가시킵니다.
-        if (Input.GetMouseButtonDown(0)) // 0은 왼쪽 마우스 버튼을 의미합니다.
+        if (Input.GetKeyDown(KeyCode.Alpha1)) // 0은 왼쪽 마우스 버튼을 의미합니다.
         {
             currentScore += 1;
         }

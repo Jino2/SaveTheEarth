@@ -18,7 +18,7 @@ public class ScoreManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             score++;
             UpdateScoreText();
