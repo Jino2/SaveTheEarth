@@ -6,30 +6,19 @@ using UnityEngine.UIElements;
 public class DragAndDrop : MonoBehaviour
 {
     public bool draggable;
-    //public float liftHeight = 0.5f; // 오브젝트가 올라가는 높이 조정 
-    public float rotationAngle = 90f; // 한 번에 회전할 각도
+    public float rotationAngle = 90f;
     public float rotationSpeed = 5f;
     public float scaleSpeed = 0.1f;
     public float minScale = 0.1f;
     public float maxScale = 3.0f;
 
     private Quaternion targetRotation;
-
-    //private Rigidbody rb;
-    //private Vector3 offset;
-    //private Vector3 collisionNormal; // 충돌 방향을 저장할 변수
-    //private bool hasCollision = false; // 충돌 여부를 체크할 변수
+    private float initialY;  // 오브젝트의 초기 Y 값 저장
 
     void Start()
     {
         targetRotation = transform.rotation; // 초기 회전값 설정
-        //rb = GetComponent<Rigidbody>();
-
-        //// 만약 Collider가 없다면 추가
-        //if (GetComponent<Collider>() == null)
-        //{
-        //    gameObject.AddComponent<BoxCollider>();
-        //}
+        initialY = transform.position.y; // 초기 Y 값 저장
     }
 
     void Update()
@@ -41,71 +30,22 @@ public class DragAndDrop : MonoBehaviour
             if (hit.transform == transform)
             {
                 draggable = true;
-
-                //if (objectCollider != null)
-                //{
-                //    objectCollider.enabled = false;
-                //}
-                //offset = transform.position - GetMouseWorldPosition();
-                //if (rb != null)
-                //{
-                //    rb.isKinematic = true;
-                //}
-                //hasCollision = false; // 드래그 시작 시 충돌 상태 초기화
             }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
             draggable = false;
-            //if (rb != null)
-            //{
-            //    rb.isKinematic = false;
-            //    rb.velocity = Vector3.zero; // 속도 초기화
-            //    rb.angularVelocity = Vector3.zero; // 각속도 초기화
-            //}
-
-            //var hits = Physics.RaycastAll(transform.position + Vector3.up, Vector3.down, 10f);
-            //foreach (var hit in hits)
-            //{
-            //    if (hit.collider.gameObject == transform.gameObject)
-            //        continue;
-
-            //    float objectHeight = GetComponent<Collider>().bounds.size.y;
-            //    transform.position = hit.point + Vector3.up * (objectHeight / 2);
-            //    break;
-            //}
-            //if (objectcollider != null)
-            //{
-            //    objectcollider.enabled = true;
-            //}
         }
 
         if (draggable)
         {
             Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
-
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
 
-            transform.position = new Vector3(worldPosition.x, 0.5f, worldPosition.z);
-            //Vector3 mouseWorldPosition = GetMouseWorldPosition() + offset;
-            //Vector3 targetPosition = new Vector3(mouseWorldPosition.x, mouseWorldPosition.z); // 초기 높이에 liftHeight 추가
-
-            //// 충돌 상태라면 충돌 방향으로의 이동을 막음
-            //if (hasCollision)
-            //{
-            //    Vector3 directionToMove = targetPosition - transform.position;
-            //    float dotProduct = Vector3.Dot(directionToMove.normalized, collisionNormal);
-
-            //    // dotProduct가 양수라면, 충돌 방향으로 이동하려는 것을 의미
-            //    if (dotProduct > 0)
-            //    {
-            //        directionToMove -= collisionNormal * dotProduct * directionToMove.magnitude;
-            //        targetPosition = transform.position + directionToMove;
-            //    }
-            //}
-
-            //transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed * Time.deltaTime); // 이동 속도 적용
+            // Y 값을 스케일에 따라 증가시키되, 초기 Y 값에 0.5가 더해지지 않도록 수정
+            float newY = initialY + (transform.localScale.y - 1f) / 2;
+            transform.position = new Vector3(worldPosition.x, newY, worldPosition.z);
 
             if (Input.GetKeyDown(KeyCode.A))
             {
@@ -115,16 +55,6 @@ public class DragAndDrop : MonoBehaviour
             {
                 targetRotation *= Quaternion.Euler(0, rotationAngle, 0);
             }
-
-            //// W, S 입력으로 앞뒤 회전 (X축 회전)
-            //if (Input.GetKeyDown(KeyCode.W))
-            //{
-            //    targetRotation *= Quaternion.Euler(-rotationAngle, 0, 0);
-            //}
-            //if (Input.GetKeyDown(KeyCode.S))
-            //{
-            //    targetRotation *= Quaternion.Euler(rotationAngle, 0, 0);
-            //}
 
             transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
 
@@ -136,6 +66,10 @@ public class DragAndDrop : MonoBehaviour
                 newScale.y = Mathf.Clamp(newScale.y, minScale, maxScale);
                 newScale.z = Mathf.Clamp(newScale.z, minScale, maxScale);
                 transform.localScale = newScale;
+
+                // 스케일에 따라 Y 값을 증가시키되, 초기 Y 값에 0.5가 더해지지 않도록 수정
+                newY = initialY + (transform.localScale.y - 1f) / 2;
+                transform.position = new Vector3(transform.position.x, newY, transform.position.z);
             }
         }
     }
@@ -161,29 +95,4 @@ public class DragAndDrop : MonoBehaviour
 
         return hit;
     }
-    //private Vector3 GetMouseWorldPosition()
-    //{
-    //    Vector3 mouseScreenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
-    //    return Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-    //}
-
-    //// 드래그 중 충돌을 감지하는 메서드
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (draggable)
-    //    {
-    //        hasCollision = true;
-    //        collisionNormal = other.ClosestPoint(transform.position) - transform.position;
-    //        collisionNormal = collisionNormal.normalized;
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (draggable)
-    //    {
-    //        hasCollision = false;
-    //        collisionNormal = Vector3.zero;
-    //    }
-    //}
 }
