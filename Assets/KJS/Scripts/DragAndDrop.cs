@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,8 +12,6 @@ public class DragAndDrop : MonoBehaviour
     public float scaleSpeed = 0.1f;
     public float minScale = 0.1f;
     public float maxScale = 3.0f;
-    public Vector3 firstScale;
-    public Vector3 firstPosition;
 
     private Quaternion targetRotation;
 
@@ -25,8 +22,6 @@ public class DragAndDrop : MonoBehaviour
 
     void Start()
     {
-        firstScale = transform.localScale;
-        firstPosition = transform.position;
         targetRotation = transform.rotation; // 초기 회전값 설정
         //rb = GetComponent<Rigidbody>();
 
@@ -140,29 +135,10 @@ public class DragAndDrop : MonoBehaviour
                 newScale.x = Mathf.Clamp(newScale.x, minScale, maxScale);
                 newScale.y = Mathf.Clamp(newScale.y, minScale, maxScale);
                 newScale.z = Mathf.Clamp(newScale.z, minScale, maxScale);
-
-                AdjustPivot(newScale);
                 transform.localScale = newScale;
             }
         }
     }
-    void AdjustPivot(Vector3 newScale)
-    {
-        float heightDifference = newScale.y - firstScale.y;
-
-        // 피벗 조정 전에 현재 오브젝트 위치를 저장
-        Vector3 originalPosition = transform.position;
-
-        // 스케일 적용
-        transform.localScale = newScale;
-
-        // y 축에 대한 피벗 이동 계산
-        Vector3 pivotOffset = new Vector3(0, heightDifference / 2, 0);
-
-        // 피벗이 중앙이 아닌 하단 중심에 위치하도록 조정
-        transform.position = originalPosition + pivotOffset;
-    }
-
 
     private RaycastHit CastRay()
     {
