@@ -3,7 +3,7 @@
         <ui:VisualElement name="Header" style="flex-grow: 0; height: 50px; flex-direction: row-reverse;">
             <ui:Button text="닫기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="closeButton" style="width: 40px; height: 40px;" />
         </ui:VisualElement>
-        <ui:ScrollView mode="Horizontal" name="ChallengeListScrollView" style="flex-grow: 1; background-color: rgb(255, 255, 255);" />
+        <ui:ScrollView mode="Horizontal" name="ChallengeScrollView" style="flex-grow: 1; background-color: rgb(255, 255, 255);" />
         <ui:VisualElement name="Footer" style="flex-grow: 0; flex-direction: row; height: 50px;">
             <ui:Label tabindex="-1" text="재화 명칭 들어갈 곳" parse-escape-sequences="true" display-tooltip-when-elided="true" name="pointHeaderLabel" />
             <ui:Label tabindex="-1" text="100 point" parse-escape-sequences="true" display-tooltip-when-elided="true" name="point" />

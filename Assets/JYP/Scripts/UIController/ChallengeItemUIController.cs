@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SubsystemsImplementation;
 using UnityEngine.UIElements;
 
-public class ChallengeItemUIController : MonoBehaviour
+public class ChallengeItemUIController
 {
     private Label challengeNameLabel;
     private VisualElement challengeImage;

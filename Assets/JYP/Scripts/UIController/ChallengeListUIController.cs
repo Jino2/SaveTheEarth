@@ -13,7 +13,7 @@ public class ChallengeListUIController
 
     public void InitList(VisualElement root, VisualTreeAsset itemTemplate)
     {
-        challengeScrollView = root.Q<ScrollView>("ChallengeListScrollView");
+        challengeScrollView = root.Q<ScrollView>("ChallengeScrollView");
 
         
         challengeApi.GetChallengeListByUserId(userId, (list) =>
@@ -23,19 +23,21 @@ public class ChallengeListUIController
             challengeInfos = list;
             challengeScrollView.Clear();
             AddItems(challengeInfos, itemTemplate);
+            // challengeScrollView.
         });
     }
 
     private void AddItems(List<ChallengeInfo> challengeInfos, VisualTreeAsset itemTemplate)
     {
-        for (int i = 0; i < challengeInfos.Count; i++)
+        for (int i = 0; i < challengeInfos.Count*2; i++)
         {
             var newListEntry = itemTemplate.Instantiate();
             var sellingItemUIController = new ChallengeItemUIController();
             newListEntry.userData = sellingItemUIController;
 
             sellingItemUIController.Initialize(newListEntry);
-            sellingItemUIController.SetItemData(challengeInfos[i]);
+            sellingItemUIController.SetItemData(challengeInfos[i/2]);
+            challengeScrollView.Add(newListEntry);
         }
     }
 }
