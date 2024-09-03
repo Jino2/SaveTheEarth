@@ -22,11 +22,12 @@ public class ChallengeItemUIController
         challengeButton = root.Q<Button>("ChallengeOrAuthButton");
     }
 
-    public void SetItemData(ChallengeInfo item)
+    public void SetItemData(ChallengeInfo item, Action<ChallengeInfo> onChallenge)
     {
         challengeInfo = item;
         challengeNameLabel.text = item.name;
         challengeRewardLabel.text = item.reward;
+        challengeButton.clicked += () => onChallenge(item);
         SetChallengeButton();
     }
 
@@ -36,28 +37,16 @@ public class ChallengeItemUIController
         {
             case ChallengeStatus.NotStarted:
                 challengeButton.text = "도전하기";
-                challengeButton.clicked += StartChallenge;
  
                 break;
             case ChallengeStatus.InProgress:
                 challengeButton.text = "인증하기";
-                challengeButton.clicked += VerifyChallenge;
                 break;
             case ChallengeStatus.Completed:
                 challengeButton.text = "완료";
-                challengeButton.clicked += null;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-    }
-
-    private void VerifyChallenge()
-    {
-        
-    }
-
-    private void StartChallenge()
-    {
     }
 }

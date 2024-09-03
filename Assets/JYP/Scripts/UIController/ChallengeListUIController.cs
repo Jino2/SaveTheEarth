@@ -1,20 +1,23 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 public class ChallengeListUIController
 {
     private ChallengeApi challengeApi = new ChallengeApi();
     public string userId = "test";
-    private ScrollView challengeScrollView;
+    private ScrollView challengeScrollView; 
+    private  Action<ChallengeInfo> onChallengeClicked;
 
     // Start is called before the first frame update
     private List<ChallengeInfo> challengeInfos;
 
-    public void InitList(VisualElement root, VisualTreeAsset itemTemplate)
+    public void InitList(VisualElement root, VisualTreeAsset itemTemplate, Action<ChallengeInfo> onChallengeClicked)
     {
         challengeScrollView = root.Q<ScrollView>("ChallengeScrollView");
-
+        this.onChallengeClicked = onChallengeClicked;
         
         challengeApi.GetChallengeListByUserId(userId, (list) =>
         {
@@ -36,7 +39,7 @@ public class ChallengeListUIController
             newListEntry.userData = sellingItemUIController;
 
             sellingItemUIController.Initialize(newListEntry);
-            sellingItemUIController.SetItemData(challengeInfos[i/2]);
+            sellingItemUIController.SetItemData(challengeInfos[i/2], onChallengeClicked);
             challengeScrollView.Add(newListEntry);
         }
     }

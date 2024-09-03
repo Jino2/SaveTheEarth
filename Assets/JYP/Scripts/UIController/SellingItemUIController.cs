@@ -15,7 +15,7 @@ public class SellingItemUIController
         priceLabel = root.Q<Label>("price");
     }
 
-    public void SetItemData(SellingItem item)
+    public void SetItemData(VisualElement root ,SellingItem item)
     {
         nameLabel.text = item.Name;
         priceLabel.text = $"{item.Price} 포인트";
