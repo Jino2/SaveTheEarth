@@ -17,11 +17,11 @@ MonoBehaviour:
     AppIdFusion: 
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 
+    AppVersion: 1.0.0
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: kr
     Server: 
-    Port: 0
+    Port: 7777
     ProxyServer: 
     Protocol: 0
     EnableProtocolFallback: 1
@@ -40,5 +40,5 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
-  DevRegionSetOnce: 0
+  ShowSettings: 1
+  DevRegionSetOnce: 1

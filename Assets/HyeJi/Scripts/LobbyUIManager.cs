@@ -37,4 +37,15 @@ public class LobbyUIManager : MonoBehaviour
     {
         
     }
+
+    // Panel 켰다껐다하기
+    public void ShowPanel()
+    {
+        // 로그인 버튼 상호작용
+        btn_Login.interactable = true;
+        // 로그인 화면 자체를 비활성화
+        panel_Login.gameObject.SetActive(false);
+        // 방만들기 창 활성화
+        panel_JoinOrCreateRoom.gameObject.SetActive(true);
+    }
 }
