@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
@@ -6,10 +6,12 @@ using UnityEngine;
 
 public class PanelProximityMover : MonoBehaviour
 {
-    public RectTransform targetPanel; // ´ë»ó ÆĞ³Î
-    public float moveDistance = 50f; // ÆĞ³ÎÀÌ ÀÌµ¿ÇÒ °Å¸®
-    public float moveSpeed = 5f; // ÆĞ³ÎÀÌ ÀÌµ¿ÇÏ´Â ¼Óµµ
-    public Canvas canvas; // UI ÆĞ³ÎÀÌ ¼ÓÇÑ Äµ¹ö½º
+    public RectTransform targetPanel; // ëŒ€ìƒ íŒ¨ë„
+    public float moveDistance = 50f; // íŒ¨ë„ì´ ì´ë™í•  ê±°ë¦¬
+    public float moveSpeed = 5f; // íŒ¨ë„ì´ ì´ë™í•˜ëŠ” ì†ë„
+    public Canvas canvas; // UI íŒ¨ë„ì´ ì†í•œ ìº”ë²„ìŠ¤
+
+    public bool isPanelMoving { get; private set; } // íŒ¨ë„ì´ ì›€ì§ì´ê³  ìˆëŠ”ì§€ ì—¬ë¶€
 
     private Vector3 originalPosition;
     private Vector3 targetPosition;
@@ -22,45 +24,53 @@ public class PanelProximityMover : MonoBehaviour
             canvas = GetComponentInParent<Canvas>();
         }
 
-        originalPosition = targetPanel.localPosition; // ÆĞ³ÎÀÇ ÃÊ±â À§Ä¡ ÀúÀå
-        targetPosition = originalPosition; // ÃÊ±â ¸ñÇ¥ À§Ä¡´Â ¿ø·¡ À§Ä¡·Î ¼³Á¤
+        originalPosition = targetPanel.localPosition; // íŒ¨ë„ì˜ ì´ˆê¸° ìœ„ì¹˜ ì €ì¥
+        targetPosition = originalPosition; // ì´ˆê¸° ëª©í‘œ ìœ„ì¹˜ëŠ” ì›ë˜ ìœ„ì¹˜ë¡œ ì„¤ì •
     }
 
     private void Update()
     {
-        // ¸¶¿ì½º°¡ ÆĞ³ÎÀÌ³ª ±× ÀÚ½ÄÀÇ RectTransform ¿µ¿ª ³»¿¡ ÀÖ´ÂÁö È®ÀÎ
+        // ë§ˆìš°ìŠ¤ê°€ íŒ¨ë„ì´ë‚˜ ê·¸ ìì‹ì˜ RectTransform ì˜ì—­ ë‚´ì— ìˆëŠ”ì§€ í™•ì¸
         if (IsMouseOverPanelOrChildren())
         {
             if (!isMoved)
             {
-                // ¸¶¿ì½º°¡ ÆĞ³Î ³»¿¡ µé¾î¿ÔÀ» ¶§ ¸ñÇ¥ À§Ä¡ ¼³Á¤
+                // ë§ˆìš°ìŠ¤ê°€ íŒ¨ë„ ë‚´ì— ë“¤ì–´ì™”ì„ ë•Œ ëª©í‘œ ìœ„ì¹˜ ì„¤ì •
                 targetPosition = new Vector3(originalPosition.x - moveDistance, originalPosition.y, originalPosition.z);
                 isMoved = true;
+                isPanelMoving = true; // íŒ¨ë„ì´ ì›€ì§ì´ê³  ìˆìŒì„ í‘œì‹œ
             }
         }
         else
         {
             if (isMoved)
             {
-                // ¸¶¿ì½º°¡ ÆĞ³Î°ú ±× ÀÚ½ÄÀ» ¸ğµÎ ¹ş¾î³µÀ» ¶§ ¸ñÇ¥ À§Ä¡¸¦ ¿ø·¡ À§Ä¡·Î ¼³Á¤
+                // ë§ˆìš°ìŠ¤ê°€ íŒ¨ë„ê³¼ ê·¸ ìì‹ì„ ëª¨ë‘ ë²—ì–´ë‚¬ì„ ë•Œ ëª©í‘œ ìœ„ì¹˜ë¥¼ ì›ë˜ ìœ„ì¹˜ë¡œ ì„¤ì •
                 targetPosition = originalPosition;
                 isMoved = false;
+                isPanelMoving = false; // íŒ¨ë„ì´ ì›€ì§ì´ê³  ìˆìŒì„ í‘œì‹œ
             }
         }
 
-        // ÆĞ³ÎÀ» ¸ñÇ¥ À§Ä¡·Î ºÎµå·´°Ô ÀÌµ¿
+        // íŒ¨ë„ì„ ëª©í‘œ ìœ„ì¹˜ë¡œ ë¶€ë“œëŸ½ê²Œ ì´ë™
         targetPanel.localPosition = Vector3.Lerp(targetPanel.localPosition, targetPosition, Time.deltaTime * moveSpeed);
+
+        // íŒ¨ë„ì´ ëª©í‘œ ìœ„ì¹˜ì— ê±°ì˜ ë„ë‹¬í–ˆì„ ë•Œ, ì´ë™ ìƒíƒœë¥¼ í•´ì œ
+        if (Vector3.Distance(targetPanel.localPosition, targetPosition) < 0.01f)
+        {
+            isPanelMoving = false; // íŒ¨ë„ì´ ë” ì´ìƒ ì›€ì§ì´ì§€ ì•ŠìŒì„ í‘œì‹œ
+        }
     }
 
     private bool IsMouseOverPanelOrChildren()
     {
-        // ¸¶¿ì½º°¡ ÆĞ³Î ¶Ç´Â ÀÚ½Ä ¿ÀºêÁ§Æ®ÀÇ ¿µ¿ª ³»¿¡ ÀÖ´ÂÁö Ã¼Å©
+        // ë§ˆìš°ìŠ¤ê°€ íŒ¨ë„ ë˜ëŠ” ìì‹ ì˜¤ë¸Œì íŠ¸ì˜ ì˜ì—­ ë‚´ì— ìˆëŠ”ì§€ ì²´í¬
         if (RectTransformUtility.RectangleContainsScreenPoint(targetPanel, Input.mousePosition, canvas.worldCamera))
         {
             return true;
         }
 
-        // ¸ğµç ÀÚ½Ä ¿ÀºêÁ§Æ®¸¦ °Ë»ç
+        // ëª¨ë“  ìì‹ ì˜¤ë¸Œì íŠ¸ë¥¼ ê²€ì‚¬
         foreach (RectTransform child in targetPanel)
         {
             if (RectTransformUtility.RectangleContainsScreenPoint(child, Input.mousePosition, canvas.worldCamera))

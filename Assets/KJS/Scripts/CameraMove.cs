@@ -1,55 +1,59 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class CameraMove : MonoBehaviour
 {
+    
     public float moveSpeed = 5f;
-    public Camera mainCamera; // ¸ŞÀÎ Ä«¸Ş¶ó¸¦ ¿©±â¼­ ÂüÁ¶
-    public Vector3 offset = new Vector3(0, 5, -10); // Ä«¸Ş¶ó À§Ä¡ Á¶Á¤ º¯¼ö
-    public Vector3 rotationOffset = new Vector3(30, 0, 0); // Ä«¸Ş¶ó °¢µµ Á¶Á¤ º¯¼ö
+    public Camera mainCamera; // ë©”ì¸ ì¹´ë©”ë¼ë¥¼ ì—¬ê¸°ì„œ ì°¸ì¡°
+    public Vector3 offset = new Vector3(0, 5, -10); // ì¹´ë©”ë¼ ìœ„ì¹˜ ì¡°ì • ë³€ìˆ˜
 
-    private Vector3 originalPosition; // Ä«¸Ş¶óÀÇ ¿ø·¡ À§Ä¡ ÀúÀå
-    private Quaternion originalRotation; // Ä«¸Ş¶óÀÇ ¿ø·¡ È¸Àü ÀúÀå
-    private bool isAtTargetPosition = false; // Ä«¸Ş¶ó°¡ ÇöÀç Å¸°Ù À§Ä¡¿¡ ÀÖ´ÂÁö ¿©ºÎ
+    private Vector3 originalPosition; // ì¹´ë©”ë¼ì˜ ì›ë˜ ìœ„ì¹˜ ì €ì¥
+    private bool isAtTargetPosition = false; // ì¹´ë©”ë¼ê°€ í˜„ì¬ íƒ€ê²Ÿ ìœ„ì¹˜ì— ìˆëŠ”ì§€ ì—¬ë¶€
 
     void Start()
     {
-        originalPosition = mainCamera.transform.position; // ½ÃÀÛÇÒ ¶§ Ä«¸Ş¶óÀÇ ¿ø·¡ À§Ä¡ ÀúÀå
-        originalRotation = mainCamera.transform.rotation; // ½ÃÀÛÇÒ ¶§ Ä«¸Ş¶óÀÇ ¿ø·¡ È¸Àü ÀúÀå
+        originalPosition = mainCamera.transform.position; // ì‹œì‘í•  ë•Œ ì¹´ë©”ë¼ì˜ ì›ë˜ ìœ„ì¹˜ ì €ì¥
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // ¸¶¿ì½º ¿ŞÂÊ ¹öÆ° Å¬¸¯ ½Ã
+        if (Input.GetMouseButtonDown(0)) // ë§ˆìš°ìŠ¤ ì™¼ìª½ ë²„íŠ¼ í´ë¦­ ì‹œ
         {
             Vector3 mousePosition = Input.mousePosition;
             Ray ray = mainCamera.ScreenPointToRay(mousePosition);
 
-            // Raycast¸¦ »ç¿ëÇÏ¿© Å¬¸¯ÇÑ ¿ÀºêÁ§Æ® È®ÀÎ
+            // Raycastë¥¼ ì‚¬ìš©í•˜ì—¬ í´ë¦­í•œ ì˜¤ë¸Œì íŠ¸ í™•ì¸
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                // Å¬¸¯µÈ ¿ÀºêÁ§Æ®°¡ ÀÌ ½ºÅ©¸³Æ®°¡ ÇÒ´çµÈ ¿ÀºêÁ§Æ®ÀÎÁö È®ÀÎ
+                // í´ë¦­ëœ ì˜¤ë¸Œì íŠ¸ê°€ ì´ ìŠ¤í¬ë¦½íŠ¸ê°€ í• ë‹¹ëœ ì˜¤ë¸Œì íŠ¸ì¸ì§€ í™•ì¸
                 if (hit.transform == transform)
                 {
-                    if (isAtTargetPosition) // ÇöÀç Å¸°Ù À§Ä¡¿¡ ÀÖ´Ù¸é ¿ø·¡ À§Ä¡·Î µ¹¾Æ°¨
+                    if (isAtTargetPosition) // í˜„ì¬ íƒ€ê²Ÿ ìœ„ì¹˜ì— ìˆë‹¤ë©´ ì›ë˜ ìœ„ì¹˜ë¡œ ëŒì•„ê°
                     {
-                        mainCamera.transform.position = originalPosition;
-                        mainCamera.transform.rotation = originalRotation;
+                        StartCoroutine(MoveCameraToPosition(originalPosition));
                     }
-                    else // ±×·¸Áö ¾Ê´Ù¸é Å¸°Ù À§Ä¡·Î ÀÌµ¿
+                    else // ê·¸ë ‡ì§€ ì•Šë‹¤ë©´ íƒ€ê²Ÿ ìœ„ì¹˜ë¡œ ì´ë™
                     {
-                        Vector3 targetPosition = hit.transform.position + offset; // ¿ÀºêÁ§Æ® À§Ä¡¿¡ offset Àû¿ë
-                        mainCamera.transform.position = targetPosition;
-
-                        // È¸Àüµµ Á¶Á¤
-                        Quaternion targetRotation = Quaternion.Euler(rotationOffset);
-                        mainCamera.transform.rotation = targetRotation;
+                        Vector3 targetPosition = hit.transform.position + offset; // ì˜¤ë¸Œì íŠ¸ ìœ„ì¹˜ì— offset ì ìš©
+                        StartCoroutine(MoveCameraToPosition(targetPosition));
                     }
 
-                    isAtTargetPosition = !isAtTargetPosition; // »óÅÂ ¹İÀü
+                    isAtTargetPosition = !isAtTargetPosition; // ìƒíƒœ ë°˜ì „
                 }
             }
         }
+    }
+
+    System.Collections.IEnumerator MoveCameraToPosition(Vector3 targetPosition)
+    {
+        while (Vector3.Distance(mainCamera.transform.position, targetPosition) > 0.1f) // ì¹´ë©”ë¼ì˜ ìœ„ì¹˜ë¥¼ ì›€ì§ì„
+        {
+            mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        mainCamera.transform.position = targetPosition;
     }
 }
