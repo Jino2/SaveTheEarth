@@ -88,7 +88,4 @@ public class BaseDialogUIController : MonoBehaviour
         container.Add(root);
         
     }
-        
-        
-        
 }
