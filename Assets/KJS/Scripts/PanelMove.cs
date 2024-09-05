@@ -53,7 +53,8 @@ public class PanelProximityMover : MonoBehaviour
         }
 
         // 패널을 목표 위치로 부드럽게 이동
-        targetPanel.localPosition = Vector3.Lerp(targetPanel.localPosition, targetPosition, Time.deltaTime * moveSpeed);
+        targetPanel.localPosition = Vector3.Lerp(targetPanel.localPosition, targetPosition, Time.deltaTime
+            * moveSpeed);
 
         // 패널이 목표 위치에 거의 도달했을 때, 이동 상태를 해제
         if (Vector3.Distance(targetPanel.localPosition, targetPosition) < 0.01f)
@@ -62,7 +63,7 @@ public class PanelProximityMover : MonoBehaviour
         }
     }
 
-    private bool IsMouseOverPanelOrChildren()
+    public bool IsMouseOverPanelOrChildren()
     {
         // 마우스가 패널 또는 자식 오브젝트의 영역 내에 있는지 체크
         if (RectTransformUtility.RectangleContainsScreenPoint(targetPanel, Input.mousePosition, canvas.worldCamera))
