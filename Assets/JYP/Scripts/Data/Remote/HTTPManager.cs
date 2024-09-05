@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -80,7 +82,7 @@ public class HTTPManager : MonoBehaviour
             requestInfo.onError();
         }
     }
-    
+
     public void Delete<T, R>(HttpRequestInfo<T, R> requestInfo)
     {
         StartCoroutine(DeleteAsync(requestInfo));
@@ -90,9 +92,33 @@ public class HTTPManager : MonoBehaviour
     {
         string bodyJson = JsonUtility.ToJson(requestInfo.requestBody);
         using var request = UnityWebRequest.Delete(requestInfo.url);
-        request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(bodyJson));
+        request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(bodyJson));
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Accept", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            var response = JsonUtility.FromJson<R>(request.downloadHandler.text);
+            requestInfo.onSuccess(response);
+        }
+        else
+        {
+            requestInfo.onError();
+        }
+    }
+    
+    public void UploadMultipart<R>(HttpRequestInfo<List<IMultipartFormSection>, R> requestInfo)
+    {
+        StartCoroutine(UploadMultipartAsync(requestInfo));
+    }
+
+    private IEnumerator UploadMultipartAsync<R>(HttpRequestInfo<List<IMultipartFormSection>, R> requestInfo)
+    {
+        
+        using var request = UnityWebRequest.Post(requestInfo.url, requestInfo.requestBody);
+        
+        
         yield return request.SendWebRequest();
         
         if (request.result == UnityWebRequest.Result.Success)
@@ -102,6 +128,8 @@ public class HTTPManager : MonoBehaviour
         }
         else
         {
+            Debug.LogError(request.error);
+            Debug.LogError(request.downloadHandler.text);
             requestInfo.onError();
         }
     }

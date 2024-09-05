@@ -1,7 +1,9 @@
 ﻿    public enum ChallengeType
     {
-        A,
-        B,
+        Transport,
+        Tumbler,
+        Recycle,
+        
     }
     
     public enum ChallengeStatus

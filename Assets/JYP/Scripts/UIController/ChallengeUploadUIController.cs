@@ -7,6 +7,7 @@ using SFB;
 
 public class ChallengeUploadUIController : MonoBehaviour
 {
+    
     public UIDocument uiDocument;
 
     private Button chooseImageButton;
@@ -15,6 +16,8 @@ public class ChallengeUploadUIController : MonoBehaviour
 
     private string selectedImagePath;
 
+    private ChallengeApi challengeApi = new ChallengeApi();
+    private ChallengeInfo challengeInfo;
     void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -27,6 +30,7 @@ public class ChallengeUploadUIController : MonoBehaviour
 
     public void ShowUIWith(ChallengeInfo challengeInfo)
     {
+        this.challengeInfo = challengeInfo;
         ShowUI();
     }
 
@@ -36,7 +40,7 @@ public class ChallengeUploadUIController : MonoBehaviour
         uiDocument.enabled = true;
         chooseImageButton = uiDocument.rootVisualElement.Q<Button>("btn_ChallengeChooseImage");
         selectedImage = uiDocument.rootVisualElement.Q<VisualElement>("img_SelectedImage");
-        uploadButton = uiDocument.rootVisualElement.Q<Button>("btn_ChallengeChooseImage");
+        uploadButton = uiDocument.rootVisualElement.Q<Button>("btn_ChallengeUpload");
 
         chooseImageButton.clicked += OnChooseImageButtonClicked;
         uploadButton.clicked += OnUploadButtonClicked;
@@ -44,8 +48,14 @@ public class ChallengeUploadUIController : MonoBehaviour
 
     private void OnUploadButtonClicked()
     {
-        print("Upload button clicked");
+        challengeApi.TryChallengeTumbler("test", selectedImagePath, (result) =>
+        {
+            Debug.Log($"result: {result}");
+        });
+        // goto NextPage
     }
+    
+    
 
     private void OnChooseImageButtonClicked()
     {

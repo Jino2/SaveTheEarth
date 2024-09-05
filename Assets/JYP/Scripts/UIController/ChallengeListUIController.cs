@@ -32,14 +32,14 @@ public class ChallengeListUIController
 
     private void AddItems(List<ChallengeInfo> challengeInfos, VisualTreeAsset itemTemplate)
     {
-        for (int i = 0; i < challengeInfos.Count*2; i++)
+        for (int i = 0; i < challengeInfos.Count; i++)
         {
             var newListEntry = itemTemplate.Instantiate();
             var sellingItemUIController = new ChallengeItemUIController();
             newListEntry.userData = sellingItemUIController;
 
             sellingItemUIController.Initialize(newListEntry);
-            sellingItemUIController.SetItemData(challengeInfos[i/2], onChallengeClicked);
+            sellingItemUIController.SetItemData(challengeInfos[i], onChallengeClicked);
             challengeScrollView.Add(newListEntry);
         }
     }
