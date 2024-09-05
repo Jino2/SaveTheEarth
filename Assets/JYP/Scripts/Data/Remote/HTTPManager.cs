@@ -80,4 +80,29 @@ public class HTTPManager : MonoBehaviour
             requestInfo.onError();
         }
     }
+    
+    public void Delete<T, R>(HttpRequestInfo<T, R> requestInfo)
+    {
+        StartCoroutine(DeleteAsync(requestInfo));
+    }
+
+    private IEnumerator DeleteAsync<T, R>(HttpRequestInfo<T, R> requestInfo)
+    {
+        string bodyJson = JsonUtility.ToJson(requestInfo.requestBody);
+        using var request = UnityWebRequest.Delete(requestInfo.url);
+        request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(bodyJson));
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Accept", "application/json");
+        yield return request.SendWebRequest();
+        
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            var response = JsonUtility.FromJson<R>(request.downloadHandler.text);
+            requestInfo.onSuccess(response);
+        }
+        else
+        {
+            requestInfo.onError();
+        }
+    }
 }

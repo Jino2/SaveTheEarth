@@ -18,8 +18,8 @@ public class SellingItemUIController
 
     public void SetItemData(VisualElement root ,SellingItem item)
     {
-        nameLabel.text = item.Name;
-        priceLabel.text = $"{item.Price} 포인트";
+        nameLabel.text = item.name;
+        priceLabel.text = $"{item.price} 포인트";
         purchaseButton.clicked += () =>
         {
             new BaseDialogUIBuilder()

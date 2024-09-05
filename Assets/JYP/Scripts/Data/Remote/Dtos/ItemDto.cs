@@ -1,4 +1,7 @@
-﻿public class SellingItem
+﻿using System;
+
+[Serializable]
+public class ItemDto
 {
     public int id;
     public string name;
