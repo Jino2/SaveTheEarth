@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public struct ItemApi
 {
-    private static readonly string BaseURL = "http://localhost:8000/items";
+    private static readonly string BaseURL = "http://54.180.232.125/items";
 
     public static void GetItems(Action<List<ItemDto>> onComplete)
     {

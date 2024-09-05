@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public struct UserApi
 {
-    public static string BASE_URL = "http://localhost:8000/user";
+    public static string BASE_URL = "http://54.180.232.125/user";
 
 
     public static void Register(string id, string password, string name, Action<string> onComplete)

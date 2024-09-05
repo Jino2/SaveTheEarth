@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 public class ChallengeApi
 {
-    private static readonly string BASE_URL = "https://api.example.com";
+    private static readonly string BASE_URL = "http://54.180.232.125/challenges";
     private static readonly string CHALLENGE_AI_URL = "https://1bd2-222-103-183-137.ngrok-free.app";
 
     public void GetChallengeListByUserId(string userId, Action<List<ChallengeInfo>> onComplete)
