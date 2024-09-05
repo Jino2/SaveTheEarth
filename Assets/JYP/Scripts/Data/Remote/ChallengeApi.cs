@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -25,42 +24,81 @@ public class ChallengeApi
         );
     }
 
-    public void TryChallengeTumbler(string userId, string imagePath, Action<string> onComplete)
+    public void TryChallengeTumbler(string userId, string imagePath, Action<string> onComplete, Action onFail)
     {
-        Debug.Log($"path: {imagePath}");
-        string url = $"{CHALLENGE_AI_URL}/tumbler-challenge";
+        var url = $"{CHALLENGE_AI_URL}/tumbler-challenge";
         var data = File.ReadAllBytes(imagePath);
-        Debug.Log($"data: {data.Length}");
         var multipartForm = new List<IMultipartFormSection>
         {
-            new MultipartFormFileSection ("file", data, "image.jpg", "multipart/form-data")
+            new MultipartFormFileSection("file", data, "image.jpg", "multipart/form-data")
         };
-        var info = new HttpRequestInfo<List<IMultipartFormSection>, string>
+        var info = new HttpRequestInfo<List<IMultipartFormSection>, BasicMessageDto>
         {
             url = url,
             requestBody = multipartForm,
-            onSuccess = (t) => { OnTryChallengeSuccess(userId, 1, onComplete); },
-            onError = () => { }
+            onSuccess = (t) =>
+            {
+                if (t.message.Contains("불가"))
+                    onFail();
+                else
+                    OnTryChallengeSuccess(userId, 1, onComplete);
+            },
+            onError = onFail
         };
 
         HTTPManager.GetInstance()
             .UploadMultipart(info);
     }
 
-    public void TryChallengeTransport(string userId, string imagePath, Action<string> onComplete)
+
+    public void TryChallengeTransport(string userId, string imagePath, Action<string> onComplete, Action onFail)
     {
         string url = $"{CHALLENGE_AI_URL}/transport-challenge";
-
+        var data = File.ReadAllBytes(imagePath);
         var multipartForm = new List<IMultipartFormSection>
         {
-            new MultipartFormFileSection("image", imagePath)
+            new MultipartFormFileSection("file", data, "image.jpg", "multipart/form-data")
         };
-        var info = new HttpRequestInfo<List<IMultipartFormSection>, string>
+        var info = new HttpRequestInfo<List<IMultipartFormSection>, BasicMessageDto>
         {
             url = url,
             requestBody = multipartForm,
-            onSuccess = (t) => { OnTryChallengeSuccess(userId, 0, onComplete); },
-            onError = () => { }
+            onSuccess = (t) =>
+            {
+                if (t.message.Contains("불가"))
+                    onFail();
+                else
+                    OnTryChallengeSuccess(userId, 0, onComplete);
+            },
+            onError = onFail
+        };
+
+        HTTPManager.GetInstance()
+            .UploadMultipart(info);
+    }
+
+    public void TryChallengeRecycling(string userId, string imagePath, Action<string> onComplete, Action onFail)
+    {
+        Debug.Log($"path: {imagePath}");
+        string url = $"{CHALLENGE_AI_URL}/transport-challenge";
+        var data = File.ReadAllBytes(imagePath);
+        Debug.Log($"data: {data.Length}");
+        var multipartForm = new List<IMultipartFormSection>
+        {
+            new MultipartFormFileSection("file", data, "image.jpg", "multipart/form-data")
+        };
+        var info = new HttpRequestInfo<List<IMultipartFormSection>, BasicMessageDto>
+        {
+            url = url,
+            requestBody = multipartForm,
+            onSuccess = (t) =>
+            {
+                if (t.message.Contains("불가"))
+                    onFail();
+                else
+                    OnTryChallengeSuccess(userId, 2, onComplete);
+            },
+            onError = onFail
         };
 
         HTTPManager.GetInstance()
@@ -71,6 +109,5 @@ public class ChallengeApi
     {
         //do job
         onSuccess("success");
-        
     }
 }

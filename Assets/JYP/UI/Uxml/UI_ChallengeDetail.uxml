@@ -1,0 +1,43 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Container" style="flex-grow: 1; flex-direction: column; background-color: rgb(255, 255, 255);">
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement name="LeftContainer" style="flex-grow: 1; width: 50%;">
+                <ui:VisualElement style="flex-grow: 0; flex-direction: row;">
+                    <ui:VisualElement name="img_challengeInfo" style="flex-grow: 0; width: 400px; height: 400px; left: 0; margin-left: 50px;" />
+                    <ui:VisualElement style="flex-grow: 0; justify-content: center; align-self: stretch; align-items: center; padding-right: 98px; padding-left: 1px; left: 0;">
+                        <ui:Label tabindex="-1" text="대중교통 이용&#10;챌린지" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_Title" style="font-size: 56px; align-items: stretch; -unity-text-align: upper-center; -unity-font-style: bold;" />
+                        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_Reward" style="-unity-text-align: upper-center;" />
+                        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_Status" style="align-items: center; background-color: rgb(0, 126, 255); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; width: 100px; height: 40px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label tabindex="-1" text="챌린지 안내" parse-escape-sequences="true" display-tooltip-when-elided="true" name="info" style="font-size: 36px; padding-top: 50px; padding-right: 50px; padding-bottom: 50px; padding-left: 50px;" />
+                <ui:VisualElement name="howToContainer" style="flex-grow: 1; flex-direction: row;">
+                    <ui:Label tabindex="-1" text="인증 방법" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-grow: 1; height: 80px; align-items: center; justify-content: space-between; align-self: auto; width: 15%; flex-shrink: 1; -unity-text-align: upper-left; padding-left: 50px; font-size: 24px; -unity-font-style: bold;" />
+                    <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_howToDo" style="flex-grow: 1; width: 60%; -unity-text-align: upper-left; font-size: 24px; height: 80px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="dueDateContainer" style="flex-grow: 1; flex-direction: row;">
+                    <ui:Label tabindex="-1" text="진행 기간" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-grow: 1; height: 80px; align-items: center; justify-content: space-between; align-self: auto; width: 15%; flex-shrink: 1; -unity-text-align: upper-left; padding-left: 50px; font-size: 24px; -unity-font-style: bold;" />
+                    <ui:Label tabindex="-1" text="참가 후 24시간&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_dueDate" style="flex-grow: 1; width: 60%; -unity-text-align: upper-left; font-size: 24px; height: 80px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="LevelContainer" style="flex-grow: 1; flex-direction: row;">
+                    <ui:Label tabindex="-1" text="예상 난이도" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-grow: 1; height: auto; align-items: center; justify-content: space-between; align-self: auto; width: 15%; flex-shrink: 1; -unity-text-align: upper-left; padding-left: 50px; font-size: 24px; -unity-font-style: bold;" />
+                    <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_howToDo" style="flex-grow: 1; width: 60%; -unity-text-align: upper-left; font-size: 24px; height: 80px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="RightContainer" style="flex-grow: 1; width: 50%;">
+                <ui:VisualElement name="TimerContainer" style="flex-grow: 1;">
+                    <ui:Label tabindex="-1" text="남은 시간" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 36px; margin-top: 100px;" />
+                    <ui:VisualElement name="TimeContainer" style="flex-grow: 1;" />
+                    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+                        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+                        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="FeedContainer" style="flex-grow: 1;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="FooterContainer" style="flex-grow: 0; height: 18%;">
+            <ui:Button text="바로 인증하기" parse-escape-sequences="true" display-tooltip-when-elided="true" style="width: 500px; align-items: stretch; align-self: center; height: 120px; -unity-font-style: normal; font-size: 36px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

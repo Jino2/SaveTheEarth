@@ -123,6 +123,7 @@ public class HTTPManager : MonoBehaviour
         
         if (request.result == UnityWebRequest.Result.Success)
         {
+            print(request.downloadHandler.text);
             var response = JsonUtility.FromJson<R>(request.downloadHandler.text);
             requestInfo.onSuccess(response);
         }

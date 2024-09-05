@@ -1,15 +1,14 @@
+using System;
 using System.IO;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
 using SFB;
-
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class ChallengeUploadUIController : MonoBehaviour
 {
-    
     public UIDocument uiDocument;
-
+    public ChallengeFinishUIController FinishUIController;
     private Button chooseImageButton;
     private VisualElement selectedImage;
     private Button uploadButton;
@@ -18,6 +17,7 @@ public class ChallengeUploadUIController : MonoBehaviour
 
     private ChallengeApi challengeApi = new ChallengeApi();
     private ChallengeInfo challengeInfo;
+
     void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -48,14 +48,53 @@ public class ChallengeUploadUIController : MonoBehaviour
 
     private void OnUploadButtonClicked()
     {
-        challengeApi.TryChallengeTumbler("test", selectedImagePath, (result) =>
+        switch (challengeInfo.type)
         {
-            Debug.Log($"result: {result}");
-        });
+            case ChallengeType.Transport:
+                challengeApi.TryChallengeTransport("test", selectedImagePath,
+                    (result) =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(true);
+                    },
+                    () =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(false);
+                    });
+                break;
+            case ChallengeType.Tumbler:
+                challengeApi.TryChallengeTumbler("test", selectedImagePath,
+                    (result) =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(true);
+                    },
+                    () =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(false);
+                    });
+                break;
+            case ChallengeType.Recycle:
+                challengeApi.TryChallengeRecycling("test", selectedImagePath,
+                    (result) =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(true);
+                    },
+                    () =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(false);
+                    });
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         // goto NextPage
     }
-    
-    
+
 
     private void OnChooseImageButtonClicked()
     {
@@ -69,9 +108,11 @@ public class ChallengeUploadUIController : MonoBehaviour
     {
         string[] ex = new string[]
         {
-            "xbm", "tif", "jfif", "ico", "tiff", "gif", "svg", "jpeg", "svgz", "jpg", "webp", "png", "bmp", "pjp", "apng", "pjpeg", "avif"
+            "xbm", "tif", "jfif", "ico", "tiff", "gif", "svg", "jpeg", "svgz", "jpg", "webp", "png", "bmp", "pjp",
+            "apng", "pjpeg", "avif"
         };
-        var paths = StandaloneFileBrowser.OpenFilePanel("열기", "", new ExtensionFilter[1] { new ExtensionFilter("이미지 파일", ex) }, false);
+        var paths = StandaloneFileBrowser.OpenFilePanel("열기", "",
+            new ExtensionFilter[1] { new ExtensionFilter("이미지 파일", ex) }, false);
         if (paths.Length == 0) return null;
         return paths[0];
     }
