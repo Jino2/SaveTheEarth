@@ -24,12 +24,13 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         // 방장의 씬을 기준으로 싱크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
         // 싱글톤으로 닉네임 텍스트 가져오기
-        PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_Nickname.text;
+        //PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_Nickname.text;
 
         // 접속을 서버에 요청하기
         PhotonNetwork.ConnectUsingSettings();
+
         // login창 없애기 (이미 로그인 했응께)
-        LobbyUIManager.lobbyUI.btn_Login.interactable = false;
+        //LobbyUIManager.lobbyUI.btn_Login.interactable = false;
     }
 
     // 연결에 성공
@@ -47,7 +48,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
         // 네임 서버에 접속 실패 원인을 알려주기
         // 로그인 버튼 UI 활성화
-        LobbyUIManager.lobbyUI.btn_Login.interactable = true;
+        //LobbyUIManager.lobbyUI.btn_Login.interactable = true;
     }
 
     // 마스터 서버에 연결
@@ -93,27 +94,27 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     // 방 생성
     public void CreateRoom()
     {
-        // 문자열로 인풋텍스트 받아오기
-        string roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
-        int playerCount = Convert.ToInt32(LobbyUIManager.lobbyUI.roomSetting[1].text);
+        //// 문자열로 인풋텍스트 받아오기
+        //string roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
+        //int playerCount = Convert.ToInt32(LobbyUIManager.lobbyUI.roomSetting[1].text);
 
         // 방 이름 글자 0 이상, 플레이어가 1명 이상 존재해야함
-        if (roomName.Length > 0 && playerCount > 1)
-        {
-            // 룸만들기 로직 ㄱㄱ
-            // 클라이언트에서의 룸이 아닌 서버에서의 룸 만들기
-            // 방 옵션 설정
-            RoomOptions roomOptions = new RoomOptions();
-            // 최대 인원 설정
-            roomOptions.MaxPlayers = 10;
-            // 누군가 내 방에 들어올 수 있게 개방하는가?
-            roomOptions.IsOpen = true;
-            // 누군가 내 방을 검색할 수 있게 허용하는가?
-            roomOptions.IsVisible = true;
+        //if (roomName.Length > 0 && playerCount > 1)
+        //{
+        //    // 룸만들기 로직 ㄱㄱ
+        //    // 클라이언트에서의 룸이 아닌 서버에서의 룸 만들기
+        //    // 방 옵션 설정
+        //    RoomOptions roomOptions = new RoomOptions();
+        //    // 최대 인원 설정
+        //    roomOptions.MaxPlayers = 10;
+        //    // 누군가 내 방에 들어올 수 있게 개방하는가?
+        //    roomOptions.IsOpen = true;
+        //    // 누군가 내 방을 검색할 수 있게 허용하는가?
+        //    roomOptions.IsVisible = true;
 
-            // 리퀘스트 함수
-            PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
-        }     
+        //    // 리퀘스트 함수
+        //    PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
+        //}     
     }
 
     // 방 참가 요청
