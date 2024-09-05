@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class DragAndDrop : MonoBehaviour
 {
+    private GoodsInfo goodsInfo;
     public bool draggable;
     public float rotationAngle = 90f;
     public float rotationSpeed = 5f;
@@ -26,6 +27,13 @@ public class DragAndDrop : MonoBehaviour
             childObject = transform.GetChild(0); // 첫 번째 자식 오브젝트
             targetRotation = childObject.rotation; // 초기 회전값 설정
         }
+
+        goodsInfo = GetComponent<GoodsInfo>();
+        if (goodsInfo == null)
+        {
+            Debug.LogWarning("GoodsInfo 컴포넌트를 찾을 수 없습니다!");
+        }
+
     }
 
     void Update()
@@ -54,20 +62,7 @@ public class DragAndDrop : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (draggable)
-            {
-                draggable = false;
-
-                // 패널이 움직이는 상태에서 드롭하면 오브젝트 비활성화
-                if (panelProximityMover != null && panelProximityMover.isPanelMoving)
-                {
-                    gameObject.SetActive(false); // 오브젝트 비활성화
-                }
-                // 패널이 움직이지 않았을 때는 아무 동작도 하지 않음 (현재 위치 유지)
-            }
-        }
+        Drop();
 
         if (draggable && childObject != null)
         {
@@ -146,5 +141,35 @@ public class DragAndDrop : MonoBehaviour
         RaycastHit hit;
         Physics.Raycast(worldMousePosNear, worldMousePosFar - worldMousePosNear, out hit);
         return hit;
+    }
+
+    void Drop()
+    {
+        // 마우스 왼쪽 버튼을 떼면 (드래그 중인 경우)
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (draggable)
+            {
+                draggable = false;  // 드래그 중지
+
+                // PanelProximityMover가 패널 위에 마우스가 있는지 확인
+                if (panelProximityMover != null && panelProximityMover.IsMouseOverPanelOrChildren())
+                {
+                    // 인벤토리에 아이템 추가
+                    Inventory_KJS.instance.AddGoods(goodsInfo);
+                    Debug.Log($"{goodsInfo.goodsType}이(가) 인벤토리에 저장되었습니다.");
+
+                    // 오브젝트 비활성화
+                    gameObject.SetActive(false);
+
+                    // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
+                    Inventory_KJS.instance.AddDisabledObject(gameObject);
+                }
+                else
+                {
+                    Debug.LogWarning("마우스가 패널 위에 있지 않습니다.");
+                }
+            }
+        }
     }
 }
