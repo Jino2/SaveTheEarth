@@ -1,9 +1,10 @@
 ﻿using System;
 
 [Serializable]
-class BuyItemRequestDto
+public class ItemWithInventory
 {
-    public string userId;
     public int itemId;
+    public string name;
+    public int price;
     public int amount;
 }

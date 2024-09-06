@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEngine.Networking;
 
 public class HttpRequestInfo<T, TR>
 {

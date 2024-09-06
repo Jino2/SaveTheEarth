@@ -1,15 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
+using Label = UnityEngine.UIElements.Label;
 
 public class SellingItemUIController
 {
     private Label nameLabel;
     private Label priceLabel;
     private Button purchaseButton;
-    
-    //private builder = new BaseDialogUIBuilder();
+
+    private SellingItem item;
     public void Initialize(VisualElement root)
     {
         purchaseButton = root.Q<Button>("btn_Purchase");
@@ -17,20 +17,22 @@ public class SellingItemUIController
         priceLabel = root.Q<Label>("price");
     }
 
-    public void SetItemData(VisualElement root ,SellingItem item)
+    public void SetItemData(VisualElement root, SellingItem item)
     {
-        nameLabel.text = item.Name;
-        priceLabel.text = $"{item.Price} 포인트";
+        nameLabel.text = item.name;
+        priceLabel.text = $"{item.price} 포인트";
+        this.item = item;
+        
         purchaseButton.clicked += () =>
         {
+            Debug.Log($"item id: {this.item.id} / amount: 1");
             new BaseDialogUIBuilder()
                 .SetTitle("구매")
                 .SetMessage("구매하시겠습니까?")
-                .SetOnConfirm(() => Debug.Log("구매완료"))
+                .SetOnConfirm(() => { UserApi.BuyItem("test", item.id, 1, (t) => { Debug.Log("구매완료"); }); })
                 .SetConfirmButtonText("확인")
                 .SetCancelButtonText("취소")
                 .Build();
-
         };
     }
 }

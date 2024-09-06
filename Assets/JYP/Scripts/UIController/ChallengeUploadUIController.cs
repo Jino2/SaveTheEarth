@@ -1,19 +1,22 @@
+using System;
 using System.IO;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
 using SFB;
-
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class ChallengeUploadUIController : MonoBehaviour
 {
     public UIDocument uiDocument;
-
+    public ChallengeFinishUIController FinishUIController;
     private Button chooseImageButton;
     private VisualElement selectedImage;
     private Button uploadButton;
 
     private string selectedImagePath;
+
+    private ChallengeApi challengeApi = new ChallengeApi();
+    private ChallengeInfo challengeInfo;
 
     void Start()
     {
@@ -27,6 +30,7 @@ public class ChallengeUploadUIController : MonoBehaviour
 
     public void ShowUIWith(ChallengeInfo challengeInfo)
     {
+        this.challengeInfo = challengeInfo;
         ShowUI();
     }
 
@@ -36,7 +40,7 @@ public class ChallengeUploadUIController : MonoBehaviour
         uiDocument.enabled = true;
         chooseImageButton = uiDocument.rootVisualElement.Q<Button>("btn_ChallengeChooseImage");
         selectedImage = uiDocument.rootVisualElement.Q<VisualElement>("img_SelectedImage");
-        uploadButton = uiDocument.rootVisualElement.Q<Button>("btn_ChallengeChooseImage");
+        uploadButton = uiDocument.rootVisualElement.Q<Button>("btn_ChallengeUpload");
 
         chooseImageButton.clicked += OnChooseImageButtonClicked;
         uploadButton.clicked += OnUploadButtonClicked;
@@ -44,8 +48,53 @@ public class ChallengeUploadUIController : MonoBehaviour
 
     private void OnUploadButtonClicked()
     {
-        print("Upload button clicked");
+        switch (challengeInfo.type)
+        {
+            case ChallengeType.Transport:
+                challengeApi.TryChallengeTransport("test", selectedImagePath,
+                    (result) =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(true);
+                    },
+                    () =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(false);
+                    });
+                break;
+            case ChallengeType.Tumbler:
+                challengeApi.TryChallengeTumbler("test", selectedImagePath,
+                    (result) =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(true);
+                    },
+                    () =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(false);
+                    });
+                break;
+            case ChallengeType.Recycle:
+                challengeApi.TryChallengeRecycling("test", selectedImagePath,
+                    (result) =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(true);
+                    },
+                    () =>
+                    {
+                        uiDocument.enabled = false;
+                        FinishUIController.ShowUIWith(false);
+                    });
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        // goto NextPage
     }
+
 
     private void OnChooseImageButtonClicked()
     {
@@ -59,9 +108,11 @@ public class ChallengeUploadUIController : MonoBehaviour
     {
         string[] ex = new string[]
         {
-            "xbm", "tif", "jfif", "ico", "tiff", "gif", "svg", "jpeg", "svgz", "jpg", "webp", "png", "bmp", "pjp", "apng", "pjpeg", "avif"
+            "xbm", "tif", "jfif", "ico", "tiff", "gif", "svg", "jpeg", "svgz", "jpg", "webp", "png", "bmp", "pjp",
+            "apng", "pjpeg", "avif"
         };
-        var paths = StandaloneFileBrowser.OpenFilePanel("열기", "", new ExtensionFilter[1] { new ExtensionFilter("이미지 파일", ex) }, false);
+        var paths = StandaloneFileBrowser.OpenFilePanel("열기", "",
+            new ExtensionFilter[1] { new ExtensionFilter("이미지 파일", ex) }, false);
         if (paths.Length == 0) return null;
         return paths[0];
     }

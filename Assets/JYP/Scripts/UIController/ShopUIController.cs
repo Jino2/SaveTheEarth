@@ -19,10 +19,7 @@ public class ShopUIController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            ShopApi.GetTest();
-        }
+        
     }
 
     public void ShowShopUI()
