@@ -182,7 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactKeyCode: 101
   interactGuideText: {fileID: 6323723763696477402}
-  interactRange: 5
+  interactRange: 3
   interactLayer:
     serializedVersion: 2
     m_Bits: 64
