@@ -18,7 +18,8 @@ public class LobbyUIManager : MonoBehaviour
     public GameObject panel_Remain;
     public GameObject panel_ServiceExit;
 
-    public Button btn_Checking;
+    public Button btn_Check;
+    public Image img_Logining;
     
 
     private void Awake()

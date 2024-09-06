@@ -29,8 +29,10 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         // 접속을 서버에 요청하기
         PhotonNetwork.ConnectUsingSettings();
 
-        // login창 없애기 (이미 로그인 했응께)
-        //LobbyUIManager.lobbyUI.btn_Login.interactable = false;
+        // login 버튼 없애기 (이미 로그인 했응께)
+        LobbyUIManager.lobbyUI.btn_Check.interactable = false;
+        // 그리구 로그인중 ... 띄우기! 그냥 덮어써도 ㄱㅊ을듯
+        LobbyUIManager.lobbyUI.img_Logining.enabled = true;
     }
 
     // 연결에 성공
@@ -39,6 +41,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         base.OnConnected();
 
         // 네임 서버에 접속이 완료되었음을 알려주기
+        // 로그인 Panel 없애기
+        //LobbyUIManager.lobbyUI.gameObject.panel_Login
     }
 
     // 연결에 실패
