@@ -34,26 +34,32 @@ public class LobbyUIManager : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Update()
     {
         
     }
 
-    void Update()
-    {
-        
-    }
+
+
 
     // Panel 켰다껐다하기
-    public void ShowPanel()
+    public void ShowPanel_login()
     {
+        // 로그인 창 끄기
         panel_Login.gameObject.SetActive(false);
 
         //// 로그인 버튼 상호작용
         //btn_Login.interactable = true;
         //// 로그인 화면 자체를 비활성화
         //panel_Login.gameObject.SetActive(false);
-        //// 방만들기 창 활성화
-        //panel_JoinOrCreateRoom.gameObject.SetActive(true);
+
+        // Remain 창 활성화
+        panel_Remain.gameObject.SetActive(true);
+    }
+
+    public void ShowPanel_Remain()
+    {
+        // 
+        panel_Remain.gameObject.SetActive(false);
     }
 }
