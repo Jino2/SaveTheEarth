@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 
 public class Inventory_KJS : MonoBehaviour
 {
@@ -117,6 +118,12 @@ public class Inventory_KJS : MonoBehaviour
         UserApi.GetUserInventoryList("test", (items) =>
         {
             inventoryItems = items;
+
+            goodsCounts.Clear();
+            for(int i=0; i< items.Count; i++ )
+            {
+                goodsCounts.Add((GoodsType)inventoryItems[i].itemId, inventoryItems[i].amount);
+            }
         });
     }
 }
