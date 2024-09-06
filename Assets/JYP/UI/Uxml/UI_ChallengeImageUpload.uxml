@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Container" style="flex-grow: 1; align-items: stretch; background-color: rgb(255, 255, 255);">
+        <ui:VisualElement name="HeaderContainer" style="flex-grow: 0; height: 150px;">
+            <ui:Label tabindex="-1" text="File Upload" parse-escape-sequences="true" display-tooltip-when-elided="true" name="txt_FileUpload" style="flex-grow: 1; align-items: center; font-size: 80px; -unity-font-style: bold; justify-content: center; -unity-text-align: middle-left; align-self: stretch;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="BodyContainer" style="flex-grow: 1; height: 0;">
+            <ui:VisualElement name="img_SelectedImage" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="FooterContainer" style="flex-grow: 0; height: 150px; align-items: center; align-self: stretch; justify-content: center; flex-direction: row;">
+            <ui:Button text="Choose Image" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_ChallengeChooseImage" style="width: 30%; height: 60px; font-size: 20px;" />
+            <ui:Button text="Upload" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_ChallengeUpload" style="width: 30%; height: 60px; font-size: 20px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

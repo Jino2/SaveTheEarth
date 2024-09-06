@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/JYP/Scenes/JYP_Test.unity
+    guid: acfaa85888119564292ce1ceeee1ccc5
+  - enabled: 1
     path: Assets/Scenes/LobbyScene.unity
     guid: bd95e324fbf4d8a45a0233a26b40d68a
   - enabled: 1

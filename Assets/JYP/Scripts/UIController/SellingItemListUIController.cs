@@ -32,7 +32,7 @@ public class SellingItemListUIController : MonoBehaviour
         sellingListView.bindItem = (element, i) =>
         {
             var sellingItemUIController = (SellingItemUIController) element.userData;
-            sellingItemUIController.SetItemData(sellingItems[i]);
+            sellingItemUIController.SetItemData(root, sellingItems[i]);
         };
 
         sellingListView.fixedItemHeight = 45;

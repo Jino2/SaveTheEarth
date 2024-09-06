@@ -6,39 +6,52 @@ using UnityEngine.UIElements;
 
 public class DragAndDrop : MonoBehaviour
 {
+    private GoodsInfo goodsInfo;
     public bool draggable;
-    //public float liftHeight = 0.5f; // 오브젝트가 올라가는 높이 조정 
-    public float rotationAngle = 90f; // 한 번에 회전할 각도
+    public float rotationAngle = 90f;
     public float rotationSpeed = 5f;
-    public float scaleSpeed = 0.1f;
+    public float scaleFactor = 1.1f; // 스케일 변경 배수
     public float minScale = 0.1f;
     public float maxScale = 3.0f;
-    public Vector3 firstScale;
-    public Vector3 firstPosition;
+    public PanelProximityMover panelProximityMover; // PanelProximityMover 스크립트에 대한 참조
 
     private Quaternion targetRotation;
-
-    //private Rigidbody rb;
-    //private Vector3 offset;
-    //private Vector3 collisionNormal; // 충돌 방향을 저장할 변수
-    //private bool hasCollision = false; // 충돌 여부를 체크할 변수
+    private Transform childObject;
+    private bool isRotating = false;
 
     void Start()
     {
-        firstScale = transform.localScale;
-        firstPosition = transform.position;
-        targetRotation = transform.rotation; // 초기 회전값 설정
-        //rb = GetComponent<Rigidbody>();
+        // 자식 오브젝트 가져오기
+        if (transform.childCount > 0)
+        {
+            childObject = transform.GetChild(0); // 첫 번째 자식 오브젝트
+            targetRotation = childObject.rotation; // 초기 회전값 설정
+        }
 
-        //// 만약 Collider가 없다면 추가
-        //if (GetComponent<Collider>() == null)
-        //{
-        //    gameObject.AddComponent<BoxCollider>();
-        //}
+        goodsInfo = GetComponent<GoodsInfo>();
+        if (goodsInfo == null)
+        {
+            Debug.LogWarning("GoodsInfo 컴포넌트를 찾을 수 없습니다!");
+        }
+
     }
 
     void Update()
     {
+        if (isRotating)
+        {
+            // 회전 중일 때 현재 회전을 목표 회전으로 점진적으로 변경 (LERP)
+            childObject.rotation = Quaternion.Lerp(childObject.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+            // 회전이 거의 완료되었는지 확인
+            if (Quaternion.Angle(childObject.rotation, targetRotation) < 0.1f)
+            {
+                childObject.rotation = targetRotation; // 정확히 맞추기
+                isRotating = false; // 회전 완료
+            }
+            return; // 회전 중이면 다른 입력 무시
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit = CastRay();
@@ -46,125 +59,71 @@ public class DragAndDrop : MonoBehaviour
             if (hit.transform == transform)
             {
                 draggable = true;
-
-                //if (objectCollider != null)
-                //{
-                //    objectCollider.enabled = false;
-                //}
-                //offset = transform.position - GetMouseWorldPosition();
-                //if (rb != null)
-                //{
-                //    rb.isKinematic = true;
-                //}
-                //hasCollision = false; // 드래그 시작 시 충돌 상태 초기화
             }
         }
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            draggable = false;
-            //if (rb != null)
-            //{
-            //    rb.isKinematic = false;
-            //    rb.velocity = Vector3.zero; // 속도 초기화
-            //    rb.angularVelocity = Vector3.zero; // 각속도 초기화
-            //}
+        Drop();
 
-            //var hits = Physics.RaycastAll(transform.position + Vector3.up, Vector3.down, 10f);
-            //foreach (var hit in hits)
-            //{
-            //    if (hit.collider.gameObject == transform.gameObject)
-            //        continue;
-
-            //    float objectHeight = GetComponent<Collider>().bounds.size.y;
-            //    transform.position = hit.point + Vector3.up * (objectHeight / 2);
-            //    break;
-            //}
-            //if (objectcollider != null)
-            //{
-            //    objectcollider.enabled = true;
-            //}
-        }
-
-        if (draggable)
+        if (draggable && childObject != null)
         {
             Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
-
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
 
-            transform.position = new Vector3(worldPosition.x, 0.5f, worldPosition.z);
-            //Vector3 mouseWorldPosition = GetMouseWorldPosition() + offset;
-            //Vector3 targetPosition = new Vector3(mouseWorldPosition.x, mouseWorldPosition.z); // 초기 높이에 liftHeight 추가
+            transform.position = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
 
-            //// 충돌 상태라면 충돌 방향으로의 이동을 막음
-            //if (hasCollision)
-            //{
-            //    Vector3 directionToMove = targetPosition - transform.position;
-            //    float dotProduct = Vector3.Dot(directionToMove.normalized, collisionNormal);
-
-            //    // dotProduct가 양수라면, 충돌 방향으로 이동하려는 것을 의미
-            //    if (dotProduct > 0)
-            //    {
-            //        directionToMove -= collisionNormal * dotProduct * directionToMove.magnitude;
-            //        targetPosition = transform.position + directionToMove;
-            //    }
-            //}
-
-            //transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed * Time.deltaTime); // 이동 속도 적용
-
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                targetRotation *= Quaternion.Euler(0, -rotationAngle, 0);
-            }
+            // 부모 피봇을 중심으로 자식 오브젝트 회전
             if (Input.GetKeyDown(KeyCode.D))
             {
-                targetRotation *= Quaternion.Euler(0, rotationAngle, 0);
+                RotateChildAroundParent(Vector3.up, -rotationAngle);
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                RotateChildAroundParent(Vector3.up, rotationAngle);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                RotateChildAroundParent(Vector3.right, -rotationAngle);
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                RotateChildAroundParent(Vector3.right, rotationAngle);
             }
 
-            //// W, S 입력으로 앞뒤 회전 (X축 회전)
-            //if (Input.GetKeyDown(KeyCode.W))
-            //{
-            //    targetRotation *= Quaternion.Euler(-rotationAngle, 0, 0);
-            //}
-            //if (Input.GetKeyDown(KeyCode.S))
-            //{
-            //    targetRotation *= Quaternion.Euler(rotationAngle, 0, 0);
-            //}
-
-            transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
-
+            // 스케일 변경 (자식의 피봇을 기준으로)
             float scroll = Input.GetAxis("Mouse ScrollWheel");
             if (scroll != 0f)
             {
-                Vector3 newScale = transform.localScale + Vector3.one * scroll * scaleSpeed;
+                // 새로운 스케일 계산 (배수를 곱하여 증가 또는 감소)
+                Vector3 newScale;
+                if (scroll > 0)
+                {
+                    newScale = childObject.localScale * scaleFactor;
+                }
+                else
+                {
+                    newScale = childObject.localScale / scaleFactor;
+                }
+
+                // 최소 및 최대 스케일 값 제한
                 newScale.x = Mathf.Clamp(newScale.x, minScale, maxScale);
                 newScale.y = Mathf.Clamp(newScale.y, minScale, maxScale);
                 newScale.z = Mathf.Clamp(newScale.z, minScale, maxScale);
 
-                AdjustPivot(newScale);
-                transform.localScale = newScale;
+                // 스케일 적용
+                childObject.localScale = newScale;
             }
         }
     }
-    void AdjustPivot(Vector3 newScale)
+
+    void RotateChildAroundParent(Vector3 axis, float angle)
     {
-        float heightDifference = newScale.y - firstScale.y;
-
-        // 피벗 조정 전에 현재 오브젝트 위치를 저장
-        Vector3 originalPosition = transform.position;
-
-        // 스케일 적용
-        transform.localScale = newScale;
-
-        // y 축에 대한 피벗 이동 계산
-        Vector3 pivotOffset = new Vector3(0, heightDifference / 2, 0);
-
-        // 피벗이 중앙이 아닌 하단 중심에 위치하도록 조정
-        transform.position = originalPosition + pivotOffset;
+        // 부모(피봇)를 중심으로 자식 오브젝트를 회전
+        childObject.RotateAround(transform.position, axis, angle);
+        isRotating = true;
+        targetRotation = childObject.rotation; // 회전 목표값 갱신
     }
 
-
-    private RaycastHit CastRay()
+    RaycastHit CastRay()
     {
         Vector3 screenMousePosFar = new Vector3(
             Input.mousePosition.x,
@@ -180,34 +139,37 @@ public class DragAndDrop : MonoBehaviour
         Vector3 worldMousePosNear = Camera.main.ScreenToWorldPoint(screenMousePosNear);
 
         RaycastHit hit;
-
         Physics.Raycast(worldMousePosNear, worldMousePosFar - worldMousePosNear, out hit);
-
         return hit;
     }
-    //private Vector3 GetMouseWorldPosition()
-    //{
-    //    Vector3 mouseScreenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
-    //    return Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-    //}
 
-    //// 드래그 중 충돌을 감지하는 메서드
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (draggable)
-    //    {
-    //        hasCollision = true;
-    //        collisionNormal = other.ClosestPoint(transform.position) - transform.position;
-    //        collisionNormal = collisionNormal.normalized;
-    //    }
-    //}
+    void Drop()
+    {
+        // 마우스 왼쪽 버튼을 떼면 (드래그 중인 경우)
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (draggable)
+            {
+                draggable = false;  // 드래그 중지
 
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (draggable)
-    //    {
-    //        hasCollision = false;
-    //        collisionNormal = Vector3.zero;
-    //    }
-    //}
+                // PanelProximityMover가 패널 위에 마우스가 있는지 확인
+                if (panelProximityMover != null && panelProximityMover.IsMouseOverPanelOrChildren())
+                {
+                    // 인벤토리에 아이템 추가
+                    Inventory_KJS.instance.AddGoods(goodsInfo);
+                    Debug.Log($"{goodsInfo.goodsType}이(가) 인벤토리에 저장되었습니다.");
+
+                    // 오브젝트 비활성화
+                    gameObject.SetActive(false);
+
+                    // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
+                    Inventory_KJS.instance.AddDisabledObject(gameObject);
+                }
+                else
+                {
+                    Debug.LogWarning("마우스가 패널 위에 있지 않습니다.");
+                }
+            }
+        }
+    }
 }

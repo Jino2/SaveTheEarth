@@ -7,16 +7,30 @@ public class SellingItemUIController
 {
     private Label nameLabel;
     private Label priceLabel;
+    private Button purchaseButton;
     
+    private builder = new BaseDialogUIBuilder();
     public void Initialize(VisualElement root)
     {
+        purchaseButton = root.Q<Button>("btn_Purchase");
         nameLabel = root.Q<Label>("name");
         priceLabel = root.Q<Label>("price");
     }
 
-    public void SetItemData(SellingItem item)
+    public void SetItemData(VisualElement root ,SellingItem item)
     {
         nameLabel.text = item.Name;
         priceLabel.text = $"{item.Price} 포인트";
+        purchaseButton.clicked += () =>
+        {
+            new BaseDialogUIBuilder()
+                .SetTitle("구매")
+                .SetMessage("구매하시겠습니까?")
+                .SetOnConfirm(() => Debug.Log("구매완료"))
+                .SetConfirmButtonText("확인")
+                .SetCancelButtonText("취소")
+                .Build();
+
+        };
     }
 }
