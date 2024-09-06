@@ -17,4 +17,17 @@ public struct ItemApi
         HTTPManager.GetInstance()
             .Get(requestInfo);
     }
+    
+    public static void GetItemsWithInventory(string userId, Action<List<ItemWithInventory>> onComplete)
+    {
+        var requestInfo = new HttpRequestInfo<string, ItemWithInventoryListDto>
+        {
+            url = BaseURL + $"users/{userId}/selling",
+            requestBody = "",
+            onSuccess = (res) => { onComplete(res.data); },
+            onError = () => { }
+        };
+        HTTPManager.GetInstance()
+            .Get(requestInfo);
+    }
 }

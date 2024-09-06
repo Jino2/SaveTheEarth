@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,10 +8,16 @@ public class SellingItemListUIController : MonoBehaviour
     private List<SellingItem> sellingItems;
     private ListView sellingListView;
 
+    private UserInfo userInfo = new UserInfo()
+    {
+        id = "test",
+        name = "이름",
+        level = 0,
+    };
 
     public void InitList(VisualElement root, VisualTreeAsset itemTemplate)
     {
-        ItemApi.GetItems((list) =>
+        ItemApi.GetItemsWithInventory(userInfo.id, (list) =>
             {
                 sellingItems = list.Select(dto => new SellingItem()
                     {
@@ -21,13 +26,13 @@ public class SellingItemListUIController : MonoBehaviour
                         price = dto.price
                     })
                     .ToList();
-                
+
                 sellingListView.bindItem = (element, i) =>
                 {
                     var sellingItemUIController = (SellingItemUIController)element.userData;
                     sellingItemUIController.SetItemData(root, sellingItems[i]);
                 };
-                sellingListView.itemsSource = sellingItems; 
+                sellingListView.itemsSource = sellingItems;
                 sellingListView.Rebuild();
             }
         );
@@ -50,6 +55,5 @@ public class SellingItemListUIController : MonoBehaviour
         };
 
         sellingListView.fixedItemHeight = 45;
-
     }
 }
