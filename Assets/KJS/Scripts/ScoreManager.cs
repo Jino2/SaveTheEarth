@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine. UI;
+using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -10,9 +8,14 @@ public class ScoreManager : MonoBehaviour
 
     void Start()
     {
-        // ScoreManager 스크립트가 할당된 게임 오브젝트에서 Text 컴포넌트를 찾습니다.
         scoreText = GetComponent<Text>();
         score = 0;
+        UserApi.GetUserInfo("test", info =>
+        {
+            score = info.point;
+            UpdateScoreText();
+
+        });
         UpdateScoreText();
     }
 

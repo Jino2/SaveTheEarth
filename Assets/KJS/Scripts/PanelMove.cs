@@ -16,6 +16,7 @@ public class PanelProximityMover : MonoBehaviour
     private Vector3 originalPosition;
     private Vector3 targetPosition;
     private bool isMoved = false;
+    
 
     private void Start()
     {

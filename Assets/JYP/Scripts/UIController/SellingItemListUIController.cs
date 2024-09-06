@@ -12,7 +12,7 @@ public class SellingItemListUIController : MonoBehaviour
     {
         id = "test",
         name = "이름",
-        level = 0,
+        point = 0,
     };
 
     public void InitList(VisualElement root, VisualTreeAsset itemTemplate)
