@@ -27,11 +27,6 @@ public class SellingItemListUIController : MonoBehaviour
                     })
                     .ToList();
 
-                sellingListView.bindItem = (element, i) =>
-                {
-                    var sellingItemUIController = (SellingItemUIController)element.userData;
-                    sellingItemUIController.SetItemData(root, sellingItems[i]);
-                };
                 sellingListView.itemsSource = sellingItems;
                 sellingListView.Rebuild();
             }
