@@ -9,7 +9,7 @@ public class SellingItemUIController
     private Label priceLabel;
     private Button purchaseButton;
     
-    //private builder = new BaseDialogUIBuilder();
+
     public void Initialize(VisualElement root)
     {
         purchaseButton = root.Q<Button>("btn_Purchase");
