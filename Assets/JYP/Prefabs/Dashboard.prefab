@@ -63,6 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 0}
+  FinishUIController: {fileID: 5137033435080348357}
 --- !u!1 &1994107575397900465
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,6 +165,7 @@ Transform:
   - {fileID: 8770586765748451326}
   - {fileID: 360575579700483453}
   - {fileID: 584497695067470084}
+  - {fileID: 3871806155793021663}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6114514979838288706
@@ -361,6 +363,99 @@ MonoBehaviour:
       - m_Target: {fileID: 1421013564733193508}
         m_TargetAssemblyTypeName: ShopUIController, Assembly-CSharp
         m_MethodName: ShowShopUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &7114584901833113946
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3871806155793021663}
+  - component: {fileID: 6458868689109687461}
+  - component: {fileID: 5137033435080348357}
+  m_Layer: 0
+  m_Name: Challenge Finish UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3871806155793021663
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7114584901833113946}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7700532797636797058}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6458868689109687461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7114584901833113946}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: a1efdbc9b421e2546b903bb0a7468370, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: c71080bbc027d4c438f97e0e1283c416,
+    type: 3}
+  m_SortingOrder: 0
+--- !u!114 &5137033435080348357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7114584901833113946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b02cbf8ac61949f690130aa567f44c5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiDocument: {fileID: 0}
+  onChallengeAgainButtonClicked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4564827592613894068}
+        m_TargetAssemblyTypeName: ChallengeUploadUIController, Assembly-CSharp
+        m_MethodName: ShowUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onOtherChallengesButtonClicked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7607654560242233457}
+        m_TargetAssemblyTypeName: ChallengeUIController, Assembly-CSharp
+        m_MethodName: ShowUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
