@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 
@@ -9,7 +10,8 @@ public class Inventory_KJS : MonoBehaviour
     public List<GameObject> goods = new List<GameObject>();  //오브젝트 리스트
     private Dictionary<GoodsType, int> goodsCounts = new Dictionary<GoodsType, int>();  // GoodsType별로 수량을 추적
 
-    private List<InventoryItem> 
+    private List<InventoryItem> inventoryItems;
+    
     private void Awake()
     {
         
@@ -30,6 +32,11 @@ public class Inventory_KJS : MonoBehaviour
                 goodsCounts[type] = 0;  // 각 GoodsType의 수량을 0으로 초기화
             }
         }
+    }
+
+    private void Start()
+    {
+        LoadInventoryItems();
     }
 
     // 특정 GoodsType의 수량을 반환하는 함수 (데이터 참조용)
@@ -103,5 +110,13 @@ public class Inventory_KJS : MonoBehaviour
             Debug.Log($"{goodsInfo.goodsType}이를 획득했습니다.");
         }
         
+    }
+    
+    private void LoadInventoryItems()
+    {
+        UserApi.GetUserInventoryList("test", (items) =>
+        {
+            inventoryItems = items;
+        });
     }
 }
