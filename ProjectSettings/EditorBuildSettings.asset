@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HyeJi.unity
     guid: 10ee99a5e58704948acdd9fb11abb5d9
+  - enabled: 1
+    path: Assets/KJS/KJS.unity
+    guid: a051ae59df123084387c705693d56a6b
   m_configObjects: {}
