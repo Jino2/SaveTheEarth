@@ -24,9 +24,5 @@ public class GoodsInfo : MonoBehaviour
         {
             Inventory_KJS.instance.AddGoods(this);  // this는 현재 GoodsInfo 객체를 의미
         }
-        else
-        {
-            Debug.LogWarning("Inventory 인스턴스가 존재하지 않습니다.");
-        }
     }
 }

@@ -22,26 +22,26 @@ public class EffectController : MonoBehaviour
         int currentScore = phaseController.currentScore;
 
         // 첫 번째, 두 번째, 세 번째 범위에 따라 Water Splash 오브젝트 활성화/비활성화
-        bool shouldActivate = false;
+        bool effecfActive = false;
 
         // 첫 번째 범위 체크
         if (currentScore >= activateScore && currentScore < deactivateScore)
         {
-            shouldActivate = true;
+            effecfActive = true;
         }
         // 두 번째 범위 체크
         else if (currentScore >= secondaryActivateScore && currentScore < secondaryDeactivateScore)
         {
-            shouldActivate = true;
+            effecfActive = true;
         }
         // 세 번째 범위 체크
         else if (currentScore >= tertiaryActivateScore && currentScore < tertiaryDeactivateScore)
         {
-            shouldActivate = true;
+            effecfActive = true;
         }
 
         // 활성화 여부에 따라 Water Splash를 켜거나 끔
-        if (shouldActivate)
+        if (effecfActive)
         {
             if (!waterSplash.activeInHierarchy)
             {

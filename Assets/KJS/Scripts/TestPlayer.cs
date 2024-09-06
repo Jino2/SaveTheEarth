@@ -47,7 +47,7 @@ public class TestPlayer : MonoBehaviour
                 other.gameObject.SetActive(false);
 
                 // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
-                Inventory_KJS.instance.AddDisabledObject(other.gameObject);
+                Inventory_KJS.instance.AddGetObject(other.gameObject);
             }
         }
     }

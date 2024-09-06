@@ -51,7 +51,7 @@ public class PullOutObject : MonoBehaviour
     {
         // Inventory에 저장된 해당 GoodsType의 비활성화된 오브젝트들을 다시 활성화
         Inventory_KJS.instance.ActivateDisabledObject(goodsType);
-        Inventory_KJS.instance.DecreaseGoodsCount(goodsType);  // 해당 GoodsType의 수량 감소
+        Inventory_KJS.instance.MinusGoodsCount(goodsType);  // 해당 GoodsType의 수량 감소
     }
 
     // OnDestroy에서 이벤트 구독 해제

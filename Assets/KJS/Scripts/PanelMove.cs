@@ -31,7 +31,7 @@ public class PanelProximityMover : MonoBehaviour
     private void Update()
     {
         // 마우스가 패널이나 그 자식의 RectTransform 영역 내에 있는지 확인
-        if (IsMouseOverPanelOrChildren())
+        if (MouseonPanels())
         {
             if (!isMoved)
             {
@@ -63,7 +63,7 @@ public class PanelProximityMover : MonoBehaviour
         }
     }
 
-    public bool IsMouseOverPanelOrChildren()
+    public bool MouseonPanels()
     {
         // 마우스가 패널 또는 자식 오브젝트의 영역 내에 있는지 체크
         if (RectTransformUtility.RectangleContainsScreenPoint(targetPanel, Input.mousePosition, canvas.worldCamera))

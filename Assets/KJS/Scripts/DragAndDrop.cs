@@ -153,7 +153,7 @@ public class DragAndDrop : MonoBehaviour
                 draggable = false;  // 드래그 중지
 
                 // PanelProximityMover가 패널 위에 마우스가 있는지 확인
-                if (panelProximityMover != null && panelProximityMover.IsMouseOverPanelOrChildren())
+                if (panelProximityMover != null && panelProximityMover.MouseonPanels())
                 {
                     // 인벤토리에 아이템 추가
                     Inventory_KJS.instance.AddGoods(goodsInfo);
@@ -163,11 +163,7 @@ public class DragAndDrop : MonoBehaviour
                     gameObject.SetActive(false);
 
                     // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
-                    Inventory_KJS.instance.AddDisabledObject(gameObject);
-                }
-                else
-                {
-                    Debug.LogWarning("마우스가 패널 위에 있지 않습니다.");
+                    Inventory_KJS.instance.AddGetObject(gameObject);
                 }
             }
         }

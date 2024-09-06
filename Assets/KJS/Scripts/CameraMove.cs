@@ -32,12 +32,12 @@ public class CameraMove : MonoBehaviour
                 {
                     if (isAtTargetPosition) // 현재 타겟 위치에 있다면 원래 위치로 돌아감
                     {
-                        StartCoroutine(MoveCameraToPosition(originalPosition));
+                        StartCoroutine(Destination(originalPosition));
                     }
                     else // 그렇지 않다면 타겟 위치로 이동
                     {
                         Vector3 targetPosition = hit.transform.position + offset; // 오브젝트 위치에 offset 적용
-                        StartCoroutine(MoveCameraToPosition(targetPosition));
+                        StartCoroutine(Destination(targetPosition));
                     }
 
                     isAtTargetPosition = !isAtTargetPosition; // 상태 반전
@@ -46,7 +46,7 @@ public class CameraMove : MonoBehaviour
         }
     }
 
-    System.Collections.IEnumerator MoveCameraToPosition(Vector3 targetPosition)
+    System.Collections.IEnumerator Destination(Vector3 targetPosition)
     {
         while (Vector3.Distance(mainCamera.transform.position, targetPosition) > 0.1f) // 카메라의 위치를 움직임
         {
