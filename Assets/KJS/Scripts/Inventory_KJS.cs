@@ -10,7 +10,7 @@ public class Inventory_KJS : MonoBehaviour
     public List<GameObject> goods = new List<GameObject>();  //오브젝트 리스트
     private Dictionary<GoodsType, int> goodsCounts = new Dictionary<GoodsType, int>();  // GoodsType별로 수량을 추적
 
-    private List<InventoryItem> inventoryItems;
+    public List<InventoryItem> inventoryItems;
     
     private void Awake()
     {
