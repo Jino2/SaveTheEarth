@@ -244,5 +244,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e918cb04c5109b04e87c0e47c53d719a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goodsType: 0
+  goodsType: 8
   count: 1
