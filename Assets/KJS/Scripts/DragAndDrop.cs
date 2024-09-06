@@ -18,6 +18,7 @@ public class DragAndDrop : MonoBehaviour
     private Quaternion targetRotation;
     private Transform childObject;
     private bool isRotating = false;
+    private float dragDepth; // 카메라와 오브젝트 사이의 거리
 
     void Start()
     {
@@ -33,7 +34,6 @@ public class DragAndDrop : MonoBehaviour
         {
             Debug.LogWarning("GoodsInfo 컴포넌트를 찾을 수 없습니다!");
         }
-
     }
 
     void Update()
@@ -59,6 +59,9 @@ public class DragAndDrop : MonoBehaviour
             if (hit.transform == transform)
             {
                 draggable = true;
+
+                // 드래그 시작 시 오브젝트와 카메라 사이의 z 깊이 계산
+                dragDepth = Camera.main.WorldToScreenPoint(transform.position).z;
             }
         }
 
@@ -66,9 +69,11 @@ public class DragAndDrop : MonoBehaviour
 
         if (draggable && childObject != null)
         {
-            Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.WorldToScreenPoint(transform.position).z);
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(position);
+            // 화면의 마우스 좌표에서 월드 좌표로 변환 (z값을 드래그 시작 시 계산한 값으로 유지)
+            Vector3 screenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dragDepth);
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
 
+            // 물체의 y값을 유지하고 x, z는 마우스 좌표에 맞추어 이동
             transform.position = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
 
             // 부모 피봇을 중심으로 자식 오브젝트 회전
@@ -152,7 +157,6 @@ public class DragAndDrop : MonoBehaviour
             {
                 draggable = false;  // 드래그 중지
 
-                // PanelProximityMover가 패널 위에 마우스가 있는지 확인
                 if (panelProximityMover != null && panelProximityMover.MouseonPanels())
                 {
                     // 인벤토리에 아이템 추가
