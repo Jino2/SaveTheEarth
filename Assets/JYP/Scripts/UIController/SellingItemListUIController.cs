@@ -16,12 +16,17 @@ public class SellingItemListUIController : MonoBehaviour
             {
                 sellingItems = list.Select(dto => new SellingItem()
                     {
-                        id = dto.id,
+                        id = dto.itemId,
                         name = dto.name,
                         price = dto.price
                     })
                     .ToList();
                 
+                sellingListView.bindItem = (element, i) =>
+                {
+                    var sellingItemUIController = (SellingItemUIController)element.userData;
+                    sellingItemUIController.SetItemData(root, sellingItems[i]);
+                };
                 sellingListView.itemsSource = sellingItems; 
                 sellingListView.Rebuild();
             }
@@ -39,6 +44,7 @@ public class SellingItemListUIController : MonoBehaviour
 
         sellingListView.bindItem = (element, i) =>
         {
+            print($"{i} - bind");
             var sellingItemUIController = (SellingItemUIController)element.userData;
             sellingItemUIController.SetItemData(root, sellingItems[i]);
         };

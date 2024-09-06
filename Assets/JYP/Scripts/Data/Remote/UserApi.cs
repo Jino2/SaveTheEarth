@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public struct UserApi
 {
-    public static string BASE_URL = "http://54.180.232.125/user";
+    public static string BASE_URL = "http://54.180.232.125/users";
 
 
     public static void Register(string id, string password, string name, Action<string> onComplete)
@@ -84,12 +84,17 @@ public struct UserApi
             .Delete(requestInfo);
     }
 
-    public static void BuyItem(string userId, int itemId, Action<string> onComplete)
+    public static void BuyItem(string userId, int itemId,int amount, Action<string> onComplete)
     {
-        var requestInfo = new HttpRequestInfo<string, string>
+        var requestInfo = new HttpRequestInfo<BuyItemRequestDto, string>
         {
-            url = BASE_URL + $"/{userId}/items/{itemId}/buy",
-            requestBody = "",
+            url = BASE_URL + $"/items/buy",
+            requestBody = new BuyItemRequestDto()
+            {
+                userId = userId,
+                itemId = itemId,
+                amount = amount
+            },
             onSuccess = onComplete,
             onError = () => { }
         };

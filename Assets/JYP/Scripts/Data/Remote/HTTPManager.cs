@@ -67,9 +67,11 @@ public class HTTPManager : MonoBehaviour
     private IEnumerator PostAsync<T, R>(HttpRequestInfo<T, R> requestInfo)
     {
         string bodyJson = JsonUtility.ToJson(requestInfo.requestBody);
-        using var request = UnityWebRequest.PostWwwForm(requestInfo.url, bodyJson);
+        using var request = UnityWebRequest.Post(requestInfo.url, bodyJson);
         request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("Accept", "application/json");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(bodyJson);
+        request.uploadHandler = new UploadHandlerRaw(jsonToSend);
+        request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
@@ -79,6 +81,7 @@ public class HTTPManager : MonoBehaviour
         }
         else
         {
+            Debug.LogError($"{request.error} - {request.result} - {request.downloadHandler.text}");
             requestInfo.onError();
         }
     }
