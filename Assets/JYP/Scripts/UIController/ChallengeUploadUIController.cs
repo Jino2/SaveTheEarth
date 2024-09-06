@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using SFB;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 public class ChallengeUploadUIController : MonoBehaviour
@@ -54,8 +53,12 @@ public class ChallengeUploadUIController : MonoBehaviour
                 challengeApi.TryChallengeTransport("test", selectedImagePath,
                     (result) =>
                     {
-                        uiDocument.enabled = false;
-                        FinishUIController.ShowUIWith(true);
+                        UserApi.AddPoint("test", 200, (t) =>
+                        {
+                            uiDocument.enabled = false;
+                            FinishUIController.ShowUIWith(true);
+                            
+                        });
                     },
                     () =>
                     {
@@ -67,8 +70,11 @@ public class ChallengeUploadUIController : MonoBehaviour
                 challengeApi.TryChallengeTumbler("test", selectedImagePath,
                     (result) =>
                     {
-                        uiDocument.enabled = false;
-                        FinishUIController.ShowUIWith(true);
+                        UserApi.AddPoint("test", 200, (t) =>
+                        {
+                            uiDocument.enabled = false;
+                            FinishUIController.ShowUIWith(true);
+                        });
                     },
                     () =>
                     {
@@ -80,8 +86,11 @@ public class ChallengeUploadUIController : MonoBehaviour
                 challengeApi.TryChallengeRecycling("test", selectedImagePath,
                     (result) =>
                     {
-                        uiDocument.enabled = false;
-                        FinishUIController.ShowUIWith(true);
+                        UserApi.AddPoint("test", 200, (t) =>
+                        {
+                            uiDocument.enabled = false;
+                            FinishUIController.ShowUIWith(true);
+                        });
                     },
                     () =>
                     {
