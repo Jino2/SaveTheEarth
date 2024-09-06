@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 public class ChallengeApi
 {
     private static readonly string BASE_URL = "http://54.180.232.125/challenges";
-    private static readonly string CHALLENGE_AI_URL = "https://1bd2-222-103-183-137.ngrok-free.app";
+    private static readonly string CHALLENGE_AI_URL = "https://8dd9-222-103-183-137.ngrok-free.app";
 
     public void GetChallengeListByUserId(string userId, Action<List<ChallengeInfo>> onComplete)
     {
@@ -17,9 +17,9 @@ public class ChallengeApi
         onComplete(
             new List<ChallengeInfo>()
             {
-                new ChallengeInfo("이동", ChallengeType.Transport, "보상 1", ChallengeStatus.NotStarted),
-                new ChallengeInfo("텀블러 사용", ChallengeType.Tumbler, "보상 2", ChallengeStatus.InProgress),
-                new ChallengeInfo("재활용", ChallengeType.Recycle, "보상 3", ChallengeStatus.Completed),
+                new ChallengeInfo("이동", ChallengeType.Transport, "200", ChallengeStatus.NotStarted),
+                new ChallengeInfo("텀블러 사용", ChallengeType.Tumbler, "200", ChallengeStatus.InProgress),
+                new ChallengeInfo("재활용", ChallengeType.Recycle, "200", ChallengeStatus.Completed),
             }
         );
     }
@@ -80,7 +80,7 @@ public class ChallengeApi
     public void TryChallengeRecycling(string userId, string imagePath, Action<string> onComplete, Action onFail)
     {
         Debug.Log($"path: {imagePath}");
-        string url = $"{CHALLENGE_AI_URL}/transport-challenge";
+        string url = $"{CHALLENGE_AI_URL}/recycling-challenge";
         var data = File.ReadAllBytes(imagePath);
         Debug.Log($"data: {data.Length}");
         var multipartForm = new List<IMultipartFormSection>

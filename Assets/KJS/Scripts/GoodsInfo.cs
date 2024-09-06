@@ -5,9 +5,9 @@ using UnityEngine;
 public enum GoodsType
 {
     None = -1,
-    Item1,
-    Item2,
-    Item3
+    Chest = 6,
+    Sword,
+    Rock,
 }
 
 [System.Serializable]

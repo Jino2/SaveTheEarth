@@ -118,7 +118,7 @@ public class HTTPManager : MonoBehaviour
 
     private IEnumerator UploadMultipartAsync<R>(HttpRequestInfo<List<IMultipartFormSection>, R> requestInfo)
     {
-        
+        print($"{requestInfo.requestBody[0].contentType} - {requestInfo.requestBody[0].fileName}");
         using var request = UnityWebRequest.Post(requestInfo.url, requestInfo.requestBody);
         
         

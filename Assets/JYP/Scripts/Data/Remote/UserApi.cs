@@ -101,4 +101,33 @@ public struct UserApi
         HTTPManager.GetInstance()
             .Post(requestInfo);
     }
+    
+    public static void GetUserInfo(string userId, Action<UserInfo> onComplete)
+    {
+        var requestInfo = new HttpRequestInfo<string, UserInfo>
+        {
+            url = BASE_URL + $"/{userId}",
+            requestBody = "",
+            onSuccess = onComplete,
+            onError = () => { }
+        };
+        HTTPManager.GetInstance()
+            .Get(requestInfo);
+    }
+    
+    public static void AddPoint(string userId, int point, Action<UserInfo> onComplete)
+    {
+        var requestInfo = new HttpRequestInfo<AddPointRequestDto, UserInfo>
+        {
+            url = BASE_URL + $"/{userId}/point",
+            requestBody = new AddPointRequestDto()
+            {
+                point = point
+            },
+            onSuccess = onComplete,
+            onError = () => { }
+        };
+        HTTPManager.GetInstance()
+            .Post(requestInfo);
+    }
 }

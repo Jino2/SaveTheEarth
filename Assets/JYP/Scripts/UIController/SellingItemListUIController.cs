@@ -12,7 +12,7 @@ public class SellingItemListUIController : MonoBehaviour
     {
         id = "test",
         name = "이름",
-        level = 0,
+        point = 0,
     };
 
     public void InitList(VisualElement root, VisualTreeAsset itemTemplate)
@@ -27,11 +27,6 @@ public class SellingItemListUIController : MonoBehaviour
                     })
                     .ToList();
 
-                sellingListView.bindItem = (element, i) =>
-                {
-                    var sellingItemUIController = (SellingItemUIController)element.userData;
-                    sellingItemUIController.SetItemData(root, sellingItems[i]);
-                };
                 sellingListView.itemsSource = sellingItems;
                 sellingListView.Rebuild();
             }
