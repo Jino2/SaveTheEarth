@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class SellingItemListUIController : MonoBehaviour
         point = 0,
     };
 
-    public void InitList(VisualElement root, VisualTreeAsset itemTemplate)
+    public void InitList(VisualElement root, VisualTreeAsset itemTemplate, Action<int> onBuyItem)
     {
         ItemApi.GetItemsWithInventory(userInfo.id, (list) =>
             {
@@ -46,7 +47,7 @@ public class SellingItemListUIController : MonoBehaviour
         {
             print($"{i} - bind");
             var sellingItemUIController = (SellingItemUIController)element.userData;
-            sellingItemUIController.SetItemData(root, sellingItems[i]);
+            sellingItemUIController.SetItemData(root, sellingItems[i], onBuyItem);
         };
 
         sellingListView.fixedItemHeight = 45;

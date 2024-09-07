@@ -1,17 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class ShopUIController : MonoBehaviour
 {
-    [SerializeField]
-    private VisualTreeAsset sellingItemTemplate;
-    
+    [SerializeField] private VisualTreeAsset sellingItemTemplate;
+
     public UIDocument uiDocument;
 
     private Button closeButton;
+    private Label pointLabel;
+    private int point = 0;
     private void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -19,7 +17,6 @@ public class ShopUIController : MonoBehaviour
 
     private void Update()
     {
-        
     }
 
     public void ShowShopUI()
@@ -28,16 +25,27 @@ public class ShopUIController : MonoBehaviour
         uiDocument.enabled = true;
         var sellingItemListController = new SellingItemListUIController();
         closeButton = uiDocument.rootVisualElement.Q<Button>("closeButton");
+        pointLabel = uiDocument.rootVisualElement.Q<Label>("point");
         closeButton.clicked += OnCloseButtonClicked;
-        sellingItemListController.InitList(uiDocument.rootVisualElement, sellingItemTemplate);
+        sellingItemListController.InitList(uiDocument.rootVisualElement, sellingItemTemplate, i =>
+        {
+            point -= i;
+            pointLabel.text = point.ToString();
+        });
+        UserApi.GetUserInfo("test", info =>
+        {
+            point = info.point;
+            pointLabel.text = point.ToString();
+        });
+        
     }
-    
+
     private void OnCloseButtonClicked()
     {
         print("Close button clicked");
         HideShopUI();
     }
-    
+
     void HideShopUI()
     {
         if (!uiDocument.enabled) return;
