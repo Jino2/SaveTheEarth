@@ -10,13 +10,12 @@ public class PanelProximityMover : MonoBehaviour
     public float moveDistance = 50f; // 패널이 이동할 거리
     public float moveSpeed = 5f; // 패널이 이동하는 속도
     public Canvas canvas; // UI 패널이 속한 캔버스
-    public Inventory_KJS inventory;
     public bool isPanelMoving { get; private set; } // 패널이 움직이고 있는지 여부
 
     private Vector3 originalPosition;
     private Vector3 targetPosition;
     private bool isMoved = false;
-    
+    private Inventory_KJS inventory;
 
     private void Start()
     {
@@ -30,6 +29,13 @@ public class PanelProximityMover : MonoBehaviour
 
         // 초기 목표 위치를 원래 위치로 설정
         targetPosition = originalPosition;
+
+        // Player 오브젝트에서 Inventory_KJS 컴포넌트 가져오기
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            inventory = player.GetComponent<Inventory_KJS>();
+        }
     }
 
     private void Update()
@@ -43,7 +49,10 @@ public class PanelProximityMover : MonoBehaviour
                 targetPosition = new Vector3(originalPosition.x - moveDistance, originalPosition.y, originalPosition.z);
                 isMoved = true;
                 isPanelMoving = true; // 패널이 움직이고 있음을 표시
-                inventory.LoadInventoryItems();
+                if (inventory != null)
+                {
+                    inventory.LoadInventoryItems();
+                }
             }
             else
             {

@@ -22,6 +22,16 @@ public class InventoryUI : MonoBehaviour
         {
             playerTransform = playerObject.transform;
         }
+
+        // 이 스크립트가 붙어있는 오브젝트가 씬 변경 시 파괴되지 않도록 설정
+        DontDestroyOnLoad(gameObject);
+
+        // 최초 스폰 위치 설정
+        if (isFirstSpawn && playerTransform != null)
+        {
+            initialSpawnOffset = playerTransform.forward * 2f;
+            isFirstSpawn = false;  // 최초 스폰 이후로는 false로 설정
+        }
     }
 
     void Update()
@@ -67,47 +77,37 @@ public class InventoryUI : MonoBehaviour
     }
 
     // 프리팹을 생성하는 메서드
-    public void CreateObject(GameObject prefab, GoodsType goodsType, bool isButtonClick)
+    void CreateObject(GameObject prefab, GoodsType goodsType, bool isButtonClick)
     {
         int currentCount = Inventory_KJS.instance.CurrentGoodsCount(goodsType);
 
-        // 수량이 0보다 클 경우에만 생성
-        if (currentCount > 0)
+        if (currentCount > 0 && prefab != null && playerTransform != null)
         {
-            if (prefab != null && playerTransform != null)  // playerTransform이 null이 아닌지 확인
+            Vector3 spawnPosition;
+
+            if (isFirstSpawn)
             {
-                Vector3 spawnPosition;
+                initialSpawnOffset = playerTransform.forward * 2f;
+                spawnPosition = playerTransform.position + initialSpawnOffset;
+                isFirstSpawn = false;
+            }
+            else
+            {
+                spawnPosition = playerTransform.position + (playerTransform.rotation * initialSpawnOffset);
+            }
 
-                // 최초 스폰일 경우: 플레이어의 정면 2유닛 앞에 스폰하고, 그 오프셋을 기억함
-                if (isFirstSpawn)
-                {
-                    initialSpawnOffset = playerTransform.forward * 2f;  // 최초 스폰 위치를 정면 2유닛 앞에 설정
-                    spawnPosition = playerTransform.position + initialSpawnOffset;  // Y축 띄우지 않고 바로 스폰
-                    isFirstSpawn = false;  // 최초 스폰 이후로는 false로 설정
-                }
-                else
-                {
-                    // 회전만 고려한 새로운 위치 계산: 플레이어의 회전에 따라 초기 오프셋을 회전시킴
-                    spawnPosition = playerTransform.position + (playerTransform.rotation * initialSpawnOffset);
-                }
+            GameObject spawnedPrefab = Instantiate(prefab, spawnPosition, Quaternion.identity);
+            spawnedPrefab.transform.localScale *= 0.5f;
 
-                // 프리팹 생성
-                GameObject spawnedPrefab = Instantiate(prefab, spawnPosition, Quaternion.identity);
-
-                // 스폰된 프리팹의 크기를 줄임 (50%)
-                spawnedPrefab.transform.localScale *= 0.5f;
-
-                // 키 입력과 버튼 클릭에 따라 다른 메서드로 수량 감소 처리
-                if (isButtonClick)
-                {
-                    MinusCount(goodsType);
-                    isCountReduced = true;  // 수량 감소 후 플래그 설정
-                    Invoke(nameof(ResetCountReduced), 0.1f);  // 일정 시간 후에 플래그 초기화
-                }
-                else
-                {
-                    MinusCountByKey(goodsType);  // 숫자 키 입력 시 별도 처리
-                }
+            if (isButtonClick)
+            {
+                MinusCount(goodsType);
+                isCountReduced = true;
+                Invoke(nameof(ResetCountReduced), 0.1f);
+            }
+            else
+            {
+                MinusCountByKey(goodsType);
             }
         }
     }
