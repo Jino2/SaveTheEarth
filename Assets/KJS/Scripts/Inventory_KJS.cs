@@ -113,7 +113,7 @@ public class Inventory_KJS : MonoBehaviour
 
     }
 
-    private void LoadInventoryItems()
+    public void LoadInventoryItems()
     {
         UserApi.GetUserInventoryList("test", (items) =>
         {

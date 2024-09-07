@@ -5465,6 +5465,11 @@ PrefabInstance:
       propertyPath: canvas
       value: 
       objectReference: {fileID: 420722470}
+    - target: {fileID: 545116680581239847, guid: 07bff68135e1c3c4f986227fab724bb0,
+        type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 754158122}
     - target: {fileID: 1612987479591120428, guid: 07bff68135e1c3c4f986227fab724bb0,
         type: 3}
       propertyPath: m_AnchorMax.y
