@@ -5,32 +5,66 @@ using static GoodsInfo;  // GoodsInfo의 enum GoodsType을 사용하기 위해 s
 
 public class InventoryUI : MonoBehaviour
 {
-
     public List<GameObject> prefabList;
-
-    // 아이템 생성 위치 (원하는 위치를 설정)
     public Transform spawnPoint;
+    public TextMeshProUGUI[] itemCountTexts;  // GoodsType별로 수량을 표시할 TextMeshPro 배열
 
-    // GoodsType에 대응하는 메서드들 (매개변수 없이 OnClick 이벤트에 연결 가능)
+    private bool isCountReduced = false;  // 수량 감소 중복 방지를 위한 플래그
+
+    void Update()
+    {
+        // 숫자 키 입력에 따른 프리팹 생성
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            CreateObjectByKey(0, GoodsType.Chest);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            CreateObjectByKey(1, GoodsType.Sword);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            CreateObjectByKey(2, GoodsType.Rock);
+        }
+    }
+
+    // 숫자 키 입력에 따른 프리팹 생성 메서드
+    public void CreateObjectByKey(int prefabIndex, GoodsType goodsType)
+    {
+        if (prefabIndex >= 0 && prefabIndex < prefabList.Count)
+        {
+            CreateObject(prefabList[prefabIndex], goodsType, false);  // false: 버튼 클릭 아님
+        }
+    }
+
+    // GoodsType에 대응하는 메서드들 (OnClick 이벤트에 연결 가능)
     public void OnChestButtonClicked()
     {
-        CreateObject(prefabList[0], GoodsType.Chest);
+        if (!isCountReduced)  // 수량 감소가 한 번도 처리되지 않았을 때만 실행
+        {
+            CreateObject(prefabList[0], GoodsType.Chest, true);  // true: 버튼 클릭
+        }
     }
 
     public void OnSwordButtonClicked()
     {
-        CreateObject(prefabList[1], GoodsType.Sword);
+        if (!isCountReduced)
+        { 
+            CreateObject(prefabList[1], GoodsType.Sword, true);  // true: 버튼 클릭
+        }
     }
 
     public void OnRockButtonClicked()
     {
-        CreateObject(prefabList[2], GoodsType.Rock);
+        if (!isCountReduced)
+        {
+            CreateObject(prefabList[2], GoodsType.Rock, true);  // true: 버튼 클릭
+        }
     }
 
-    // 프리팹을 생성하는 메서드
-    public void CreateObject(GameObject prefab, GoodsType goodsType)
+    // 프리팹을 생성하는 메서드 (키 입력 또는 버튼 클릭 여부에 따라 수량 감소 처리)
+    public void CreateObject(GameObject prefab, GoodsType goodsType, bool isButtonClick)
     {
-        // 현재 GoodsType의 수량을 확인
         int currentCount = Inventory_KJS.instance.CurrentGoodsCount(goodsType);
 
         // 수량이 0보다 클 경우에만 생성
@@ -38,69 +72,66 @@ public class InventoryUI : MonoBehaviour
         {
             if (prefab != null)
             {
-                // 프리팹을 지정된 위치에 생성
-                Vector3 spawnPosition = new Vector3(0, 1, 0);
+                Vector3 spawnPosition = spawnPoint != null ? spawnPoint.position : new Vector3(0, 1, 0);
                 Instantiate(prefab, spawnPosition, Quaternion.identity);
-                Debug.Log($"{prefab.name} created at {spawnPosition}");
+
+
+                // 키 입력과 버튼 클릭에 따라 다른 메서드로 수량 감소 처리
+                if (isButtonClick)
+                {
+
+                    MinusCount(goodsType);
+                    isCountReduced = true;  // 수량 감소 후 플래그 설정
+                    Invoke(nameof(ResetCountReduced), 0.1f);  // 일정 시간 후에 플래그 초기화
+                }
+                else
+                {
+                    MinusCountByKey(goodsType);  // 숫자 키 입력 시 별도 처리
+                }
             }
-            else
-            {
-                Debug.LogError("Prefab is not assigned.");
-            }
-        }
-        else
-        {
-            Debug.LogWarning($"Cannot create {goodsType} object. Count is zero or less.");
         }
     }
 
+    // 플래그 초기화 메서드 (일정 시간이 지난 후 수량 감소 플래그를 초기화)
+    private void ResetCountReduced()
+    {
+        isCountReduced = false;
+    }
 
-public TextMeshProUGUI[] itemCountTexts;  // GoodsType별로 수량을 표시할 TextMeshPro 배열
-
-    // GoodsType의 수량을 1씩 감소시키고 UI를 업데이트
+    // 버튼 클릭 시 호출되는 GoodsType의 수량을 1씩 감소시키고 UI를 업데이트하는 메서드
     public void MinusCount(GoodsType goodsType)
     {
-        // Inventory에서 해당 GoodsType의 현재 수량을 가져옴
         int currentCount = Inventory_KJS.instance.CurrentGoodsCount(goodsType);
 
-        // 수량을 1 감소시키고 Inventory에 업데이트
+        // 플래그로 중복 호출 방지
+        if (!isCountReduced)
+        {
+
+            if (currentCount > 0)
+            {
+                Inventory_KJS.instance.SetGoodsCount(goodsType, currentCount - 1);
+
+                // UI 업데이트
+                UpdateText(goodsType);
+            }
+        }
+    }
+
+    // 숫자 키 입력 시 호출되는 GoodsType의 수량을 1씩 감소시키고 UI를 업데이트하는 메서드
+    public void MinusCountByKey(GoodsType goodsType)
+    {
+        int currentCount = Inventory_KJS.instance.CurrentGoodsCount(goodsType);
+        
+
         if (currentCount > 0)
         {
-            Inventory_KJS.instance.SetGoodsCount(goodsType, currentCount - 1);  // 수량 감소
+            Inventory_KJS.instance.SetGoodsCount(goodsType, currentCount - 1);
+            
 
             // UI 업데이트
             UpdateText(goodsType);
         }
-        else
-        {
-            Debug.LogWarning($"더 이상 {goodsType}의 수량이 없습니다.");
-        }
-    }
-
-    // 특정 GoodsType의 오브젝트를 활성화하고 UI를 업데이트
-    public void ActivateObject(GoodsType goodsType)
-    {
-        List<GameObject> disabledObjects = Inventory_KJS.instance.GetDisabledObjects();
-
-        // 하나의 오브젝트만 활성화하도록 루프를 break
-        for (int i = 0; i < disabledObjects.Count; i++)
-        {
-            GameObject obj = disabledObjects[i];
-            GoodsInfo goodsInfo = obj.GetComponent<GoodsInfo>();
-
-            if (goodsInfo != null && goodsInfo.goodsType == goodsType)
-            {
-                obj.SetActive(true);  // 오브젝트 활성화
-                obj.transform.position = Vector3.zero;  // 오브젝트 좌표를 (0, 0, 0)으로 설정
-
-                goodsInfo.count = 1;  // 활성화 시 count 초기화
-
-                // 활성화된 오브젝트는 리스트에서 제거
-                disabledObjects.RemoveAt(i);
-
-                break;  // 한 번에 하나의 오브젝트만 활성화
-            }
-        }
+       
     }
 
     // 특정 GoodsType의 수량을 TextMeshPro에 업데이트하는 함수
@@ -110,10 +141,7 @@ public TextMeshProUGUI[] itemCountTexts;  // GoodsType별로 수량을 표시할
 
         if (index >= 0 && index < itemCountTexts.Length)
         {
-            // Inventory에서 해당 GoodsType의 수량을 가져옴
             int count = Inventory_KJS.instance.CurrentGoodsCount(goodsType);
-
-            // TextMeshPro에 수량을 표시
             itemCountTexts[index].text = $"{count}";
         }
     }

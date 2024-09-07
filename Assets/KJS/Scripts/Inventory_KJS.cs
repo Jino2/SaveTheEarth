@@ -81,13 +81,13 @@ public class Inventory_KJS : MonoBehaviour
     }
 
     // ActivateDisabledObject는 이제 InventoryUI로 위임
-    public void ActivateDisabledObject(GoodsType goodsType)
-    {
-        if (inventoryUI != null)
-        {
-            inventoryUI.ActivateObject(goodsType);
-        }
-    }
+    //public void ActivateDisabledObject(GoodsType goodsType)
+    //{
+    //    if (inventoryUI != null)
+    //    {
+    //        inventoryUI.ActivateObject(goodsType);
+    //    }
+    //}
     public void AddGoods(GoodsInfo goodsInfo)
     {
         if (goodsInfo != null)
