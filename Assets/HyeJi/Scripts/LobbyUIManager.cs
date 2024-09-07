@@ -20,6 +20,9 @@ public class LobbyUIManager : MonoBehaviour
 
     public Button btn_Check;
     public Image img_Logining;
+
+    // 방 셋팅 (방 이름, 최대 플레이어 수 배열로 받기)
+    public TMP_InputField[] roomSetting;
     
 
     private void Awake()
