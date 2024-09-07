@@ -18,6 +18,16 @@ public class PhaseController : MonoBehaviour
     private void Start()
     {
         DisableEnvironmentObjects();
+        
+        UserApi.GetUserInfo("test", info =>
+        {
+            currentScore = info.point;
+            // 점수가 특정 포인트에 도달하면 자식 오브젝트들의 상태를 변경합니다.
+            if (currentScore >= triggerScore)
+            {
+                UpdateChildObjects();
+            }
+        });
     }
 
     private void DisableEnvironmentObjects()
@@ -33,17 +43,6 @@ public class PhaseController : MonoBehaviour
 
     private void Update()
     {
-        UserApi.GetUserInfo("test", info =>
-        {
-            currentScore = info.point;
-
-        });
-
-        // 점수가 특정 포인트에 도달하면 자식 오브젝트들의 상태를 변경합니다.
-        if (currentScore >= triggerScore)
-        {
-            UpdateChildObjects();
-        }
     }
 
     // 자식 오브젝트들의 상태를 변경하는 메서드입니다.
