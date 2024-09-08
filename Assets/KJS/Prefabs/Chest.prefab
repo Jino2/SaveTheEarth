@@ -31,8 +31,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.33, y: 0, z: -9.96}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 4.99, y: 4.99, z: 4.99}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1746939638597771522}
   m_Father: {fileID: 0}
@@ -126,7 +126,7 @@ MonoBehaviour:
   scaleFactor: 1.1
   minScale: 0.1
   maxScale: 10
-  panelProximityMover: {fileID: 0}
+  scaleMultiplier: 0.5
 --- !u!114 &5435492376167454366
 MonoBehaviour:
   m_ObjectHideFlags: 0
