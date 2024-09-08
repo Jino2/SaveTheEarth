@@ -5,7 +5,7 @@ using UnityEngine;
 public enum GoodsType
 {
     None = -1,
-    Chest = 6,
+    Chest= 6,
     Sword,
     Rock,
 }

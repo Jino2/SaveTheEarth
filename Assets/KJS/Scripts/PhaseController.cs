@@ -1,14 +1,16 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class PhaseController : MonoBehaviour
 {
-    // Æ®¸®°Å°¡ ¹ß»ıÇÒ Á¡¼öÀÔ´Ï´Ù.
+    // íŠ¸ë¦¬ê±°ê°€ ë°œìƒí•  ì ìˆ˜ì…ë‹ˆë‹¤.
     public int triggerScore = 100;
 
-    // ÇöÀç Á¡¼ö¸¦ ÃßÀûÇÏ´Â º¯¼öÀÔ´Ï´Ù.
+    [SerializeField]
+    // í˜„ì¬ ì ìˆ˜ë¥¼ ì¶”ì í•˜ëŠ” ë³€ìˆ˜ì…ë‹ˆë‹¤.
     public int currentScore = 0;
 
     public event Action OnUpdateChildObjects;
@@ -16,6 +18,16 @@ public class PhaseController : MonoBehaviour
     private void Start()
     {
         DisableEnvironmentObjects();
+
+        UserApi.GetUserInfo("test", info =>
+        {
+            currentScore = info.point;
+            // ì ìˆ˜ê°€ íŠ¹ì • í¬ì¸íŠ¸ì— ë„ë‹¬í•˜ë©´ ìì‹ ì˜¤ë¸Œì íŠ¸ë“¤ì˜ ìƒíƒœë¥¼ ë³€ê²½í•©ë‹ˆë‹¤.
+            if (currentScore >= triggerScore)
+            {
+                UpdateChildObjects();
+            }
+        });
     }
 
     private void DisableEnvironmentObjects()
@@ -31,32 +43,32 @@ public class PhaseController : MonoBehaviour
 
     private void Update()
     {
-        // ¸¶¿ì½º Å¬¸¯À» °¨ÁöÇÏ°í Á¡¼ö¸¦ Áõ°¡½ÃÅµ´Ï´Ù.
-        if (Input.GetKeyDown(KeyCode.Alpha1)) // 0Àº ¿ŞÂÊ ¸¶¿ì½º ¹öÆ°À» ÀÇ¹ÌÇÕ´Ï´Ù.
-        {
-            currentScore += 1;
-        }
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    // ì ìˆ˜ 1 ì¦ê°€
+        //    currentScore += 1;
+        //    // ì ìˆ˜ UI ì—…ë°ì´íŠ¸
 
-        // Á¡¼ö°¡ Æ¯Á¤ Æ÷ÀÎÆ®¿¡ µµ´ŞÇÏ¸é ÀÚ½Ä ¿ÀºêÁ§Æ®µéÀÇ »óÅÂ¸¦ º¯°æÇÕ´Ï´Ù.
-        if (currentScore >= triggerScore)
-        {
-            UpdateChildObjects();
-        }
+        //}
+        //if (currentScore >= triggerScore)
+        //{
+        //    UpdateChildObjects();
+        //}
     }
 
-    // ÀÚ½Ä ¿ÀºêÁ§Æ®µéÀÇ »óÅÂ¸¦ º¯°æÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    // ìì‹ ì˜¤ë¸Œì íŠ¸ë“¤ì˜ ìƒíƒœë¥¼ ë³€ê²½í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     public void UpdateChildObjects()
     {
         foreach (Transform child in transform)
         {
             if (child.CompareTag("trash"))
             {
-                // 'trash' ÅÂ±×°¡ ÀÖ´Â ¿ÀºêÁ§Æ®´Â È°¼ºÈ­ÇÕ´Ï´Ù.
+                // 'trash' íƒœê·¸ê°€ ìˆëŠ” ì˜¤ë¸Œì íŠ¸ëŠ” í™œì„±í™”í•©ë‹ˆë‹¤.
                 child.gameObject.SetActive(false);
             }
             else if (child.CompareTag("environment"))
             {
-                // 'environment' ÅÂ±×°¡ ÀÖ´Â ¿ÀºêÁ§Æ®´Â ºñÈ°¼ºÈ­ÇÕ´Ï´Ù.
+                // 'environment' íƒœê·¸ê°€ ìˆëŠ” ì˜¤ë¸Œì íŠ¸ëŠ” ë¹„í™œì„±í™”í•©ë‹ˆë‹¤.
                 child.gameObject.SetActive(true);
             }
             OnUpdateChildObjects?.Invoke();

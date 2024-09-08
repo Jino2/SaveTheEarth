@@ -2,19 +2,20 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 
 public class Inventory_KJS : MonoBehaviour
 {
     public static Inventory_KJS instance;  // 싱글톤 인스턴스
-    public InventoryUI inventoryUI;    
+    public InventoryUI inventoryUI;
     public List<GameObject> goods = new List<GameObject>();  //오브젝트 리스트
     private Dictionary<GoodsType, int> goodsCounts = new Dictionary<GoodsType, int>();  // GoodsType별로 수량을 추적
 
     public List<InventoryItem> inventoryItems;
-    
+
     private void Awake()
     {
-        
+
         if (instance == null)
         {
             instance = this;
@@ -80,13 +81,13 @@ public class Inventory_KJS : MonoBehaviour
     }
 
     // ActivateDisabledObject는 이제 InventoryUI로 위임
-    public void ActivateDisabledObject(GoodsType goodsType)
-    {
-        if (inventoryUI != null)
-        {
-            inventoryUI.ActivateObject(goodsType);
-        }
-    }
+    //public void ActivateDisabledObject(GoodsType goodsType)
+    //{
+    //    if (inventoryUI != null)
+    //    {
+    //        inventoryUI.ActivateObject(goodsType);
+    //    }
+    //}
     public void AddGoods(GoodsInfo goodsInfo)
     {
         if (goodsInfo != null)
@@ -109,14 +110,33 @@ public class Inventory_KJS : MonoBehaviour
 
             Debug.Log($"{goodsInfo.goodsType}이를 획득했습니다.");
         }
-        
+
     }
-    
-    private void LoadInventoryItems()
+
+    public void LoadInventoryItems()
     {
         UserApi.GetUserInventoryList("test", (items) =>
         {
             inventoryItems = items;
+
+            goodsCounts.Clear();
+            goods.Clear(); // 기존 리스트 초기화
+
+            foreach (var item in items)
+            {
+                // InventoryItem의 데이터를 GoodsInfo에 매핑하여 GoodsInfo 인스턴스 생성
+                GoodsInfo goodsInfo = new GameObject($"Item_{item.itemId}").AddComponent<GoodsInfo>();
+
+                // GoodsInfo의 데이터 설정
+                goodsInfo.goodsType = (GoodsType)item.itemId;
+                goodsInfo.count = item.amount;
+
+                // 인벤토리에 추가 (AddGoods가 수량 업데이트 및 UI 처리를 담당)
+                goodsInfo.AddToInventory();
+
+                // goods 리스트에도 추가
+                goods.Add(goodsInfo.gameObject);
+            }
         });
     }
 }

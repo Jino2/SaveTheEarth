@@ -13,7 +13,7 @@ public class DragAndDrop : MonoBehaviour
     public float scaleFactor = 1.1f; // 스케일 변경 배수
     public float minScale = 0.1f;
     public float maxScale = 3.0f;
-    public PanelProximityMover panelProximityMover; // PanelProximityMover 스크립트에 대한 참조
+    private PanelProximityMover panelProximityMover; // PanelProximityMover 스크립트에 대한 참조
 
     private Quaternion targetRotation;
     private Transform childObject;
@@ -22,6 +22,12 @@ public class DragAndDrop : MonoBehaviour
 
     void Start()
     {
+        Canvas canvas = FindObjectOfType<Canvas>();  // 씬에서 Canvas 오브젝트를 찾음
+
+        if (canvas != null)
+        {
+            panelProximityMover = canvas.GetComponentInChildren<PanelProximityMover>();
+        }
         // 자식 오브젝트 가져오기
         if (transform.childCount > 0)
         {

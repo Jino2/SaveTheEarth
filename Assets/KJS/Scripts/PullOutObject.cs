@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;  // UI Button을 위해 필요한 네임스페이스
 
 public class PullOutObject : MonoBehaviour
@@ -49,8 +50,30 @@ public class PullOutObject : MonoBehaviour
     // 각 GoodsType에 맞는 버튼이 클릭되었을 때 호출되는 함수
     private void OnActivateButtonClicked(GoodsType goodsType)
     {
-        // Inventory에 저장된 해당 GoodsType의 비활성화된 오브젝트들을 다시 활성화
-        Inventory_KJS.instance.ActivateDisabledObject(goodsType);
+        //{
+        //    List<GameObject> disabledObjects = Inventory_KJS.instance.GetDisabledObjects();
+
+        //    하나의 오브젝트만 활성화하도록 루프를 break
+        //    for (int i = 0; i < disabledObjects.Count; i++)
+        //    {
+        //        GameObject obj = disabledObjects[i];
+        //        GoodsInfo goodsInfo = obj.GetComponent<GoodsInfo>();
+
+        //        if (goodsInfo != null && goodsInfo.goodsType == goodsType)
+        //        {
+        //            obj.SetActive(true);  // 오브젝트 활성화
+        //            obj.transform.position = Vector3.zero;  // 오브젝트 좌표를 (0, 0, 0)으로 설정
+
+        //            goodsInfo.count = 1;  // 활성화 시 count 초기화
+
+        //            활성화된 오브젝트는 리스트에서 제거
+        //            disabledObjects.RemoveAt(i);
+
+        //            break;  // 한 번에 하나의 오브젝트만 활성화
+        //        }
+        //    }
+        //}
+
         Inventory_KJS.instance.MinusGoodsCount(goodsType);  // 해당 GoodsType의 수량 감소
     }
 
