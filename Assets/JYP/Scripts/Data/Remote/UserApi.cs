@@ -111,7 +111,7 @@ public struct UserApi
             onSuccess = onComplete,
             onError = () => { }
         };
-        HTTPManager.GetInstance()
+        HTTPManager.GetInstance() 
             .Get(requestInfo);
     }
     
