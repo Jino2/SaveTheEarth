@@ -11,6 +11,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     // Manual (판넬 리스트 관리 리스트)
     public GameObject[] panelList;
 
+    // 방 이름
+    string roomName;
+
     // 로그인 시작
     public void StartLogin()
     {
@@ -108,7 +111,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public void CreateRoom()
     {
         //// 문자열로 인풋텍스트, 숫자 받아오기
-        string roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
+        roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
         int playerCount = Convert.ToInt32(LobbyUIManager.lobbyUI.roomSetting[1].text);
 
         // 방 이름 글자 0 이상, 플레이어가 1명 이상 존재해야함
@@ -133,7 +136,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public void JoinRoom()
     {
         // 룸 네임 받아오기
-        string roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
+        roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
 
         // 방 이름의 길이는 0 이상이어야 한다
         if(roomName.Length > 0)
