@@ -24,8 +24,9 @@ public class DragAndDrop : MonoBehaviour
     private BoxCollider parentCollider;
     private Vector3 initialParentColliderSize;
 
-    // 스케일 변경 시 적용되는 배율 (1보다 작은 값으로 설정하여 변화 폭을 줄임)
-    public float scaleMultiplier = 0.5f;
+    // x와 z 축의 변화율을 조정하기 위한 배율
+    public float scaleMultiplierX = 0.1f;  // x축 변화 최소화
+    public float scaleMultiplierZ = 0.1f;  // z축 변화 최소화
 
     void Start()
     {
@@ -139,23 +140,25 @@ public class DragAndDrop : MonoBehaviour
                 // 스케일 적용
                 childObject.localScale = newScale;
 
-                // 부모 BoxCollider 크기 업데이트
+                // 부모 BoxCollider 크기 업데이트 (x, z는 최소한으로, y는 그대로 변화)
                 UpdateParentColliderSize();
             }
         }
     }
 
-    // 부모 BoxCollider 크기를 자식 스케일에 맞춰 조정
+    // 부모 BoxCollider 크기를 자식 스케일에 맞춰 조정 (x, z는 최소한으로, y는 그대로 반영)
     void UpdateParentColliderSize()
     {
         if (parentCollider != null && childObject != null)
         {
             // 자식의 스케일을 반영한 새로운 부모 콜라이더 크기 계산
             Vector3 childScale = childObject.lossyScale; // 자식 오브젝트의 월드 스케일
+
+            // x와 z는 최소한의 변화 적용, y는 자식의 스케일 변화 그대로 반영
             parentCollider.size = new Vector3(
-                initialParentColliderSize.x * (1 + (childScale.x - 1) * scaleMultiplier),
-                initialParentColliderSize.y * (1 + (childScale.y - 1) * scaleMultiplier),
-                initialParentColliderSize.z * (1 + (childScale.z - 1) * scaleMultiplier)
+                initialParentColliderSize.x * (1 + (childScale.x - 1) * scaleMultiplierX),  // x 축 변화 최소화
+                initialParentColliderSize.y * childScale.y,                                // y 축 변화 반영
+                initialParentColliderSize.z * (1 + (childScale.z - 1) * scaleMultiplierZ)   // z 축 변화 최소화
             );
         }
     }
