@@ -1221,7 +1221,7 @@ Camera:
   m_GameObject: {fileID: 961739749}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -1436,7 +1436,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1024697297
 Transform:
   m_ObjectHideFlags: 0
@@ -1615,6 +1615,11 @@ PrefabInstance:
     - target: {fileID: 7447163605590411544, guid: 907fd825e3988774caab4234b943bf44,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7447163605599512414, guid: 907fd825e3988774caab4234b943bf44,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1809,11 +1814,11 @@ MonoBehaviour:
   rotSpeed: 200
   walkSpeed: 2
   runSpeed: 10
-  isMoving: 0
   cameraTransform: {fileID: 961739753}
   rotationSpeed: 10
   jumpPower: 2
   jumpMaxCnt: 2
+  moveDir: {x: 0, y: 0, z: 0}
 --- !u!114 &1171178485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1830,7 +1835,6 @@ MonoBehaviour:
   rotSpeed: 200
   walkSpeed: 5
   runSpeed: 10
-  isMoving: 0
 --- !u!143 &1171178486
 CharacterController:
   m_ObjectHideFlags: 0
