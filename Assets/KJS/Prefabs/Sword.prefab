@@ -125,8 +125,7 @@ MonoBehaviour:
   rotationSpeed: 5
   scaleFactor: 1.1
   minScale: 0.1
-  maxScale: 10
-  panelProximityMover: {fileID: 0}
+  maxScale: 200
 --- !u!114 &5449410746206881286
 MonoBehaviour:
   m_ObjectHideFlags: 0

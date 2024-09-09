@@ -20,6 +20,13 @@ public class DragAndDrop : MonoBehaviour
     private bool isRotating = false;
     private float dragDepth; // 카메라와 오브젝트 사이의 거리
 
+    // 부모의 BoxCollider
+    private BoxCollider parentCollider;
+    private Vector3 initialParentColliderSize;
+
+    // 스케일 변경 시 적용되는 배율 (1보다 작은 값으로 설정하여 변화 폭을 줄임)
+    public float scaleMultiplier = 0.5f;
+
     void Start()
     {
         Canvas canvas = FindObjectOfType<Canvas>();  // 씬에서 Canvas 오브젝트를 찾음
@@ -28,11 +35,20 @@ public class DragAndDrop : MonoBehaviour
         {
             panelProximityMover = canvas.GetComponentInChildren<PanelProximityMover>();
         }
+
         // 자식 오브젝트 가져오기
         if (transform.childCount > 0)
         {
             childObject = transform.GetChild(0); // 첫 번째 자식 오브젝트
             targetRotation = childObject.rotation; // 초기 회전값 설정
+        }
+
+        // 부모의 BoxCollider 가져오기
+        parentCollider = GetComponent<BoxCollider>();
+        if (parentCollider != null)
+        {
+            // 부모 BoxCollider의 초기 크기 저장
+            initialParentColliderSize = parentCollider.size;
         }
 
         goodsInfo = GetComponent<GoodsInfo>();
@@ -122,7 +138,25 @@ public class DragAndDrop : MonoBehaviour
 
                 // 스케일 적용
                 childObject.localScale = newScale;
+
+                // 부모 BoxCollider 크기 업데이트
+                UpdateParentColliderSize();
             }
+        }
+    }
+
+    // 부모 BoxCollider 크기를 자식 스케일에 맞춰 조정
+    void UpdateParentColliderSize()
+    {
+        if (parentCollider != null && childObject != null)
+        {
+            // 자식의 스케일을 반영한 새로운 부모 콜라이더 크기 계산
+            Vector3 childScale = childObject.lossyScale; // 자식 오브젝트의 월드 스케일
+            parentCollider.size = new Vector3(
+                initialParentColliderSize.x * (1 + (childScale.x - 1) * scaleMultiplier),
+                initialParentColliderSize.y * (1 + (childScale.y - 1) * scaleMultiplier),
+                initialParentColliderSize.z * (1 + (childScale.z - 1) * scaleMultiplier)
+            );
         }
     }
 
