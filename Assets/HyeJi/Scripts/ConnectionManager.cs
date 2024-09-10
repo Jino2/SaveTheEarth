@@ -22,7 +22,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         // 방장의 씬을 기준으로 싱크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
         // 싱글톤으로 닉네임 텍스트 가져오기
-        //PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_Nickname.text;
+        PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_NickName.text;
+        //PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_Pw.text;
 
         // 접속을 서버에 요청하기
         PhotonNetwork.ConnectUsingSettings();         
@@ -36,12 +37,14 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         // 네임 서버에 접속이 완료되었음을 알려주기
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
 
-        // 그리구 로그인중 ... 띄우기! 그냥 덮어써도 ㄱㅊ을듯
-        LobbyUIManager.lobbyUI.img_Logining.enabled = true;
-        // login 버튼 없애기 (이미 로그인 했응께)
-        LobbyUIManager.lobbyUI.btn_Check.interactable = false;      
-        // 로그인 Panel 없애기
-        LobbyUIManager.lobbyUI.ShowPanel_login();
+        LobbyUIManager.lobbyUI.ShowPanel();
+
+        //// 그리구 로그인중 ... 띄우기! 그냥 덮어써도 ㄱㅊ을듯
+        //LobbyUIManager.lobbyUI.img_Logining.enabled = true;
+        //// login 버튼 없애기 (이미 로그인 했응께)
+        //LobbyUIManager.lobbyUI.btn_Check.interactable = false;      
+        //// 로그인 Panel 없애기
+        //LobbyUIManager.lobbyUI.ShowPanel_login();
     }
 
     // 연결에 실패
@@ -61,7 +64,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         base.OnConnectedToMaster();
 
         // 마스터 서버에 접속이 완료되었음을 알려주기
-        print(MethodInfo.GetCurrentMethod().Name + " is Call!");
+        print(MethodInfo.GetCurrentMethod().Name + " is Call!");       
 
         // 서버의 로비로 들어간다고 요청
         PhotonNetwork.JoinLobby();
@@ -76,7 +79,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
 
         // UI 변환 함수를 싱글톤으로 받아오기
-        //LobbyUIManager.lobbyUI.ShowPanel();
+        LobbyUIManager.lobbyUI.ShowPanel_2();
     }
 
     public override void OnCreatedRoom()
@@ -107,7 +110,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         Debug.LogError(message);
     }
 
-    // 방 생성
+    // 로비에 입장 후 -> 방 생성
     public void CreateRoom()
     {
         //// 문자열로 인풋텍스트, 숫자 받아오기
