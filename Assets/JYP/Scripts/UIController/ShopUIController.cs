@@ -5,6 +5,8 @@ public class ShopUIController : MonoBehaviour
 {
     [SerializeField] private VisualTreeAsset sellingItemTemplate;
 
+    [SerializeField]
+    public Shop shop;
     public UIDocument uiDocument;
 
     private Button closeButton;
@@ -27,10 +29,11 @@ public class ShopUIController : MonoBehaviour
         closeButton = uiDocument.rootVisualElement.Q<Button>("closeButton");
         pointLabel = uiDocument.rootVisualElement.Q<Label>("point");
         closeButton.clicked += OnCloseButtonClicked;
-        sellingItemListController.InitList(uiDocument.rootVisualElement, sellingItemTemplate, i =>
+        sellingItemListController.InitList(uiDocument.rootVisualElement, sellingItemTemplate, item =>
         {
-            point -= i;
+            point -= item.price;
             pointLabel.text = point.ToString();
+            shop.SoldItem(item.id);
         });
         UserApi.GetUserInfo("test", info =>
         {

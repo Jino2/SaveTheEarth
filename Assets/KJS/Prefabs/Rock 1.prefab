@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 8454550862529859543}
   - component: {fileID: 8248248673361740000}
   - component: {fileID: 8330789239781736255}
+  - component: {fileID: -64523448788916825}
   m_Layer: 0
   m_Name: Rock 1
   m_TagString: Item
@@ -247,3 +248,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsType: 8
   count: 1
+--- !u!114 &-64523448788916825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3325128002496834769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c137efc76fc56f84fa3abdb07f7c9573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  droppedScale: 0.1
+  dropPower: 1
+  floatingHeight: 1
+  floatingRange: 0.5
+  floatingSpeed: 1
+  pickUpOffset: 1
+  pickUpSpeed: 1
