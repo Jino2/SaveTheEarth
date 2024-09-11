@@ -5,13 +5,15 @@ using Photon.Pun;
 using Photon.Realtime;
 using System;
 using System.Reflection;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class ConnectionManager : MonoBehaviourPunCallbacks
 {
+    // roomPrefab
+    public GameObject roomPrefab;
     // Manual (판넬 리스트 관리 리스트)
     public GameObject[] panelList;
 
-    // 방 이름
     string roomName;
 
     // 로그인 시작
@@ -88,6 +90,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
         // 성공적으로 방이 개설되었음을 알려준다.
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
+
+        // 로그 확인하기
+        LobbyUIManager.lobbyUI.PrintLog("방 만들어짐!");
     }
 
     public override void OnJoinedRoom()
@@ -96,6 +101,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
         // 성공적으로 방에 입장되었음을 알려준다.
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
+
+        // 로그 확인하기
+        LobbyUIManager.lobbyUI.PrintLog("방 들어가짐!");
 
         // 방에 입장한 경우 모두 1번 씬으로 이동한다.
         PhotonNetwork.LoadLevel(1);
@@ -129,6 +137,15 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             roomOptions.IsOpen = true;
             // 누군가 내 방을 검색할 수 있게 허용하는가?
             roomOptions.IsVisible = true;
+
+            // 룸의 커스텀 정보를 추가한다 (키 값 등록하기)
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "MASTER_NAME", "PASSWORD" };
+
+            Hashtable roomTable = new Hashtable();
+            roomTable.Add("MASTER_NAME", PhotonNetwork.NickName);
+            roomTable.Add("PASSWORD", 1234);
+            roomOptions.CustomRoomProperties = roomTable;
+
 
             // 리퀘스트 함수
             PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);

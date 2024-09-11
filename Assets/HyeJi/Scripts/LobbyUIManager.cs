@@ -19,6 +19,7 @@ public class LobbyUIManager : MonoBehaviour
 
     // 로그 텍스트
     public TMP_Text text_LogText;
+    string log;
     // 사용자 닉네임
     public TMP_InputField input_NickName;
     // 사용자 pw
@@ -85,5 +86,13 @@ public class LobbyUIManager : MonoBehaviour
     {
         // 
         panel_Remain.gameObject.SetActive(false);
+    }
+
+    public void PrintLog(string message)
+    {
+        // 로그 더하기
+        log += message + "\n";
+        // 로그 찍기
+        text_LogText.text = log;
     }
 }
