@@ -6,15 +6,27 @@ using Photon.Realtime;
 using System;
 using System.Reflection;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.UIElements;
 
 public class ConnectionManager : MonoBehaviourPunCallbacks
 {
     // roomPrefab
     public GameObject roomPrefab;
+    // ScrollView
+    public Transform scrollContent;
     // Manual (판넬 리스트 관리 리스트)
     public GameObject[] panelList;
 
     string roomName;
+
+    // 룸 생성, 사라지는 방 리스트로 관리
+    List<RoomInfo> cachedRoomList = new List<RoomInfo>();
+
+    private void Start()
+    {
+        // 해상도 조절
+        Screen.SetResolution(640, 480, FullScreenMode.Windowed);
+    }
 
     // 로그인 시작
     public void StartLogin()
@@ -155,15 +167,16 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     // 방 참가 요청
     public void JoinRoom()
     {
-        // 룸 네임 받아오기
-        roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
+        ChangePanel(1, 2);
+        //// 룸 네임 받아오기
+        //roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
 
-        // 방 이름의 길이는 0 이상이어야 한다
-        if(roomName.Length > 0)
-        {
-            // 작성한 방 이름으로 참가한다.
-            PhotonNetwork.JoinRoom(roomName);
-        }     
+        //// 방 이름의 길이는 0 이상이어야 한다
+        //if(roomName.Length > 0)
+        //{
+        //    // 작성한 방 이름으로 참가한다.
+        //    PhotonNetwork.JoinRoom(roomName);
+        //}     
     }
 
     void ChangePanel(int offIndex, int onIndex )
@@ -183,4 +196,46 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         base.OnPlayerLeftRoom(otherPlayer);
     }
 
+
+    // 현재 로비에서 룸의 변경사항을 알려주는 콜백 함수
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        base.OnRoomListUpdate(roomList);
+
+        // 방 생성 관리
+        foreach (RoomInfo room in roomList)
+        {
+            // 제거할 룸이라면
+            if(room.RemovedFromList)
+            {
+                // 리스트에서 해당 룸 제거
+                cachedRoomList.Remove(room);
+            }
+            else
+            {
+                // 이미 있는 룸이라면
+                if(cachedRoomList.Contains(room))
+                {
+                    // 기존 룸 정보 제거
+                    cachedRoomList.Remove(room);
+                }
+                // 아니면 새 룸을 추가
+                cachedRoomList.Add(room);
+            }
+        }
+
+        // 관리 확인하기
+        foreach(RoomInfo room in cachedRoomList)
+        {
+            GameObject go = Instantiate(roomPrefab, scrollContent);
+            RoomPanel roomPanel = go.GetComponent<RoomPanel>();
+            roomPanel.SetRoomInfo(room);
+
+            // 버튼에 방 입장 기능 연결하기
+            roomPanel.btn_join.onClick.AddListener(() =>
+            {
+                PhotonNetwork.JoinRoom(room.Name);
+            });
+        }
+    }
 }
