@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Networking;
 public class ChatManager : MonoBehaviour
 {
     public GameObject input; // TMP_InputField가 붙은 게임 오브젝트
@@ -11,7 +12,7 @@ public class ChatManager : MonoBehaviour
 
     private List<string> chatMessages = new List<string>(); // 채팅 메시지를 저장하는 리스트
     private string ID = "Aquaman"; // 사용자의 ID
-    private string aiUrl = "https://api.your-ai-chat-service.com/chat"; // AI 서버의 URL
+    private string aiUrl = "https://32ac-222-103-183-137.ngrok-free.app/chat/turtle";
 
     void Start()
     {
@@ -39,29 +40,47 @@ public class ChatManager : MonoBehaviour
     // AI 서버에 사용자의 메시지를 전달하고 응답을 받음
     void SendMessageToAI(string userMessage)
     {
-        // AIRequest 및 AIResponse는 별도의 클래스로 정의되어 있어야 함
-        var requestInfo = new HttpRequestInfo<AIRequest, AIResponse>
+        string requestUrl = $"{aiUrl}?user_id={ID}"; // user_id를 쿼리 파라미터로 추가
+
+        var aiRequest = new AIRequest
         {
-            url = aiUrl,
-            requestBody = new AIRequest { message = userMessage },
-            onSuccess = OnAIResponse,
-            onError = OnError
+            user_message = userMessage // 사용자 메시지 설정
         };
 
-        HTTPManager.GetInstance().Post(requestInfo); // HTTPManager로 POST 요청 전송
+        string jsonRequestBody = JsonUtility.ToJson(aiRequest); // JSON으로 직렬화
+        Debug.Log("Request Body: " + jsonRequestBody); // 로그로 JSON 출력
+
+        StartCoroutine(SendPostRequest(requestUrl, jsonRequestBody)); // 요청 전송
     }
 
-    // AI 서버로부터 받은 응답을 처리
+    IEnumerator SendPostRequest(string url, string json)
+    {
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError($"Error: {request.error}, Response Code: {request.responseCode}");
+        }
+        else
+        {
+            Debug.Log("Response: " + request.downloadHandler.text);
+        }
+    }
+
     void OnAIResponse(AIResponse response)
     {
-        // AI의 응답 메시지를 채팅 리스트에 추가
-        chatMessages.Add("AI : " + response.reply);
+        Debug.Log("Received response from AI server: " + response.reply);
 
-        // 채팅 내용을 업데이트
+        chatMessages.Add("AI : " + response.reply);
         UpdateChatContent();
     }
 
-    // 요청 실패 시 호출되는 함수
     void OnError()
     {
         Debug.LogError("Failed to get a response from the AI server.");
@@ -72,11 +91,6 @@ public class ChatManager : MonoBehaviour
     {
         // TMP_Text 컴포넌트에서 채팅 내용 갱신
         textchat.GetComponent<TMP_Text>().text = string.Join("\n", chatMessages.ToArray());
-
-        // 캔버스를 강제로 업데이트하여 레이아웃 갱신
-        Canvas.ForceUpdateCanvases();
-
-        // 스크롤을 가장 아래로 설정
-        scrollRect.verticalNormalizedPosition = 0f;
     }
+
 }
