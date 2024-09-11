@@ -42,17 +42,3 @@ public class AIChatManager : MonoBehaviour
         Debug.LogError($"[{currentBotType}] Failed to get response from the AI server.");
     }
 }
-
-// AI 요청에 사용할 데이터 클래스
-[System.Serializable]
-public class AIRequest
-{
-    public string user_message { get; set; } // 서버에서 요구하는 필드명과 일치하는지 확인
-}
-
-// AI 응답을 처리할 데이터 클래스
-[System.Serializable]
-public class AIResponse
-{
-    public string reply;
-}

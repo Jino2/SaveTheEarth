@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using UnityEngine.Networking;
+using TMPro; // 텍스트 메쉬 프로 관련 네임스페이스 추가
+using UnityEngine.UI; // ScrollRect를 위해 추가
+
 public class ChatManager : MonoBehaviour
 {
     public GameObject input; // TMP_InputField가 붙은 게임 오브젝트
@@ -12,7 +15,7 @@ public class ChatManager : MonoBehaviour
 
     private List<string> chatMessages = new List<string>(); // 채팅 메시지를 저장하는 리스트
     private string ID = "Aquaman"; // 사용자의 ID
-    private string aiUrl = "https://32ac-222-103-183-137.ngrok-free.app/chat/turtle";
+    private string aiUrl = "https://32ac-222-103-183-137.ngrok-free.app/chat/turtle"; // AI 챌린지 서버 URL
 
     void Start()
     {
@@ -66,10 +69,14 @@ public class ChatManager : MonoBehaviour
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
         {
             Debug.LogError($"Error: {request.error}, Response Code: {request.responseCode}");
+            Debug.LogError("Response Body: " + request.downloadHandler.text); // 서버 응답 확인
+            OnError();
         }
         else
         {
             Debug.Log("Response: " + request.downloadHandler.text);
+            AIResponse response = JsonUtility.FromJson<AIResponse>(request.downloadHandler.text);
+            OnAIResponse(response);
         }
     }
 
@@ -79,11 +86,17 @@ public class ChatManager : MonoBehaviour
 
         chatMessages.Add("AI : " + response.reply);
         UpdateChatContent();
+
+        // 채팅 창을 최신 메시지로 스크롤
+        Canvas.ForceUpdateCanvases();
+        scrollRect.verticalNormalizedPosition = 0f;
     }
 
     void OnError()
     {
         Debug.LogError("Failed to get a response from the AI server.");
+        chatMessages.Add("System : AI 서버로부터 응답을 받지 못했습니다.");
+        UpdateChatContent();
     }
 
     // 채팅 내용을 갱신하는 함수
@@ -92,5 +105,18 @@ public class ChatManager : MonoBehaviour
         // TMP_Text 컴포넌트에서 채팅 내용 갱신
         textchat.GetComponent<TMP_Text>().text = string.Join("\n", chatMessages.ToArray());
     }
+}
 
+// AI 요청과 응답을 처리하기 위한 클래스
+[Serializable]
+public class AIRequest
+{
+    public string user_message;
+    public string user_id; // 추가 필드
+}
+
+[Serializable]
+public class AIResponse
+{
+    public string reply; // AI 응답 메시지
 }

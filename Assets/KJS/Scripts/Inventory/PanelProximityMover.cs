@@ -6,89 +6,54 @@ using UnityEngine;
 
 public class PanelProximityMover : MonoBehaviour
 {
-    public RectTransform targetPanel; // 대상 패널
-    public float moveDistance = 50f; // 패널이 이동할 거리
-    public float moveSpeed = 5f; // 패널이 이동하는 속도
-    public Canvas canvas; // UI 패널이 속한 캔버스
-    public bool isPanelMoving { get; private set; } // 패널이 움직이고 있는지 여부
+    public GameObject panel; // 패널 오브젝트 (UI 패널 연결)
 
-    private Vector3 originalPosition;
-    private Vector3 targetPosition;
-    private bool isMoved = false;
-    private Inventory_KJS inventory;
-
-    private void Start()
+    void Start()
     {
-        if (canvas == null)
+        // 시작 시 패널을 비활성화
+        if (panel != null)
         {
-            canvas = GetComponentInParent<Canvas>();
+            panel.SetActive(false);
         }
-
-        // 패널의 초기 위치 저장
-        originalPosition = targetPanel.localPosition;
-
-        // 초기 목표 위치를 원래 위치로 설정
-        targetPosition = originalPosition;
-
-        // Player 오브젝트에서 Inventory_KJS 컴포넌트 가져오기
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
+        else
         {
-            inventory = player.GetComponent<Inventory_KJS>();
+            Debug.LogError("패널 오브젝트가 할당되지 않았습니다.");
         }
     }
 
-    private void Update()
+    void Update()
     {
-        // 'i' 키 입력 감지
+        // i 키를 눌렀을 때 패널 활성화/비활성화 토글
         if (Input.GetKeyDown(KeyCode.I))
         {
-            if (!isMoved)
+            if (panel != null)
             {
-                // 'i' 키가 눌렸을 때 목표 위치 설정
-                targetPosition = new Vector3(originalPosition.x - moveDistance, originalPosition.y, originalPosition.z);
-                isMoved = true;
-                isPanelMoving = true; // 패널이 움직이고 있음을 표시
-                if (inventory != null)
-                {
-                    inventory.LoadInventoryItems();
-                }
-            }
-            else
-            {
-                // 'i' 키가 다시 눌렸을 때 목표 위치를 원래 위치로 설정
-                targetPosition = originalPosition;
-                isMoved = false;
-                isPanelMoving = false; // 패널이 더 이상 움직이지 않음을 표시
+                bool isActive = panel.activeSelf;
+                panel.SetActive(!isActive);
+
+                // 디버깅 메시지 출력
+                Debug.Log("패널 상태: " + (!isActive ? "활성화" : "비활성화"));
             }
         }
-
-        // 패널을 목표 위치로 부드럽게 이동
-        targetPanel.localPosition = Vector3.Lerp(targetPanel.localPosition, targetPosition, Time.deltaTime * moveSpeed);
-
-        // 패널이 목표 위치에 거의 도달했을 때, 이동 상태를 해제
-        if (Vector3.Distance(targetPanel.localPosition, targetPosition) < 0.01f)
-        {
-            isPanelMoving = false; // 패널이 더 이상 움직이지 않음을 표시
-        }
-    }
-
-    public bool MouseonPanels()
-    {
-        if (RectTransformUtility.RectangleContainsScreenPoint(targetPanel, Input.mousePosition, canvas.worldCamera))
-        {
-            return true;
-        }
-
-        // 모든 자식 오브젝트를 검사
-        foreach (RectTransform child in targetPanel)
-        {
-            if (RectTransformUtility.RectangleContainsScreenPoint(child, Input.mousePosition, canvas.worldCamera))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
+
+//    public bool MouseonPanels()
+//    {
+//        if (RectTransformUtility.RectangleContainsScreenPoint(targetPanel, Input.mousePosition, canvas.worldCamera))
+//        {
+//            return true;
+//        }
+
+//        // 모든 자식 오브젝트를 검사
+//        foreach (RectTransform child in targetPanel)
+//        {
+//            if (RectTransformUtility.RectangleContainsScreenPoint(child, Input.mousePosition, canvas.worldCamera))
+//            {
+//                return true;
+//            }
+//        }
+
+//        return false;
+//    }
+//}

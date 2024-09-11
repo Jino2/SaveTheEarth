@@ -200,7 +200,7 @@ public class DragAndDrop : MonoBehaviour
             {
                 draggable = false;  // 드래그 중지
 
-                if (panelProximityMover != null && panelProximityMover.MouseonPanels())
+                if (panelProximityMover != null && panelProximityMover)//MouseonPanels())
                 {
                     // 인벤토리에 아이템 추가
                     Inventory_KJS.instance.AddGoods(goodsInfo);
