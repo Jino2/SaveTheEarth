@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class PlayerMove : PlayerStateBase
 {
+    // CharacterController
     CharacterController cc;
-
+    // 카메라 위치 Transform
     public Transform cameraTransform;
+    // Animator
+    Animator anim;
 
     // 회전 속도 조절할 변수
     public float rotationSpeed = 10f;
@@ -18,9 +21,18 @@ public class PlayerMove : PlayerStateBase
     public int jumpMaxCnt = 2;
     int jumpCurrCnt;
 
+    // 움직이는 방향
+    public Vector3 moveDir;
+
+    // 뛰는 속도 주기
+    float speedValue = 1;
+    private bool isRunning = false;
+    private float runningTime = 0;
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -38,19 +50,18 @@ public class PlayerMove : PlayerStateBase
         right.y = 0;
 
         // 입력에 따라 이동할 방향을 계산
-        Vector3 moveDir = forward * v + right * h;
+        moveDir = forward * v + right * h;
         moveDir.Normalize();
-
 
         // 방향 벡터의 크기가 0이 아닐때만 회전
         if(moveDir.magnitude > 0.1f)
         {
-            //Vector3 lookDir = dir.normalized;
-
             // 이동 방향으로 플레이어를 회전
             Quaternion targetRotation = Quaternion.LookRotation(moveDir);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
+
+        WalkRun();
 
         // 점프 로직
         // 땅에 있다면 yVelocity 를 0으로 초기화
@@ -82,6 +93,8 @@ public class PlayerMove : PlayerStateBase
 
     }
 
+    
+
     // 뛰자
     void WalkRun()
     {
@@ -90,13 +103,21 @@ public class PlayerMove : PlayerStateBase
         {
             // 뛰어
             SetWalkRun(true);
+            speedValue = 2f;
+            isRunning = true;
+            print("출력확인");
         }
         // 왼쪽 Shift 키를 떼면
         if(Input.GetKeyUp(KeyCode.LeftShift))
         {
             // 걷자
             SetWalkRun(false);
+            speedValue = 1f;
+            isRunning = false;
+            runningTime = 0f;
         }
+
+        anim.SetFloat("speed", moveDir.magnitude * speedValue);
     }
 
     void SetWalkRun(bool isRun)
