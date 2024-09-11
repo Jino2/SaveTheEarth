@@ -16,7 +16,7 @@ public class SellingItemListUIController : MonoBehaviour
         point = 0,
     };
 
-    public void InitList(VisualElement root, VisualTreeAsset itemTemplate, Action<int> onBuyItem)
+    public void InitList(VisualElement root, VisualTreeAsset itemTemplate, Action<SellingItem> onBuyItem)
     {
         ItemApi.GetItemsWithInventory(userInfo.id, (list) =>
             {
@@ -32,6 +32,7 @@ public class SellingItemListUIController : MonoBehaviour
                 sellingListView.Rebuild();
             }
         );
+        
         sellingListView = root.Q<ListView>("SellingListView");
         sellingListView.makeItem = () =>
         {
