@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 643603425193164750}
   - component: {fileID: 1027088502895748250}
   - component: {fileID: 5449410746206881286}
+  - component: {fileID: -2071770509982991561}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Item
@@ -126,6 +127,8 @@ MonoBehaviour:
   scaleFactor: 1.1
   minScale: 0.1
   maxScale: 200
+  scaleMultiplierX: 0.1
+  scaleMultiplierZ: 0.1
 --- !u!114 &5449410746206881286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +143,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goodsType: 7
   count: 1
+--- !u!114 &-2071770509982991561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307810329126226524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c137efc76fc56f84fa3abdb07f7c9573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  droppedScale: 0.1
+  dropPower: 1
+  floatingHeight: 1
+  floatingRange: 0.5
+  floatingSpeed: 1
+  pickUpOffset: 1
+  pickUpSpeed: 1
 --- !u!1 &3039116538969556817
 GameObject:
   m_ObjectHideFlags: 0
