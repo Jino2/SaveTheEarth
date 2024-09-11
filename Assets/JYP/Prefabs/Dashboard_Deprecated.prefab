@@ -142,7 +142,7 @@ GameObject:
   - component: {fileID: 6114514979838288706}
   - component: {fileID: 4909334310565393386}
   m_Layer: 0
-  m_Name: Dashboard
+  m_Name: Dashboard_Deprecated
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
