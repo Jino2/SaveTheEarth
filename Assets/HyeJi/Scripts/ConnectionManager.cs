@@ -167,6 +167,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     // 방 참가 요청
     public void JoinRoom()
     {
+        // Join 관련 패널을 활성화
         ChangePanel(1, 2);
         //// 룸 네임 받아오기
         //roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
