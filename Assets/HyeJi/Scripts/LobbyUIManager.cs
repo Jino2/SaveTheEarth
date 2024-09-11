@@ -11,15 +11,23 @@ public class LobbyUIManager : MonoBehaviour
 
     // UI 재입력
     public GameObject panel_Login;
-    public GameObject panel_Logout;
-    public GameObject panel_Logouting;
-    public GameObject panel_Main;
-    public GameObject panel_MainLogout;
+    public GameObject panel_joinOrCreateRoom;
     public GameObject panel_Remain;
-    public GameObject panel_ServiceExit;
 
     public Button btn_Check;
     public Image img_Logining;
+
+    // 로그 텍스트
+    public TMP_Text text_LogText;
+    string log;
+    // 사용자 닉네임
+    public TMP_InputField input_NickName;
+    // 사용자 pw
+    public TMP_InputField input_Pw;
+
+    //public TMP_Text text_LoginSC;
+    //public TMP_Text text_TakeCare;
+    
 
     // 방 셋팅 (방 이름, 최대 플레이어 수 배열로 받기)
     public TMP_InputField[] roomSetting;
@@ -43,7 +51,21 @@ public class LobbyUIManager : MonoBehaviour
     }
 
 
+    public void ShowPanel()
+    {
+        btn_Check.interactable = true;
+        panel_Login.gameObject.SetActive(false);
+        // 지구를 지키러온 팝업창 띄우기
+        panel_Remain.SetActive(true);
+    }
 
+    public void ShowPanel_2()
+    {
+
+        panel_Remain.SetActive(false);
+        // 방만들기창 띄우기
+        panel_joinOrCreateRoom.SetActive(true);
+    }
 
     // Panel 켰다껐다하기
     public void ShowPanel_login()
@@ -64,5 +86,13 @@ public class LobbyUIManager : MonoBehaviour
     {
         // 
         panel_Remain.gameObject.SetActive(false);
+    }
+
+    public void PrintLog(string message)
+    {
+        // 로그 더하기
+        log += message + "\n";
+        // 로그 찍기
+        text_LogText.text = log;
     }
 }

@@ -64,12 +64,13 @@ public class HTTPManager : MonoBehaviour
         StartCoroutine(PostAsync(requestInfo));
     }
 
+
     private IEnumerator PostAsync<T, R>(HttpRequestInfo<T, R> requestInfo)
     {
         string bodyJson = JsonUtility.ToJson(requestInfo.requestBody);
         using var request = UnityWebRequest.PostWwwForm(requestInfo.url, bodyJson);
         request.SetRequestHeader("Content-Type", "application/json");
-        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(bodyJson);
+        byte[] jsonToSend = new UTF8Encoding().GetBytes(bodyJson);
         request.uploadHandler = new UploadHandlerRaw(jsonToSend);
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         yield return request.SendWebRequest();
@@ -110,7 +111,7 @@ public class HTTPManager : MonoBehaviour
             requestInfo.onError();
         }
     }
-    
+
     public void UploadMultipart<R>(HttpRequestInfo<List<IMultipartFormSection>, R> requestInfo)
     {
         StartCoroutine(UploadMultipartAsync(requestInfo));
@@ -120,10 +121,10 @@ public class HTTPManager : MonoBehaviour
     {
         print($"{requestInfo.requestBody[0].contentType} - {requestInfo.requestBody[0].fileName}");
         using var request = UnityWebRequest.Post(requestInfo.url, requestInfo.requestBody);
-        
-        
+
+
         yield return request.SendWebRequest();
-        
+
         if (request.result == UnityWebRequest.Result.Success)
         {
             print(request.downloadHandler.text);

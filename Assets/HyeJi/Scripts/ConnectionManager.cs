@@ -5,13 +5,15 @@ using Photon.Pun;
 using Photon.Realtime;
 using System;
 using System.Reflection;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class ConnectionManager : MonoBehaviourPunCallbacks
 {
+    // roomPrefab
+    public GameObject roomPrefab;
     // Manual (판넬 리스트 관리 리스트)
     public GameObject[] panelList;
 
-    // 방 이름
     string roomName;
 
     // 로그인 시작
@@ -22,7 +24,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         // 방장의 씬을 기준으로 싱크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
         // 싱글톤으로 닉네임 텍스트 가져오기
-        //PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_Nickname.text;
+        PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_NickName.text;
+        //PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_Pw.text;
 
         // 접속을 서버에 요청하기
         PhotonNetwork.ConnectUsingSettings();         
@@ -36,12 +39,14 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         // 네임 서버에 접속이 완료되었음을 알려주기
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
 
-        // 그리구 로그인중 ... 띄우기! 그냥 덮어써도 ㄱㅊ을듯
-        LobbyUIManager.lobbyUI.img_Logining.enabled = true;
-        // login 버튼 없애기 (이미 로그인 했응께)
-        LobbyUIManager.lobbyUI.btn_Check.interactable = false;      
-        // 로그인 Panel 없애기
-        LobbyUIManager.lobbyUI.ShowPanel_login();
+        LobbyUIManager.lobbyUI.ShowPanel();
+
+        //// 그리구 로그인중 ... 띄우기! 그냥 덮어써도 ㄱㅊ을듯
+        //LobbyUIManager.lobbyUI.img_Logining.enabled = true;
+        //// login 버튼 없애기 (이미 로그인 했응께)
+        //LobbyUIManager.lobbyUI.btn_Check.interactable = false;      
+        //// 로그인 Panel 없애기
+        //LobbyUIManager.lobbyUI.ShowPanel_login();
     }
 
     // 연결에 실패
@@ -61,7 +66,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         base.OnConnectedToMaster();
 
         // 마스터 서버에 접속이 완료되었음을 알려주기
-        print(MethodInfo.GetCurrentMethod().Name + " is Call!");
+        print(MethodInfo.GetCurrentMethod().Name + " is Call!");       
 
         // 서버의 로비로 들어간다고 요청
         PhotonNetwork.JoinLobby();
@@ -76,7 +81,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
 
         // UI 변환 함수를 싱글톤으로 받아오기
-        //LobbyUIManager.lobbyUI.ShowPanel();
+        LobbyUIManager.lobbyUI.ShowPanel_2();
     }
 
     public override void OnCreatedRoom()
@@ -85,6 +90,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
         // 성공적으로 방이 개설되었음을 알려준다.
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
+
+        // 로그 확인하기
+        LobbyUIManager.lobbyUI.PrintLog("방 만들어짐!");
     }
 
     public override void OnJoinedRoom()
@@ -93,6 +101,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
         // 성공적으로 방에 입장되었음을 알려준다.
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
+
+        // 로그 확인하기
+        LobbyUIManager.lobbyUI.PrintLog("방 들어가짐!");
 
         // 방에 입장한 경우 모두 1번 씬으로 이동한다.
         PhotonNetwork.LoadLevel(1);
@@ -107,7 +118,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         Debug.LogError(message);
     }
 
-    // 방 생성
+    // 로비에 입장 후 -> 방 생성
     public void CreateRoom()
     {
         //// 문자열로 인풋텍스트, 숫자 받아오기
@@ -126,6 +137,15 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             roomOptions.IsOpen = true;
             // 누군가 내 방을 검색할 수 있게 허용하는가?
             roomOptions.IsVisible = true;
+
+            // 룸의 커스텀 정보를 추가한다 (키 값 등록하기)
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "MASTER_NAME", "PASSWORD" };
+
+            Hashtable roomTable = new Hashtable();
+            roomTable.Add("MASTER_NAME", PhotonNetwork.NickName);
+            roomTable.Add("PASSWORD", 1234);
+            roomOptions.CustomRoomProperties = roomTable;
+
 
             // 리퀘스트 함수
             PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);

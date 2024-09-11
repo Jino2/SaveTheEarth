@@ -19,7 +19,7 @@ public class SellingItemUIController
         priceLabel = root.Q<Label>("price");
     }
 
-    public void SetItemData(VisualElement root, SellingItem item, Action<int> onBuyItem)
+    public void SetItemData(VisualElement root, SellingItem item, Action<SellingItem> onBuyItem)
     {
         nameLabel.text = item.name;
         priceLabel.text = $"{item.price} 포인트";
@@ -27,7 +27,6 @@ public class SellingItemUIController
 
         purchaseButton.clicked += () =>
         {
-            Debug.Log($"item id: {this.item.id} / amount: 1");
             new BaseDialogUIBuilder()
                 .SetTitle("구매")
                 .SetMessage("구매하시겠습니까?")
@@ -35,7 +34,7 @@ public class SellingItemUIController
                 {
                     UserApi.BuyItem("test", item.id, 1, (t) =>
                     {
-                        onBuyItem(item.price);
+                        onBuyItem(item);
                         Debug.Log("구매완료");
                     });
                 })
