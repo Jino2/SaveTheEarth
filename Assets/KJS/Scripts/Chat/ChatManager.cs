@@ -15,7 +15,7 @@ public class ChatManager : MonoBehaviour
 
     private List<string> chatMessages = new List<string>(); // 채팅 메시지를 저장하는 리스트
     private string ID = "Aquaman"; // 사용자의 ID
-    private string aiUrl = "https://32ac-222-103-183-137.ngrok-free.app/chat/turtle"; // AI 챌린지 서버 URL
+    private string aiUrl = "https://5a59-222-103-183-137.ngrok-free.app/chat/turtle"; // AI 챌린지 서버 URL
 
     void Start()
     {
@@ -52,8 +52,19 @@ public class ChatManager : MonoBehaviour
 
         string jsonRequestBody = JsonUtility.ToJson(aiRequest); // JSON으로 직렬화
         Debug.Log("Request Body: " + jsonRequestBody); // 로그로 JSON 출력
-
-        StartCoroutine(SendPostRequest(requestUrl, jsonRequestBody)); // 요청 전송
+        var request = new HttpRequestInfo<Dictionary<string, string>, string>()
+        {
+            url = requestUrl,
+            contentType = "application/x-www-form-urlencoded",
+            requestBody = new Dictionary<string, string> { { "user_message", userMessage } },
+            onSuccess = (response) =>
+            {
+                Debug.Log("Response: " + response);
+                
+            },
+            onError = (() => { Debug.LogError("Failed to get a response from the AI server."); })
+        };
+        HTTPManager.GetInstance().PostWWWForm(request);
     }
 
     IEnumerator SendPostRequest(string url, string json)
