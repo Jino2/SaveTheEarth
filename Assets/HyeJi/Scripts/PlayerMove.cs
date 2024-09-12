@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using Cinemachine;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class PlayerMove : PlayerStateBase
     CharacterController cc;
     // 카메라 위치 Transform
     public Transform cameraTransform;
+    // 버츄얼 카메라
+    private CinemachineVirtualCamera virtualCamera;
     // Animator
     Animator anim;
 
@@ -38,6 +41,34 @@ public class PlayerMove : PlayerStateBase
         cc = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         pv = GetComponent<PhotonView>();
+        print("111111");
+
+        if(pv.IsMine)
+        {
+            // 메인 카메라 찾기
+            print("545454545454545454");
+            Camera mainCamera = Camera.main;
+            if(mainCamera != null)
+            {
+                cameraTransform = mainCamera.transform;
+                print("메인 카메라 있다");
+            }
+            else
+            {
+                print("메인 카메라 내놔");
+            }
+
+            // 버츄얼 카메라 찾기
+            var virtualCamera = FindObjectOfType<ThirdPersonCamera>();
+            if(virtualCamera != null)
+            {
+                virtualCamera.SetPlayer(this.transform);
+            }
+            else
+            {
+                print("버츄얼 카메라 내놔");
+            }
+        }
     }
 
     void Update()
@@ -47,55 +78,57 @@ public class PlayerMove : PlayerStateBase
         //Vector3 dir = new Vector3(h, 0, v);
 
         // 카메라의 방향을 기준으로 이동 방향을 설정
-        Vector3 forward = cameraTransform.forward;
-        Vector3 right = cameraTransform.right;
-
-        // 수평 방향만 고려하기
-        forward.y = 0;
-        right.y = 0;
-
-        // 입력에 따라 이동할 방향을 계산
-        moveDir = forward * v + right * h;
-        moveDir.Normalize();
-
-        // 방향 벡터의 크기가 0이 아닐때만 회전
-        if(moveDir.magnitude > 0.1f)
+        if (pv.IsMine)
         {
-            // 이동 방향으로 플레이어를 회전
-            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
+            Vector3 forward = cameraTransform.forward;
+            Vector3 right = cameraTransform.right;
 
-        WalkRun();
+            // 수평 방향만 고려하기
+            forward.y = 0;
+            right.y = 0;
 
-        // 점프 로직
-        // 땅에 있다면 yVelocity 를 0으로 초기화
-        if(cc.isGrounded)
-        {
-            yVelocity = 0;
-            jumpCurrCnt = 0;
-        }
-        // 스페이스바 누르면 점프
-        // 스페이스바를 누르면 점프한다
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if(jumpCurrCnt < jumpMaxCnt)
+            // 입력에 따라 이동할 방향을 계산
+            moveDir = forward * v + right * h;
+            moveDir.Normalize();
+
+            // 방향 벡터의 크기가 0이 아닐때만 회전
+            if (moveDir.magnitude > 0.1f)
             {
-                yVelocity = jumpPower;
-                jumpCurrCnt++;
+                // 이동 방향으로 플레이어를 회전
+                Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
+
+            WalkRun();
+
+            // 점프 로직
+            // 땅에 있다면 yVelocity 를 0으로 초기화
+            if (cc.isGrounded)
+            {
+                yVelocity = 0;
+                jumpCurrCnt = 0;
+            }
+            // 스페이스바 누르면 점프
+            // 스페이스바를 누르면 점프한다
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (jumpCurrCnt < jumpMaxCnt)
+                {
+                    yVelocity = jumpPower;
+                    jumpCurrCnt++;
+                }
+            }
+            // yVelocity를 중력값을 이용해서 감소시킨다.
+            yVelocity += gravity * Time.deltaTime;
+            // moveDir.y 값에 0 셋팅
+            moveDir.y = yVelocity;
+
+            // 이동
+            cc.Move(moveDir * moveSpeed * Time.deltaTime);
+
+            // 뛰는 함수
+            WalkRun();
         }
-        // yVelocity를 중력값을 이용해서 감소시킨다.
-        yVelocity += gravity * Time.deltaTime;
-        // moveDir.y 값에 0 셋팅
-        moveDir.y = yVelocity;
-
-        // 이동
-        cc.Move(moveDir * moveSpeed * Time.deltaTime);
-
-        // 뛰는 함수
-        WalkRun();
-
     }
 
     
@@ -129,5 +162,15 @@ public class PlayerMove : PlayerStateBase
     {
         // isRun 이 true 이면 runSpeed, false 이면 walkSpeed
         moveSpeed = isRun ? runSpeed : walkSpeed;
+    }
+
+    private void OnDisable()
+    {
+        print("Disable");
+    }
+
+    private void OnDestroy()
+    {
+        print("Destroy!");
     }
 }

@@ -402,8 +402,6 @@ GameObject:
   - component: {fileID: 2070881436194208035}
   - component: {fileID: 2013469580274029064}
   - component: {fileID: 3421660703200693738}
-  - component: {fileID: 8498020444511821238}
-  - component: {fileID: 3450418959879216712}
   - component: {fileID: 8723000368947088730}
   m_Layer: 6
   m_Name: Player
@@ -567,33 +565,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.1, z: 0}
---- !u!114 &8498020444511821238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8765375452113352518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95f292e08d9d7864b83e840c76dbe7bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryUI: {fileID: 0}
-  goods: []
-  inventoryItems: []
---- !u!114 &3450418959879216712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8765375452113352518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c450bb980a3eb4d3788b7adfda4485f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8723000368947088730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -609,7 +580,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 1
+  Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
@@ -677,11 +648,6 @@ PrefabInstance:
     - target: {fileID: 7447163605590411544, guid: 907fd825e3988774caab4234b943bf44,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7447163605599512414, guid: 907fd825e3988774caab4234b943bf44,
-        type: 3}
-      propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

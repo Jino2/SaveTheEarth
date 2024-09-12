@@ -28,6 +28,12 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         //currentDistance = maxDistance;
+
+        if(player != null)
+        {
+            virtualCamera.Follow = player;
+            virtualCamera.LookAt = player;
+        }
     }
 
     void Update()
@@ -46,5 +52,16 @@ public class ThirdPersonCamera : MonoBehaviour
         virtualCamera.transform.position = player.position;
         virtualCamera.transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
 
+    }
+
+    public void SetPlayer(Transform newPlayer)
+    {
+        player = newPlayer;
+
+        if(virtualCamera != null)
+        {
+            virtualCamera.Follow = player;
+            virtualCamera.LookAt = player;
+        }
     }
 }
