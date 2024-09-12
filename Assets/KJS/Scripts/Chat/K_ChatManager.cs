@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 using TMPro; // 텍스트 메쉬 프로 관련 네임스페이스 추가
 using UnityEngine.UI; // ScrollRect를 위해 추가
 
-public class K_ChatManager : MonoBehaviour
+public class ChatManager : MonoBehaviour
 {
     public GameObject input; // TMP_InputField가 붙은 게임 오브젝트
     public GameObject textchat; // TMP_Text가 붙은 게임 오브젝트
@@ -16,7 +16,6 @@ public class K_ChatManager : MonoBehaviour
     private List<string> chatMessages = new List<string>(); // 채팅 메시지를 저장하는 리스트
     private string ID = "Aquaman"; // 사용자의 ID
     private string aiUrl = "https://5a59-222-103-183-137.ngrok-free.app/chat/turtle"; // AI 챌린지 서버 URL
-
 
     void Start()
     {
@@ -51,26 +50,30 @@ public class K_ChatManager : MonoBehaviour
             user_message = userMessage // 사용자 메시지 설정
         };
 
-        var request = new HttpRequestInfo<AIRequest, string>() {
-           url = requestUrl,
-           requestBody = aiRequest,
-           contentType = "application/x-www-form-urlencoded",
-           onSuccess = xx,
-          
+        string jsonRequestBody = JsonUtility.ToJson(aiRequest); // JSON으로 직렬화
+        Debug.Log("Request Body: " + jsonRequestBody); // 로그로 JSON 출력
+        var request = new HttpRequestInfo<Dictionary<string, string>, string>()
+        {
+            url = requestUrl,
+            contentType = "application/x-www-form-urlencoded",
+            requestBody = new Dictionary<string, string> { { "user_message", userMessage } },
+            onSuccess = (response) =>
+            {
+                Debug.Log("Response: " + response);
+                
+            },
+            onError = (() => { Debug.LogError("Failed to get a response from the AI server."); })
         };
-
-        HTTPManager.GetInstance().Post<AIRequest, string>(request);
+        HTTPManager.GetInstance().PostWWWForm(request);
     }
 
-    private void xx(string s)
-    {
-
-    }
-
-    IEnumerator SendPostRequest(string url)
+    IEnumerator SendPostRequest(string url, string json)
     {
         UnityWebRequest request = new UnityWebRequest(url, "POST");
-        request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
 
@@ -120,6 +123,7 @@ public class K_ChatManager : MonoBehaviour
 public class AIRequest
 {
     public string user_message;
+    public string user_id; // 추가 필드
 }
 
 [Serializable]

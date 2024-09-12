@@ -58,6 +58,35 @@ public class HTTPManager : MonoBehaviour
         {
         }
     }
+    
+    public void PostWWWForm(HttpRequestInfo<Dictionary<string,string>, string> requestInfo)
+    {
+        StartCoroutine(PostWWWFormAsync(requestInfo));
+    }
+
+    private IEnumerator PostWWWFormAsync(HttpRequestInfo<Dictionary<string,string>, string> requestInfo)
+    {
+        string bodyJson = JsonUtility.ToJson(requestInfo.requestBody);
+        var wF = new WWWForm();
+        foreach (var pair in requestInfo.requestBody)
+        {
+            wF.AddField(pair.Key, pair.Value);
+        }
+        using var request = UnityWebRequest.Post(requestInfo.url, wF);
+        request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        request.SetRequestHeader("Accept", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            
+            requestInfo.onSuccess(request.downloadHandler.text);
+        }
+        else
+        {
+            requestInfo.onError();
+        }
+    }
 
     public void Post<T, R>(HttpRequestInfo<T, R> requestInfo)
     {
