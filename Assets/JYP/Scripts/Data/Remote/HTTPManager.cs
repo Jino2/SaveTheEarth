@@ -69,7 +69,16 @@ public class HTTPManager : MonoBehaviour
     {
         string bodyJson = JsonUtility.ToJson(requestInfo.requestBody);
         using var request = UnityWebRequest.PostWwwForm(requestInfo.url, bodyJson);
-        request.SetRequestHeader("Content-Type", "application/json");
+        if(requestInfo.contentType == null || requestInfo.contentType == "")
+        {
+            request.SetRequestHeader("Content-Type","application/json");
+
+        }
+        else
+        {
+            request.SetRequestHeader("Content-Type",requestInfo.contentType);
+
+        }
         byte[] jsonToSend = new UTF8Encoding().GetBytes(bodyJson);
         request.uploadHandler = new UploadHandlerRaw(jsonToSend);
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();

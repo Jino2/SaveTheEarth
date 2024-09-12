@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 using TMPro; // 텍스트 메쉬 프로 관련 네임스페이스 추가
 using UnityEngine.UI; // ScrollRect를 위해 추가
 
-public class ChatManager : MonoBehaviour
+public class K_ChatManager : MonoBehaviour
 {
     public GameObject input; // TMP_InputField가 붙은 게임 오브젝트
     public GameObject textchat; // TMP_Text가 붙은 게임 오브젝트
@@ -15,7 +15,8 @@ public class ChatManager : MonoBehaviour
 
     private List<string> chatMessages = new List<string>(); // 채팅 메시지를 저장하는 리스트
     private string ID = "Aquaman"; // 사용자의 ID
-    private string aiUrl = "https://32ac-222-103-183-137.ngrok-free.app/chat/turtle"; // AI 챌린지 서버 URL
+    private string aiUrl = "https://5a59-222-103-183-137.ngrok-free.app/chat/turtle"; // AI 챌린지 서버 URL
+
 
     void Start()
     {
@@ -50,19 +51,26 @@ public class ChatManager : MonoBehaviour
             user_message = userMessage // 사용자 메시지 설정
         };
 
-        string jsonRequestBody = JsonUtility.ToJson(aiRequest); // JSON으로 직렬화
-        Debug.Log("Request Body: " + jsonRequestBody); // 로그로 JSON 출력
+        var request = new HttpRequestInfo<AIRequest, string>() {
+           url = requestUrl,
+           requestBody = aiRequest,
+           contentType = "application/x-www-form-urlencoded",
+           onSuccess = xx,
+          
+        };
 
-        StartCoroutine(SendPostRequest(requestUrl, jsonRequestBody)); // 요청 전송
+        HTTPManager.GetInstance().Post<AIRequest, string>(request);
     }
 
-    IEnumerator SendPostRequest(string url, string json)
+    private void xx(string s)
+    {
+
+    }
+
+    IEnumerator SendPostRequest(string url)
     {
         UnityWebRequest request = new UnityWebRequest(url, "POST");
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         yield return request.SendWebRequest();
 
@@ -112,7 +120,6 @@ public class ChatManager : MonoBehaviour
 public class AIRequest
 {
     public string user_message;
-    public string user_id; // 추가 필드
 }
 
 [Serializable]
