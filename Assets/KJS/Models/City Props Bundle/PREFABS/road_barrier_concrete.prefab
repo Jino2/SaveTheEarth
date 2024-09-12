@@ -108,7 +108,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 2315380319911089070}
   - {fileID: 4403731641308920335}
-  sceneViewId: 28
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &2315380319911089070
@@ -148,7 +148,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 2315380319911089070}
   - {fileID: 4403731641308920335}
-  sceneViewId: 14
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &4403731641308920335

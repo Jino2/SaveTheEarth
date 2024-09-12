@@ -18,26 +18,17 @@ public class ChatInfo : MonoBehaviour
         Dolphin    // 돌고래
     }
 
-    public void SetUp(ChatType type, Color color, string textData)
-    {
-        TextMeshProUGUI text = GetComponent<TextMeshProUGUI>();
-
-        chatType = type;
-        text.color = color;
-        text.text = textData;
-    }
-
     // 각 챗봇 타입에 따라 URL을 설정
     public static string GetApiUrl(ChatType botType)
     {
         switch (botType)
         {
             case ChatType.Turtle:
-                return "https://4e63-222-103-183-137.ngrok-free.app/chat/turtle";
+                return "https://5a59-222-103-183-137.ngrok-free.app/chat/turtle";
             case ChatType.ClownFish:
-                return "https://4e63-222-103-183-137.ngrok-free.app/chat/clownfish";
+                return "https://5a59-222-103-183-137.ngrok-free.app/chat/clownfish";
             case ChatType.Dolphin:
-                return "https://4e63-222-103-183-137.ngrok-free.app/chat/dolphin";
+                return "https://5a59-222-103-183-137.ngrok-free.app/chat/dolphin";
             default:
                 throw new System.ArgumentOutOfRangeException();
         }
