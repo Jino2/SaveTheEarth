@@ -9,9 +9,7 @@ public class PlayerStateBase : MonoBehaviour
 
     public float walkSpeed = 5;
     public float runSpeed = 10;
-    //public bool isMoving;
 
-    // Start is called before the first frame update
     void Start()
     {
         
