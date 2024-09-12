@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove : PlayerStateBase
 {
+    // PhotonView
+    PhotonView pv;
+
     // CharacterController
     CharacterController cc;
     // 카메라 위치 Transform
@@ -33,6 +37,7 @@ public class PlayerMove : PlayerStateBase
     {
         cc = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+        pv = GetComponent<PhotonView>();
     }
 
     void Update()
