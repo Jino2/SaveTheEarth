@@ -1,9 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="Container" style="flex-grow: 1; flex-direction: row-reverse; align-items: stretch;">
-        <ui:VisualElement name="PlayerShowRoom" style="flex-grow: 1;" />
-        <ui:VisualElement name="ChallengeContainer" style="flex-grow: 0; background-color: rgba(88, 229, 214, 0.39); border-right-color: rgb(0, 0, 0); border-right-width: 8px; border-top-width: 4px; border-bottom-width: 4px; border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: 900px; align-items: center;">
-            <ui:ScrollView name="ScrollView" mode="Horizontal" style="flex-grow: 1; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgb(240, 255, 255); border-top-width: 4px; border-bottom-width: 4px; border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-top: 150px; margin-right: 150px; margin-bottom: 150px; margin-left: 150px; flex-direction: row; width: 600px; align-items: center; justify-content: flex-start; align-self: stretch; flex-wrap: nowrap;">
-                <ui:VisualElement style="flex-grow: 1; background-color: rgb(191, 220, 255); justify-content: flex-start; align-self: stretch; height: 600px; width: 400px; align-items: stretch; margin-left: 100px; flex-shrink: 0;">
+        <ui:VisualElement name="PlayerShowRoom" style="flex-grow: 1; width: 30%;">
+            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_CloseChallenge" style="width: 100px; height: 100px; background-color: rgb(221, 187, 82); -unity-font-style: bold; font-size: 143px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ChallengeContainer" style="flex-grow: 1; background-color: rgba(88, 229, 214, 0.39); border-right-color: rgb(0, 0, 0); border-right-width: 8px; border-top-width: 4px; border-bottom-width: 4px; border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: 38%; align-items: center; justify-content: center; align-self: stretch; flex-shrink: 0;">
+            <ui:ScrollView name="ScrollView_Challenge" mode="Horizontal" horizontal-scroller-visibility="AlwaysVisible" vertical-scroller-visibility="Hidden" tabindex="0" nested-interaction-kind="ForwardScrolling" horizontal-page-size="1" mouse-wheel-scroll-size="100" style="flex-grow: 1; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgb(240, 255, 255); border-top-width: 4px; border-bottom-width: 4px; border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-top: 72px; margin-right: 36px; margin-bottom: 72px; margin-left: 36px; flex-direction: row; width: 600px; align-items: center; justify-content: space-around; align-self: flex-end; flex-wrap: nowrap; position: relative; left: 0; height: 100%; right: auto;">
+                <ui:VisualElement name="Container_ChallengeSelection" style="flex-grow: 1; background-color: rgb(191, 220, 255); justify-content: flex-start; align-self: stretch; height: 600px; width: 400px; align-items: stretch; margin-left: 100px; flex-shrink: 0; margin-right: 100px; margin-top: 0; margin-bottom: 0;">
                     <ui:VisualElement name="recycleContainer" style="flex-grow: 0; height: 160px; margin-top: 20px; margin-bottom: 20px; margin-right: 15px; margin-left: 15px; background-color: rgb(255, 255, 255); flex-direction: row;">
                         <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/JYP/Images/trash_icon.png?fileID=2800000&amp;guid=5bd16ab510fda4442bf814a681490f2f&amp;type=3#trash_icon&quot;); width: 115px; height: 115px; flex-shrink: 0; -unity-text-align: upper-left; align-items: center; justify-content: center; align-self: center; margin-left: 12px; margin-right: 12px;" />
                         <ui:VisualElement style="flex-grow: 1; justify-content: center;">
@@ -22,22 +24,17 @@
                     </ui:VisualElement>
                     <ui:VisualElement name="Container" style="flex-grow: 0; height: 160px; margin-top: 20px; margin-bottom: 20px; margin-right: 15px; margin-left: 15px; background-color: rgb(255, 255, 255); flex-direction: row;">
                         <ui:VisualElement name="icon" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/JYP/Images/tumbler_icon.png?fileID=2800000&amp;guid=f42f529cce92a324aa9688cf6fd913f1&amp;type=3#tumbler_icon&quot;); width: 115px; height: 115px; flex-shrink: 0; -unity-text-align: upper-left; align-items: center; justify-content: center; align-self: center; margin-left: 12px; margin-right: 12px;" />
-                        <ui:VisualElement style="flex-grow: 1; justify-content: center;">
+                        <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: center;">
                             <ui:Label tabindex="-1" text="텀블러 &lt;color=#eed32d&gt;사용&lt;/color&gt;하기" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 24px; -unity-font-style: bold; color: rgb(53, 65, 80);" />
                             <ui:Label tabindex="-1" text="플라스틱 재활용을 통해 &#10;지구를 구해보자" parse-escape-sequences="true" display-tooltip-when-elided="true" style="color: rgb(55, 55, 55); font-size: 11px;" />
-                            <ui:Button text="도전" parse-escape-sequences="true" display-tooltip-when-elided="true" name="brtn_challenge" style="background-color: rgb(221, 187, 82); font-size: 18px; -unity-font-style: bold; color: rgb(243, 255, 231);" />
+                            <ui:Button text="도전" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_tumblerChallenge" focusable="true" style="background-color: rgb(221, 187, 82); font-size: 18px; -unity-font-style: bold; color: rgb(243, 255, 231);" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement style="flex-grow: 1; background-color: rgb(0, 255, 28); justify-content: flex-start; align-self: stretch; height: 576px; width: 400px; align-items: stretch; margin-left: 100px; flex-shrink: 0;" />
-                <ui:VisualElement style="flex-grow: 1; background-color: rgb(0, 255, 28); justify-content: flex-start; align-self: stretch; height: 576px; width: 400px; align-items: stretch; margin-left: 100px; flex-shrink: 0;" />
+                <ui:VisualElement name="Container_ChallengeIamgeSelection" style="flex-grow: 1; background-color: rgb(0, 176, 255); justify-content: flex-start; align-self: stretch; height: 576px; width: 400px; align-items: stretch; margin-left: 100px; flex-shrink: 0; margin-right: 100px;" />
+                <ui:VisualElement name="Container_ChallengeCompletion" style="flex-grow: 1; background-color: rgb(0, 255, 28); justify-content: flex-start; align-self: stretch; height: 576px; width: 400px; align-items: stretch; margin-left: 100px; flex-shrink: 0;" />
             </ui:ScrollView>
         </ui:VisualElement>
-        <ui:VisualElement style="flex-grow: 0; background-color: rgba(88, 229, 214, 0.39); border-top-width: 4px; border-bottom-width: 4px; border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); flex-direction: column-reverse;">
-            <ui:VisualElement style="flex-grow: 0; background-image: none; -unity-background-scale-mode: scale-to-fit; flex-shrink: 0; height: 512px; background-color: rgb(0, 0, 0);" />
-            <ui:VisualElement style="flex-grow: 0; height: 608px; background-image: url(&quot;project://database/Assets/JYP/Images/speech-bubble-145975_1280.png?fileID=2800000&amp;guid=14964700aad4a90489082b87008344d9&amp;type=3#speech-bubble-145975_1280&quot;); transform-origin: right top; translate: 157px 98px; width: 431px;">
-                <ui:Label tabindex="-1" text="Hello" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_NPC_Talk" style="height: 366px; -unity-text-align: middle-center; margin-top: 23px; padding-right: 8px; font-size: 24px;" />
-            </ui:VisualElement>
-        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 0; background-color: rgba(88, 229, 214, 0.39); border-top-width: 4px; border-bottom-width: 4px; border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); flex-direction: column-reverse; width: 30%;" />
     </ui:VisualElement>
 </ui:UXML>

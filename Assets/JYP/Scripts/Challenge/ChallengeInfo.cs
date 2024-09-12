@@ -3,7 +3,7 @@
         Transport,
         Tumbler,
         Recycle,
-        
+        None,
     }
     
     public enum ChallengeStatus
