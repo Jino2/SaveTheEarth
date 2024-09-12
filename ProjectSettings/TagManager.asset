@@ -38,9 +38,9 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - NPC
+  - Dolphin
+  - ClownFIsh
+  - Turtle
   m_SortingLayers:
   - name: Default
     uniqueID: 0

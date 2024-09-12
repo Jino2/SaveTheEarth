@@ -14,7 +14,7 @@ public class AIChatManager : MonoBehaviour
         // 사용자의 ID를 쿼리 파라미터에 추가
         string apiUrl = ChatInfo.GetApiUrl(currentBotType) + "?user_id=Aquaman";  // 쿼리 파라미터로 user_id 추가
 
-        var requestInfo = new HttpRequestInfo<AIRequest, AIResponse>
+        var requestInfo = new HttpRequestInfo<AIRequest, string>
         {
             url = apiUrl,
             // 요청 본문에는 user_message만 포함
@@ -30,9 +30,9 @@ public class AIChatManager : MonoBehaviour
     }
 
     // AI 응답 처리
-    private void OnAIResponse(AIResponse response)
+    private void OnAIResponse(string response)
     {
-        Debug.Log($"[{currentBotType}] AI Response: {response.reply}");
+        Debug.Log($"[{currentBotType}] AI Response: {response}");
         // 챗봇 타입별 추가 응답 처리가 필요한 경우 여기에 추가 가능
     }
 
