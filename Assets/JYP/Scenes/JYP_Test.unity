@@ -1305,6 +1305,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 0}
+  challengeProcessAssets:
+  - {fileID: 9197481963319205126, guid: ab995917f0046ec4d95a587061fb89d8, type: 3}
+  - {fileID: 9197481963319205126, guid: 6de90eb5756f7554a88509c3d60097ad, type: 3}
 --- !u!1001 &265563127616925719
 PrefabInstance:
   m_ObjectHideFlags: 0
