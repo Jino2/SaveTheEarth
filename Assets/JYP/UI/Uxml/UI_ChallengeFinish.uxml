@@ -1,18 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="Container" style="flex-grow: 1; background-color: rgb(255, 255, 255);">
-        <ui:VisualElement name="TopContainer" style="flex-grow: 1; height: 5%; flex-direction: row-reverse;">
-            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_Close" style="font-size: 46px;" />
-        </ui:VisualElement>
         <ui:VisualElement name="HeaderContainer" style="flex-grow: 1; height: 15%; justify-content: space-around; font-size: 42px; -unity-font-style: bold; letter-spacing: 2px;">
-            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_ChallengeFinishTitle" style="-unity-text-align: middle-center;" />
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_ChallengeFinishTitle" style="-unity-text-align: middle-center; font-size: 44px;" />
         </ui:VisualElement>
         <ui:VisualElement name="BodyContainer" style="flex-grow: 1; height: 55%;">
             <ui:VisualElement style="flex-grow: 1; flex-shrink: 0;" />
             <ui:Label tabindex="-1" text="&lt;b&gt;Label&lt;/b&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_challengeFinishMessage" style="height: 80px; -unity-text-align: upper-center; font-size: 28px;" />
         </ui:VisualElement>
         <ui:VisualElement name="FooterContainer" style="flex-grow: 1; height: 25%; flex-direction: row; align-items: center; justify-content: center; align-self: stretch;">
-            <ui:Button text="다시찍기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_challengeAgain" style="width: 600px; padding-top: 36px; padding-right: 36px; padding-bottom: 36px; padding-left: 36px; margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px; font-size: 28px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;" />
-            <ui:Button text="챌린지화면으로 돌아가기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_backToChallenges" style="width: 600px; padding-top: 36px; padding-right: 36px; padding-bottom: 36px; padding-left: 36px; margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px; font-size: 28px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;" />
+            <ui:Button text="다시찍기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_challengeAgain" style="width: 40%; padding-top: 36px; padding-right: 36px; padding-bottom: 36px; padding-left: 36px; margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px; font-size: 36px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; background-color: rgb(221, 187, 82); color: rgb(255, 255, 226);" />
+            <ui:Button text="챌린지화면으로 돌아가기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_backToChallenges" style="width: 40%; padding-top: 36px; padding-right: 36px; padding-bottom: 36px; padding-left: 36px; margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px; font-size: 36px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; background-color: rgb(221, 187, 82); color: rgb(230, 242, 255);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
