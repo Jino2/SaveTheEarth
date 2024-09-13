@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 8330789239781736255}
   - component: {fileID: -64523448788916825}
   - component: {fileID: 2680394581263779794}
-  - component: {fileID: 4324644303294122003}
+  - component: {fileID: 3225736259640389687}
   m_Layer: 0
   m_Name: Rock 1
   m_TagString: Item
@@ -288,11 +288,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 4324644303294122003}
+  - {fileID: 3225736259640389687}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &4324644303294122003
+--- !u!114 &3225736259640389687
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

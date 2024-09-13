@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5449410746206881286}
   - component: {fileID: -2071770509982991561}
   - component: {fileID: 2710802861972923798}
-  - component: {fileID: 5757922509534388969}
+  - component: {fileID: 7581595884853947870}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Item
@@ -183,11 +183,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 5757922509534388969}
+  - {fileID: 7581595884853947870}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &5757922509534388969
+--- !u!114 &7581595884853947870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

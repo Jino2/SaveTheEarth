@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5435492376167454366}
   - component: {fileID: -6913688926305932153}
   - component: {fileID: 555937339106045687}
-  - component: {fileID: 3026628670091728992}
+  - component: {fileID: -8767605305097848618}
   m_Layer: 0
   m_Name: Chest
   m_TagString: Item
@@ -183,11 +183,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 3026628670091728992}
+  - {fileID: -8767605305097848618}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &3026628670091728992
+--- !u!114 &-8767605305097848618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
