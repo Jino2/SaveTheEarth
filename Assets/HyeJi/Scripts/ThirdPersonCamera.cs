@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public float minDistance = 1.5f;
     public float maxDistance = 4f;
     public float currentDistance;
+
 
     //public LayerMask collisionLayers;
 

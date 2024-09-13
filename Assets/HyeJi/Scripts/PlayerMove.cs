@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : PlayerStateBase
+public class PlayerMove : PlayerStateBase, IPunObservable
 {
     // PhotonView
     PhotonView pv;
@@ -35,6 +35,11 @@ public class PlayerMove : PlayerStateBase
     float speedValue = 1;
     private bool isRunning = false;
     private float runningTime = 0;
+
+    // 도착 위치
+    Vector3 receivePos;
+    // 회전해야하는 값
+    Quaternion receiveRot;
 
     void Start()
     {
@@ -172,5 +177,21 @@ public class PlayerMove : PlayerStateBase
     private void OnDestroy()
     {
         print("Destroy!");
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        // isWriting -> isMine 이 나 일때 주겠다
+        if(stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+        }
+        // isReading -> isMine 이 내가 아닐 때 주겠다
+        else if(stream.IsReading)
+        {
+            receivePos = (Vector3)stream.ReceiveNext();
+            receiveRot = (Quaternion)stream.ReceiveNext();
+        }
     }
 }

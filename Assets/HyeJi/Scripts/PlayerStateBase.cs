@@ -10,6 +10,8 @@ public class PlayerStateBase : MonoBehaviour
     public float walkSpeed = 5;
     public float runSpeed = 10;
 
+
+
     void Start()
     {
         
