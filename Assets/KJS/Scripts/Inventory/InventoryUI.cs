@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
-using static GoodsInfo;  // GoodsInfo의 enum GoodsType을 사용하기 위해 static import
+using static GoodsInfo;
+using Photon.Pun;  // GoodsInfo의 enum GoodsType을 사용하기 위해 static import
 
 public class InventoryUI : MonoBehaviour
 {
@@ -56,32 +57,34 @@ public class InventoryUI : MonoBehaviour
     {
         if (prefabIndex >= 0 && prefabIndex < prefabList.Count)
         {
-            CreateObject(prefabList[prefabIndex], goodsType, false);  // false: 버튼 클릭 아님
+            // prefabList[prefabIndex]에서 GameObject를 가져오는 대신 해당 프리팹의 이름을 전달합니다.
+            string prefabName = prefabList[prefabIndex].name;
+            CreateObject(prefabName, goodsType, false);  // false: 버튼 클릭 아님
         }
     }
 
     // OnClick 이벤트에 따른 프리팹 생성 메서드
     public void OnChestButtonClicked()
     {
-        CreateObject(prefabList[0], GoodsType.Chest, true);  // true: 버튼 클릭
+        CreateObject("Chest", GoodsType.Chest, true);  // true: 버튼 클릭
     }
 
     public void OnSwordButtonClicked()
     {
-        CreateObject(prefabList[1], GoodsType.Sword, true);  // true: 버튼 클릭
+        CreateObject("Sword", GoodsType.Sword, true);  // true: 버튼 클릭
     }
 
     public void OnRockButtonClicked()
     {
-        CreateObject(prefabList[2], GoodsType.Rock, true);  // true: 버튼 클릭
+        CreateObject("Rock 1", GoodsType.Rock, true);  // true: 버튼 클릭
     }
 
     // 프리팹을 생성하는 메서드
-    void CreateObject(GameObject prefab, GoodsType goodsType, bool isButtonClick)
+    void CreateObject(string prefabName, GoodsType goodsType, bool isButtonClick)
     {
         int currentCount = Inventory_KJS.instance.CurrentGoodsCount(goodsType);
 
-        if (currentCount > 0 && prefab != null && playerTransform != null)
+        if (currentCount > 0 && prefabName != null && playerTransform != null)
         {
             Vector3 spawnPosition;
 
@@ -96,7 +99,7 @@ public class InventoryUI : MonoBehaviour
                 spawnPosition = playerTransform.position + (playerTransform.rotation * initialSpawnOffset);
             }
 
-            GameObject spawnedPrefab = Instantiate(prefab, spawnPosition, Quaternion.identity);
+            GameObject spawnedPrefab = PhotonNetwork.Instantiate(prefabName, spawnPosition, Quaternion.identity);
             spawnedPrefab.transform.localScale *= 0.5f;
 
             if (isButtonClick)
