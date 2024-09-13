@@ -41,6 +41,8 @@ public class PlayerMove : PlayerStateBase, IPunObservable
     // 회전해야하는 값
     Quaternion receiveRot;
 
+    float inputValue;
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
@@ -131,8 +133,28 @@ public class PlayerMove : PlayerStateBase, IPunObservable
             // 이동
             cc.Move(moveDir * moveSpeed * Time.deltaTime);
 
+            // 애니메이션 연동처리
+            if (anim != null)
+            {
+                anim.SetFloat("speed", moveDir.magnitude * speedValue);
+            }
+
             // 뛰는 함수
             WalkRun();
+
+
+        }
+        // isMine 아닐때도 위치 동기화
+        else
+        {
+            transform.position = receivePos;
+            transform.rotation = receiveRot;
+
+            // 애니메이션 연동처리
+            if (anim != null)
+            {
+                anim.SetFloat("speed", inputValue);
+            }
         }
     }
 
@@ -169,15 +191,6 @@ public class PlayerMove : PlayerStateBase, IPunObservable
         moveSpeed = isRun ? runSpeed : walkSpeed;
     }
 
-    private void OnDisable()
-    {
-        print("Disable");
-    }
-
-    private void OnDestroy()
-    {
-        print("Destroy!");
-    }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -186,12 +199,16 @@ public class PlayerMove : PlayerStateBase, IPunObservable
         {
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
+
+            stream.SendNext(moveDir.magnitude * speedValue);
         }
         // isReading -> isMine 이 내가 아닐 때 주겠다
         else if(stream.IsReading)
         {
             receivePos = (Vector3)stream.ReceiveNext();
             receiveRot = (Quaternion)stream.ReceiveNext();
+
+            inputValue = (float)stream.ReceiveNext();
         }
     }
 }
