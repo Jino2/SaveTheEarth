@@ -60,6 +60,8 @@ sysinfo.txt
 *.aab
 *.unitypackage
 *.app
+Build/
+Builds/
 
 # Crashlytics generated file
 crashlytics-build.properties
@@ -191,3 +193,4 @@ fabric.properties
 Assets/KJS/Models/JC_StylizedRocks_Lite/JC_StylizedRocks_Lite_2022.3.1_HDRP_v1.0.unitypackage.meta
 Assets/KJS/Models/JC_StylizedRocks_Lite/JC_StylizedRocks_Lite_2022.3.1_URP_v1.0.unitypackage.meta
 Assets/KJS/Models/JC_StylizedRocks_Lite/JC_StylizedRocks_Lite_2022.3.1_HDRP_v1.0.unitypackage.meta
+
