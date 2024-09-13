@@ -43,6 +43,8 @@ public class PlayerMove : PlayerStateBase, IPunObservable
 
     float inputValue;
 
+    bool requestLoadLevel = false;
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
@@ -157,8 +159,7 @@ public class PlayerMove : PlayerStateBase, IPunObservable
             }
         }
     }
-
-    
+   
 
     // 뛰자
     void WalkRun()
@@ -189,6 +190,18 @@ public class PlayerMove : PlayerStateBase, IPunObservable
     {
         // isRun 이 true 이면 runSpeed, false 이면 walkSpeed
         moveSpeed = isRun ? runSpeed : walkSpeed;
+    }
+
+    IEnumerator GoToMainy()
+    {
+        // 방장이 z 버튼 활성화 시 씬 이동을 한다
+        if(PhotonNetwork.IsMasterClient && pv.IsMine && Input.GetKeyDown(KeyCode.Z))
+        {
+            yield return new WaitForSeconds(2.0f);
+
+            // 로비 씬으로 이동하자
+            PhotonNetwork.LoadLevel(2);
+        }
     }
 
 
