@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerUI : MonoBehaviour
 {
-
+    public TMP_InputField inputField;
     public TMP_Text nickName;
     
     void Start()
@@ -25,5 +25,11 @@ public class PlayerUI : MonoBehaviour
     {
         nickName.text = name;
         nickName.color = hpColor;
+    }
+
+    public void OnTextChanged()
+    {
+        string userName = inputField.text;
+        nickName.text = $"지구를 지키러 오신{userName}님, 환영합니다!";
     }
 }

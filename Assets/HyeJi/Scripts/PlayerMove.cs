@@ -3,6 +3,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : PlayerStateBase, IPunObservable
 {
@@ -158,6 +159,12 @@ public class PlayerMove : PlayerStateBase, IPunObservable
                 anim.SetFloat("speed", inputValue);
             }
         }
+
+        // 씬 이동
+        if(!requestLoadLevel && SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            StartCoroutine(GoToMainy());
+        }
     }
    
 
@@ -203,7 +210,6 @@ public class PlayerMove : PlayerStateBase, IPunObservable
             PhotonNetwork.LoadLevel(2);
         }
     }
-
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
