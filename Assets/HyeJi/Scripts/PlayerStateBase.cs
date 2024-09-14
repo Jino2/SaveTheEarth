@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerStateBase : MonoBehaviour
+public class PlayerStateBase : MonoBehaviourPun
 {
     public float moveSpeed;
     public float rotSpeed = 200;
@@ -14,7 +15,10 @@ public class PlayerStateBase : MonoBehaviour
 
     void Start()
     {
-        
+        if(photonView.IsMine)
+        {
+            gameObject.AddComponent<Inventory_KJS>();
+        }
     }
 
     // Update is called once per frame

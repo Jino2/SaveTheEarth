@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-public class ChatActivator : MonoBehaviour
+using Photon.Pun;
+public class ChatActivator : MonoBehaviourPun
 {
     public float activationDistance = 5f; // 활성화할 거리
     private GameObject player; // 플레이어 오브젝트

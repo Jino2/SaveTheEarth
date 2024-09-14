@@ -4,32 +4,15 @@ using UnityEngine;
 
 public class TestPlayer : MonoBehaviour
 {
-    float moveSpeed = 10f;
-    CharacterController cc;
-
     // Start is called before the first frame update
     void Start()
     {
-        cc = GetComponent<CharacterController>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
-    }
-
-    void Move()
-    {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        Vector3 dir = new Vector3(h, 0, v);
-        dir.Normalize();
-        // 규현이가 쓴 코드-----------------------------------------------------------------------------
-        dir.y = 0;
-        //-----------------------------------------------------------------------------------------
-        cc.Move(dir * moveSpeed * Time.deltaTime);
-
 
     }
     public void OnTriggerEnter(Collider other)

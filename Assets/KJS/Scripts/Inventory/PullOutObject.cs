@@ -12,8 +12,13 @@ public class PullOutObject : MonoBehaviour
 
     void Start()
     {
+        
+    }
+
+    public void SetInventory(Inventory_KJS inven)
+    {
         // Inventory 싱글톤 인스턴스 참조
-        inventory = Inventory_KJS.instance;
+        inventory = inven;
 
         if (inventory != null)
         {
