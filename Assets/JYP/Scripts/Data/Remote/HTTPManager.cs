@@ -58,6 +58,35 @@ public class HTTPManager : MonoBehaviour
         {
         }
     }
+    
+    public void PostWWWForm(HttpRequestInfo<Dictionary<string,string>, string> requestInfo)
+    {
+        StartCoroutine(PostWWWFormAsync(requestInfo));
+    }
+
+    private IEnumerator PostWWWFormAsync(HttpRequestInfo<Dictionary<string,string>, string> requestInfo)
+    {
+        string bodyJson = JsonUtility.ToJson(requestInfo.requestBody);
+        var wF = new WWWForm();
+        foreach (var pair in requestInfo.requestBody)
+        {
+            wF.AddField(pair.Key, pair.Value);
+        }
+        using var request = UnityWebRequest.Post(requestInfo.url, wF);
+        request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        request.SetRequestHeader("Accept", "application/json");
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            
+            requestInfo.onSuccess(request.downloadHandler.text);
+        }
+        else
+        {
+            requestInfo.onError();
+        }
+    }
 
     public void Post<T, R>(HttpRequestInfo<T, R> requestInfo)
     {
@@ -69,7 +98,16 @@ public class HTTPManager : MonoBehaviour
     {
         string bodyJson = JsonUtility.ToJson(requestInfo.requestBody);
         using var request = UnityWebRequest.PostWwwForm(requestInfo.url, bodyJson);
-        request.SetRequestHeader("Content-Type", "application/json");
+        if(requestInfo.contentType == null || requestInfo.contentType == "")
+        {
+            request.SetRequestHeader("Content-Type","application/json");
+
+        }
+        else
+        {
+            request.SetRequestHeader("Content-Type",requestInfo.contentType);
+
+        }
         byte[] jsonToSend = new UTF8Encoding().GetBytes(bodyJson);
         request.uploadHandler = new UploadHandlerRaw(jsonToSend);
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();

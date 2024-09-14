@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public float maxDistance = 4f;
     public float currentDistance;
 
+
     //public LayerMask collisionLayers;
 
 
@@ -28,6 +30,12 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         //currentDistance = maxDistance;
+
+        if(player != null)
+        {
+            virtualCamera.Follow = player;
+            virtualCamera.LookAt = player;
+        }
     }
 
     void Update()
@@ -46,5 +54,16 @@ public class ThirdPersonCamera : MonoBehaviour
         virtualCamera.transform.position = player.position;
         virtualCamera.transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
 
+    }
+
+    public void SetPlayer(Transform newPlayer)
+    {
+        player = newPlayer;
+
+        if(virtualCamera != null)
+        {
+            virtualCamera.Follow = player;
+            virtualCamera.LookAt = player;
+        }
     }
 }

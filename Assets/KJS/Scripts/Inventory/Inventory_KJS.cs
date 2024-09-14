@@ -3,26 +3,43 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using Photon.Pun;  // Photon 네임스페이스 추가
 
-public class Inventory_KJS : MonoBehaviour
+public class Inventory_KJS : MonoBehaviourPun
 {
     public static Inventory_KJS instance;  // 싱글톤 인스턴스
     public InventoryUI inventoryUI;
-    public List<GameObject> goods = new List<GameObject>();  //오브젝트 리스트
+    public List<GameObject> goods = new List<GameObject>();  // 오브젝트 리스트
     private Dictionary<GoodsType, int> goodsCounts = new Dictionary<GoodsType, int>();  // GoodsType별로 수량을 추적
 
     public List<InventoryItem> inventoryItems;
 
     private void Awake()
     {
-
-        if (instance == null)
+    // panel_Inventory라는 이름의 오브젝트에서 InventoryUI 컴포넌트를 자동으로 찾고 할당
+    
+        if(instance == null)
         {
             instance = this;
         }
+        else if(!photonView.IsMine)
+        {
+            Destroy(this);
+        }
+
+    }
+
+    private void Start()
+    {
+        GameObject panelInventory = GameObject.Find("Canvas");
+        if (panelInventory != null)
+        {
+            inventoryUI = panelInventory.transform.GetChild(0).GetComponent<InventoryUI>();
+            panelInventory.transform.GetChild(0).GetComponent<PullOutObject>().SetInventory(this);
+        }
         else
         {
-            Destroy(gameObject);
+            Debug.LogError("panel_Inventory 오브젝트를 찾을 수 없습니다.");
         }
 
         // 각 GoodsType의 수량을 초기화
@@ -33,11 +50,9 @@ public class Inventory_KJS : MonoBehaviour
                 goodsCounts[type] = 0;  // 각 GoodsType의 수량을 0으로 초기화
             }
         }
-    }
 
-    private void Start()
-    {
         LoadInventoryItems();
+
     }
 
     // 특정 GoodsType의 수량을 반환하는 함수 (데이터 참조용)
@@ -71,7 +86,7 @@ public class Inventory_KJS : MonoBehaviour
         }
     }
 
-    //  MinusGoodsCount는 이제 InventoryUI로 위임
+    // MinusGoodsCount는 이제 InventoryUI로 위임
     public void MinusGoodsCount(GoodsType goodsType)
     {
         if (inventoryUI != null)
@@ -80,14 +95,6 @@ public class Inventory_KJS : MonoBehaviour
         }
     }
 
-    // ActivateDisabledObject는 이제 InventoryUI로 위임
-    //public void ActivateDisabledObject(GoodsType goodsType)
-    //{
-    //    if (inventoryUI != null)
-    //    {
-    //        inventoryUI.ActivateObject(goodsType);
-    //    }
-    //}
     public void AddGoods(GoodsInfo goodsInfo)
     {
         if (goodsInfo != null)
@@ -110,7 +117,6 @@ public class Inventory_KJS : MonoBehaviour
 
             Debug.Log($"{goodsInfo.goodsType}이를 획득했습니다.");
         }
-
     }
 
     public void LoadInventoryItems()

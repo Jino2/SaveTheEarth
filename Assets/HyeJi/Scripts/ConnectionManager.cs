@@ -117,10 +117,16 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         // 로그 확인하기
         LobbyUIManager.lobbyUI.PrintLog("방 들어가짐!");
 
-        // 방에 입장한 경우 모두 1번 씬으로 이동한다.
-        PhotonNetwork.LoadLevel(1);
+        // 방에 입장한 경우 모두 2번(Main) 씬으로 이동한다.
+        //PhotonNetwork.LoadLevel(1);
+        StartCoroutine(SwitchScene(2));
     }
 
+    IEnumerator SwitchScene(int num)
+    {
+        yield return new WaitForSeconds(1.0f);
+        PhotonNetwork.LoadLevel(num);
+    }
     // 방 입장에 실패한 이유 출력
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -235,6 +241,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             // 버튼에 방 입장 기능 연결하기
             roomPanel.btn_join.onClick.AddListener(() =>
             {
+                print(room.Name);
                 PhotonNetwork.JoinRoom(room.Name);
             });
         }
