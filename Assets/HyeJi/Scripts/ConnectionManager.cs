@@ -117,9 +117,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         // 로그 확인하기
         LobbyUIManager.lobbyUI.PrintLog("방 들어가짐!");
 
-        // 방에 입장한 경우 모두 2번(Main) 씬으로 이동한다.
+        // 방에 입장한 경우 모두 1번(Lobby) 씬으로 이동한다.
         //PhotonNetwork.LoadLevel(1);
-        StartCoroutine(SwitchScene(2));
+        StartCoroutine(SwitchScene(1));
     }
 
     IEnumerator SwitchScene(int num)

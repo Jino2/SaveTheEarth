@@ -3,6 +3,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : PlayerStateBase, IPunObservable
 {
@@ -42,6 +43,8 @@ public class PlayerMove : PlayerStateBase, IPunObservable
     Quaternion receiveRot;
 
     float inputValue;
+
+    bool requestLoadLevel = false;
 
     void Start()
     {
@@ -156,9 +159,14 @@ public class PlayerMove : PlayerStateBase, IPunObservable
                 anim.SetFloat("speed", inputValue);
             }
         }
-    }
 
-    
+        // 씬 이동
+        if(!requestLoadLevel && SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            StartCoroutine(GoToMainy());
+        }
+    }
+   
 
     // 뛰자
     void WalkRun()
@@ -191,6 +199,17 @@ public class PlayerMove : PlayerStateBase, IPunObservable
         moveSpeed = isRun ? runSpeed : walkSpeed;
     }
 
+    IEnumerator GoToMainy()
+    {
+        // 방장이 z 버튼 활성화 시 씬 이동을 한다
+        if(PhotonNetwork.IsMasterClient && pv.IsMine && Input.GetKeyDown(KeyCode.Z))
+        {
+            yield return new WaitForSeconds(2.0f);
+
+            // 로비 씬으로 이동하자
+            PhotonNetwork.LoadLevel(2);
+        }
+    }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

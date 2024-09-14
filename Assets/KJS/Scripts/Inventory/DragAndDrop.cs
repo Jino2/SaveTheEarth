@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class DragAndDrop : MonoBehaviour
+public class DragAndDrop : MonoBehaviourPun
 {
     private GoodsInfo goodsInfo;
     public bool draggable;
@@ -61,6 +62,8 @@ public class DragAndDrop : MonoBehaviour
 
     void Update()
     {
+        if (!photonView.IsMine) return; // photonView가 본인의 것이 아니면 실행하지 않음
+
         if (isRotating)
         {
             // 회전 중일 때 현재 회전을 목표 회전으로 점진적으로 변경 (LERP)
@@ -103,18 +106,22 @@ public class DragAndDrop : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.D))
             {
                 RotateChildAroundParent(Vector3.up, -rotationAngle);
+                photonView.RPC("RotateChildRPC", RpcTarget.Others, Vector3.up, -rotationAngle);
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
                 RotateChildAroundParent(Vector3.up, rotationAngle);
+                photonView.RPC("RotateChildRPC", RpcTarget.Others, Vector3.up, rotationAngle);
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
                 RotateChildAroundParent(Vector3.right, -rotationAngle);
+                photonView.RPC("RotateChildRPC", RpcTarget.Others, Vector3.right, -rotationAngle);
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
                 RotateChildAroundParent(Vector3.right, rotationAngle);
+                photonView.RPC("RotateChildRPC", RpcTarget.Others, Vector3.right, rotationAngle);
             }
 
             // 스케일 변경 (자식의 피봇을 기준으로)
@@ -142,6 +149,9 @@ public class DragAndDrop : MonoBehaviour
 
                 // 부모 BoxCollider 크기 업데이트 (x, z는 최소한으로, y는 그대로 변화)
                 UpdateParentColliderSize();
+
+                // 스케일 변경을 네트워크에 전파
+                photonView.RPC("UpdateScaleRPC", RpcTarget.Others, newScale);
             }
         }
     }
@@ -214,5 +224,18 @@ public class DragAndDrop : MonoBehaviour
                 }
             }
         }
+    }
+
+    [PunRPC]
+    void RotateChildRPC(Vector3 axis, float angle)
+    {
+        RotateChildAroundParent(axis, angle);
+    }
+
+    [PunRPC]
+    void UpdateScaleRPC(Vector3 newScale)
+    {
+        childObject.localScale = newScale;
+        UpdateParentColliderSize();
     }
 }

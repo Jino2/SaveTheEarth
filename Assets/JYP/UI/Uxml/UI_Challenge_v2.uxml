@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Container" style="flex-grow: 1; flex-direction: row-reverse; align-items: stretch; height: 100%;">
+        <ui:VisualElement name="PlayerShowRoom" style="flex-grow: 1; width: 20%;">
+            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_CloseChallenge" style="width: 100px; height: 100px; background-color: rgb(221, 187, 82); -unity-font-style: bold; font-size: 143px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ChallengeContainer" style="flex-grow: 1; background-color: rgba(88, 229, 214, 0.39); border-right-color: rgb(0, 0, 0); border-right-width: 8px; border-top-width: 4px; border-bottom-width: 4px; border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: 80%; align-items: center; justify-content: center; align-self: stretch; flex-shrink: 0; flex-direction: row; height: 100%;" />
+    </ui:VisualElement>
+</ui:UXML>
