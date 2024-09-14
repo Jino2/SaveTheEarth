@@ -21,7 +21,7 @@
             <ui:VisualElement style="flex-grow: 1; justify-content: center; align-items: stretch; padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px;">
                 <ui:Label tabindex="-1" text="텀블러&#10;&lt;color=#eed32d&gt;사용&lt;/color&gt;하기" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 34px; -unity-font-style: bold; color: rgb(53, 65, 80); margin-bottom: 51px; -unity-text-align: upper-center;" />
                 <ui:Label tabindex="-1" text="플라스틱 재활용을 통해 &#10;지구를 구해보자" parse-escape-sequences="true" display-tooltip-when-elided="true" style="color: rgb(55, 55, 55); font-size: 23px; margin-bottom: 20%;" />
-                <ui:Button text="도전" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_challengeChallenge" style="background-color: rgb(221, 187, 82); font-size: 36px; -unity-font-style: bold; color: rgb(243, 255, 231); height: 120px; letter-spacing: 80px;" />
+                <ui:Button text="도전" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_tumblerChallenge" style="background-color: rgb(221, 187, 82); font-size: 36px; -unity-font-style: bold; color: rgb(243, 255, 231); height: 120px; letter-spacing: 80px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

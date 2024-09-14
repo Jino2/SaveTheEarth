@@ -1,10 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="Container" style="flex-grow: 1; background-color: rgb(255, 255, 255);">
+    <ui:VisualElement name="Container" style="flex-grow: 1; background-color: rgb(255, 255, 255); border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px;">
         <ui:VisualElement name="HeaderContainer" style="flex-grow: 1; height: 15%; justify-content: space-around; font-size: 42px; -unity-font-style: bold; letter-spacing: 2px;">
             <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_ChallengeFinishTitle" style="-unity-text-align: middle-center; font-size: 44px;" />
         </ui:VisualElement>
         <ui:VisualElement name="BodyContainer" style="flex-grow: 1; height: 55%;">
-            <ui:VisualElement style="flex-grow: 1; flex-shrink: 0;" />
+            <ui:VisualElement name="image_ChallengeResult" style="flex-grow: 1; flex-shrink: 0;" />
             <ui:Label tabindex="-1" text="&lt;b&gt;Label&lt;/b&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_challengeFinishMessage" style="height: 80px; -unity-text-align: upper-center; font-size: 28px;" />
         </ui:VisualElement>
         <ui:VisualElement name="FooterContainer" style="flex-grow: 1; height: 25%; flex-direction: row; align-items: center; justify-content: center; align-self: stretch;">

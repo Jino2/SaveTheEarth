@@ -13,7 +13,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
     public UIDocument uiDocument;
     private VisualElement challengeProcessContainer;
-
+    public Sprite[] challengeResultSprites;
     public VisualTreeAsset[] challengeProcessAssets;
     private Button closeButton;
 
@@ -27,8 +27,9 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     private BaseChallengeUIController _currentBaseChallengeUIController;
     private EChallengeProcess currentProcess;
 
-    public ChallengeType currentChallengeType { get; private set; } = ChallengeType.None;
+    public ChallengeType currentChallengeType { get; set; } = ChallengeType.None;
     public bool isChallengeSuccess = false;
+
     void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -93,4 +94,37 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         challengeProcessContainer.Add(_currentBaseChallengeUIController.Root);
         _currentBaseChallengeUIController.BindType(currentChallengeType);
     }
+
+    public void TryChallenge(Camera userCamera = null)
+    {
+        if (userCamera == null) userCamera = Camera.main;
+        OpenChallengeUI();
+        SetCamera(userCamera);
+    }
+
+    #region Private Methods Block
+
+    private void OpenChallengeUI()
+    {
+        currentProcess = EChallengeProcess.SelectChallenge;
+        uiDocument.enabled = true;
+        isChallengeSuccess = false;
+        GoToProcess(currentProcess);
+    }
+
+    void CloseChallengeUI()
+    {
+        uiDocument.enabled = false;
+    }
+
+    private void SetCamera(Camera userCamera)
+    {
+        if (userCamera == null)
+        {
+            Debug.LogError("User Camera is null");
+            return;
+        }
+    }
+
+    #endregion
 }

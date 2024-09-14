@@ -1,26 +1,31 @@
-﻿using System;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
-using Image = UnityEngine.UIElements.Image;
 
 public class ChallengeSelectUIController : BaseChallengeUIController
 {
-    private Label title;
-    private Label description;
-    private Image icon;
-    private Button uploadButton;
-    private Button completeButton;
+    private Button transportChallengeButton;
+    private Button tumblerChallengeButton;
+    private Button recycleChallengeButton;
+
     public override void Initialize(VisualElement root, ChallengeUIControllerV2 parentController)
     {
-        base.Initialize(root, parentController);
-        title = root.Q<Label>("title");
-        description = root.Q<Label>("description");
-        icon = root.Q<Image>("icon");
-        uploadButton = root.Q<Button>("uploadButton");
+        transportChallengeButton = root.Q<Button>("btn_transportChallenge");
+        tumblerChallengeButton = root.Q<Button>("btn_tumblerChallenge");
+        recycleChallengeButton = root.Q<Button>("btn_recycleChallenge");
+        
+        transportChallengeButton.clicked += () => OnChallengeButtonClicked(ChallengeType.Transport);
+        tumblerChallengeButton.clicked += () => OnChallengeButtonClicked(ChallengeType.Tumbler);
+        recycleChallengeButton.clicked += () => OnChallengeButtonClicked(ChallengeType.Recycle);
     }
 
     public override void BindType(ChallengeType type)
     {
         
+    }
+    
+    private void OnChallengeButtonClicked(ChallengeType type)
+    {
+        parentController.currentChallengeType = type;
+        parentController.GoToProcess(ChallengeUIControllerV2.EChallengeProcess.ChallengeUploadImage);
     }
 }

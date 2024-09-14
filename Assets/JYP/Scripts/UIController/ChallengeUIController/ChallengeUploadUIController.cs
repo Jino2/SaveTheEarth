@@ -30,6 +30,22 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
 
     public override void BindType(ChallengeType type)
     {
+        switch (type)
+        {
+            case ChallengeType.Transport:
+                title.text = "이동수단 챌린지";
+                break;
+            case ChallengeType.Tumbler:
+                title.text = "텀블러 챌린지";
+                break;
+            case ChallengeType.Recycle:
+                title.text = "재활용 챌린지";
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        
+        
     }
 
     #region Private Methods Block
@@ -84,7 +100,7 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
 
     private void UploadImage()
     {
-        switch (parent.currentChallengeType)
+        switch (parentController.currentChallengeType)
         {
             case ChallengeType.Transport:
                 challengeApi.TryChallengeTransport(
