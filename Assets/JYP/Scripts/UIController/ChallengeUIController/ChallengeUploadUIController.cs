@@ -3,10 +3,13 @@ using System.IO;
 using SFB;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
+using Label = UnityEngine.UIElements.Label;
 
 public class BaseChallengeUploadUIController2 : BaseChallengeUIController
 {
     private Label title;
+    private VisualElement typeIcon;
     private VisualElement imageContainer;
     private Button uploadButton;
     private Button selectButton;
@@ -19,17 +22,22 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
     {
         base.Initialize(root, parentController);
 
+        Debug.Log($"Init");
+
         title = root.Q<Label>("lbl_Title");
+        typeIcon = root.Q<VisualElement>("icon_Type");
         imageContainer = root.Q<VisualElement>("img_SelectedImage");
-        uploadButton = root.Q<Button>("btn_UploadImage");
+        uploadButton = root.Q<Button>("btn_ChallengeUpload");
         selectButton = root.Q<Button>("btn_ChallengeChooseImage");
-        
+
         selectButton.clicked += OnSelectButtonClicked;
         uploadButton.clicked += OnUploadButtonClicked;
     }
 
     public override void BindType(ChallengeType type)
     {
+        if(type != ChallengeType.None)
+            typeIcon.style.backgroundImage = parentController.challengeTypeSprites[(int)type].texture;
         switch (type)
         {
             case ChallengeType.Transport:
@@ -44,8 +52,6 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
-        
     }
 
     #region Private Methods Block
@@ -85,6 +91,7 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
 
     private void OnUploadButtonClicked()
     {
+        uploadButton.SetEnabled(false);
         if (selectedImagePath == null)
         {
             dialogBuiler
@@ -92,10 +99,14 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
                 .SetMessage("이미지를 선택해주세요.")
                 .SetConfirmButtonText("확인")
                 .SetCancelButtonText("취소")
+                .SetOnConfirm(() => { uploadButton.SetEnabled(true); })
+                .SetOnCancel(() => { uploadButton.SetEnabled(true); })
                 .Build();
 
             return;
         }
+
+        UploadImage();
     }
 
     private void UploadImage()
@@ -106,25 +117,47 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
                 challengeApi.TryChallengeTransport(
                     "test",
                     selectedImagePath,
-                    (result) => { UserApi.AddPoint("test", 200, (t) => { NextPage(true); }); },
-                    () => { NextPage(false); }
+                    (result) =>
+                    {
+                        uploadButton.SetEnabled(true);
+                        UserApi.AddPoint("test", 200, (t) => { NextPage(true); });
+                    },
+                    () =>
+                    {
+                        NextPage(false);
+                        uploadButton.SetEnabled(true);
+                    }
                 );
                 break;
             case ChallengeType.Tumbler:
                 challengeApi.TryChallengeTumbler(
                     "test",
                     selectedImagePath,
-                    (result) => { UserApi.AddPoint("test", 200, (t) => { NextPage(true); }); },
-                    () => { NextPage(false); }
-                );
+                    (result) =>
+                    {
+                        uploadButton.SetEnabled(true);
+                        UserApi.AddPoint("test", 200, (t) => { NextPage(true); });
+                    },
+                    () =>
+                    {
+                        NextPage(false);
+                        uploadButton.SetEnabled(true);
+                    });
                 break;
             case ChallengeType.Recycle:
                 challengeApi.TryChallengeRecycling(
                     "test",
                     selectedImagePath,
-                    (result) => { UserApi.AddPoint("test", 200, (t) => { NextPage(true); }); },
-                    () => { NextPage(false); }
-                );
+                    (result) =>
+                    {
+                        uploadButton.SetEnabled(true);
+                        UserApi.AddPoint("test", 200, (t) => { NextPage(true); });
+                    },
+                    () =>
+                    {
+                        NextPage(false);
+                        uploadButton.SetEnabled(true);
+                    });
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

@@ -1,4 +1,5 @@
 using System;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,12 +13,14 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     }
 
     public UIDocument uiDocument;
+    public CinemachineVirtualCamera challengeUICamera;
     private VisualElement challengeProcessContainer;
     public Sprite[] challengeResultSprites;
     public VisualTreeAsset[] challengeProcessAssets;
     private Button closeButton;
-
-    private BaseChallengeUIController[] controllers =
+    public Sprite[] challengeTypeSprites;
+    
+    private readonly BaseChallengeUIController[] controllers =
     {
         new ChallengeSelectUIController(),
         new BaseChallengeUploadUIController2(),
@@ -26,6 +29,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
     private BaseChallengeUIController _currentBaseChallengeUIController;
     private EChallengeProcess currentProcess;
+    private bool isTryingChallenge = false;
 
     public ChallengeType currentChallengeType { get; set; } = ChallengeType.None;
     public bool isChallengeSuccess = false;
@@ -33,22 +37,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     void Start()
     {
         uiDocument = GetComponent<UIDocument>();
-        closeButton = uiDocument.rootVisualElement.Q<Button>("btn_CloseChallenge");
-        closeButton.clicked += () => { uiDocument.enabled = false; };
 
-        challengeProcessContainer = uiDocument.rootVisualElement.Q<VisualElement>("ChallengeContainer");
-
-        for (int i = 0; i < challengeProcessAssets.Length; i++)
-        {
-            controllers[i]
-                .Initialize(
-                    challengeProcessAssets[i]
-                        .CloneTree(),
-                    this
-                );
-        }
-
-        GoToProcess(EChallengeProcess.SelectChallenge);
     }
 
 
@@ -95,35 +84,56 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         _currentBaseChallengeUIController.BindType(currentChallengeType);
     }
 
-    public void TryChallenge(Camera userCamera = null)
+    public void TryChallenge()
     {
-        if (userCamera == null) userCamera = Camera.main;
+        GameObject player = GetCurrentPlayerCharacter();
         OpenChallengeUI();
-        SetCamera(userCamera);
+        SetCamera(player);
     }
 
     #region Private Methods Block
 
     private void OpenChallengeUI()
     {
-        currentProcess = EChallengeProcess.SelectChallenge;
         uiDocument.enabled = true;
-        isChallengeSuccess = false;
-        GoToProcess(currentProcess);
+        closeButton = uiDocument.rootVisualElement.Q<Button>("btn_CloseChallenge");
+        closeButton.clicked += CloseChallengeUI;
+        challengeProcessContainer = uiDocument.rootVisualElement.Q<VisualElement>("ChallengeContainer");
+        for (int i = 0; i < challengeProcessAssets.Length; i++)
+        {
+            print(controllers[i]);
+            print(challengeProcessAssets[i]);
+            var t = challengeProcessAssets[i]
+                .CloneTree();
+            controllers[i]
+                .Initialize(
+                    t,
+                    this
+                );
+            print(t);
+        }
+        isTryingChallenge = true;
+        GoToProcess(EChallengeProcess.SelectChallenge);
     }
 
     void CloseChallengeUI()
     {
         uiDocument.enabled = false;
+        closeButton.clicked -= CloseChallengeUI;
+        challengeUICamera.gameObject.SetActive(false);
+        isTryingChallenge = false;
     }
 
-    private void SetCamera(Camera userCamera)
+    private void SetCamera(GameObject playerCharacter)
     {
-        if (userCamera == null)
-        {
-            Debug.LogError("User Camera is null");
-            return;
-        }
+        challengeUICamera.LookAt = playerCharacter.transform;
+        challengeUICamera.gameObject.SetActive(true);
+    }
+
+    private GameObject GetCurrentPlayerCharacter()
+    {
+        //TODO: implement with Photon 
+        return GameObject.FindWithTag("Player");
     }
 
     #endregion

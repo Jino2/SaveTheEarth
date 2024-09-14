@@ -9,6 +9,7 @@ public class ChallengeSelectUIController : BaseChallengeUIController
 
     public override void Initialize(VisualElement root, ChallengeUIControllerV2 parentController)
     {
+        base.Initialize(root, parentController);
         transportChallengeButton = root.Q<Button>("btn_transportChallenge");
         tumblerChallengeButton = root.Q<Button>("btn_tumblerChallenge");
         recycleChallengeButton = root.Q<Button>("btn_recycleChallenge");
