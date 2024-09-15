@@ -261,6 +261,10 @@ MonoBehaviour:
     type: 3}
   shop: {fileID: 3423489896829533278}
   uiDocument: {fileID: 8975667471768849251}
+  itemPreviewSprites:
+  - {fileID: 21300000, guid: bd18e2d2f36a94d6cad57ed2b5016ddc, type: 3}
+  - {fileID: 21300000, guid: d8c9af5fc68794309be982a9e70361c2, type: 3}
+  - {fileID: 21300000, guid: d593d0e08ac8446619084837b4def01e, type: 3}
 --- !u!1 &7168584522037989540
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ public class ShopUIController : MonoBehaviour
     private Button closeButton;
     private Label pointLabel;
     private int point = 0;
+    public Sprite[] itemPreviewSprites;
+    
     private void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -29,7 +31,7 @@ public class ShopUIController : MonoBehaviour
         closeButton = uiDocument.rootVisualElement.Q<Button>("closeButton");
         pointLabel = uiDocument.rootVisualElement.Q<Label>("point");
         closeButton.clicked += OnCloseButtonClicked;
-        sellingItemListController.InitList(uiDocument.rootVisualElement, sellingItemTemplate, item =>
+        sellingItemListController.InitList(uiDocument.rootVisualElement,itemPreviewSprites, sellingItemTemplate, item =>
         {
             point -= item.price;
             pointLabel.text = point.ToString();
