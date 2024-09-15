@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Voice.PUN;
+using UnityEngine.UI;
 
 public class PlayerMove : PlayerStateBase, IPunObservable
 {
@@ -46,11 +48,18 @@ public class PlayerMove : PlayerStateBase, IPunObservable
 
     bool requestLoadLevel = false;
 
+    public RawImage voiceIcon;
+    PhotonVoiceView voiceView;
+    bool isTalking = false;
+
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         pv = GetComponent<PhotonView>();
+        voiceView = GetComponent<PhotonVoiceView>();
+
         print("111111");
 
         if(pv.IsMine)
@@ -165,6 +174,19 @@ public class PlayerMove : PlayerStateBase, IPunObservable
         {
             StartCoroutine(GoToMainy());
         }
+
+
+        // Photon Voice
+        if(pv.IsMine)
+        {
+            // 현재 말을 하고 있다면 보이스 아이콘을 활성화한다.
+            voiceIcon.gameObject.SetActive(voiceView.IsRecording);
+        }
+        else
+        {
+            voiceIcon.gameObject.SetActive(isTalking);
+        }
+        
     }
    
 
@@ -220,6 +242,8 @@ public class PlayerMove : PlayerStateBase, IPunObservable
             stream.SendNext(transform.rotation);
 
             stream.SendNext(moveDir.magnitude * speedValue);
+
+            stream.SendNext(voiceView.IsRecording);
         }
         // isReading -> isMine 이 내가 아닐 때 주겠다
         else if(stream.IsReading)
@@ -228,6 +252,8 @@ public class PlayerMove : PlayerStateBase, IPunObservable
             receiveRot = (Quaternion)stream.ReceiveNext();
 
             inputValue = (float)stream.ReceiveNext();
+
+            isTalking = (bool)stream.ReceiveNext();
         }
     }
 }
