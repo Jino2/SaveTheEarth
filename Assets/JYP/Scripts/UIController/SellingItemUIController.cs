@@ -9,6 +9,7 @@ public class SellingItemUIController
     private Label nameLabel;
     private Label priceLabel;
     private Button purchaseButton;
+    private VisualElement previewImage;
 
     private SellingItem item;
 
@@ -17,14 +18,18 @@ public class SellingItemUIController
         purchaseButton = root.Q<Button>("btn_Purchase");
         nameLabel = root.Q<Label>("name");
         priceLabel = root.Q<Label>("price");
+        previewImage = root.Q<VisualElement>("image_sellingItemPreview");
+        
+
     }
 
-    public void SetItemData(VisualElement root, SellingItem item, Action<SellingItem> onBuyItem)
+    public void SetItemData(VisualElement root, SellingItem item, Action<SellingItem> onBuyItem, Sprite previewImage)
     {
         nameLabel.text = item.name;
         priceLabel.text = $"{item.price} 포인트";
         this.item = item;
-
+        this.previewImage.style.backgroundImage = previewImage.texture;
+        
         purchaseButton.clicked += () =>
         {
             new BaseDialogUIBuilder()
