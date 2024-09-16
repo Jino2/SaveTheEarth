@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class PlayerUI : MonoBehaviour
 {
-    public TMP_InputField inputField;
-    public TMP_Text nickName;
+    [SerializeField] TMP_InputField inputField;
+    [SerializeField] TMP_Text nickName;
     
     void Start()
     {

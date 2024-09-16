@@ -269,7 +269,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
 --- !u!114 &6852060756091639424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,7 +415,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  rotSpeed: 200
   walkSpeed: 2
   runSpeed: 10
   cameraTransform: {fileID: 0}
@@ -437,7 +436,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  rotSpeed: 200
   walkSpeed: 5
   runSpeed: 10
 --- !u!143 &3421660703200693738

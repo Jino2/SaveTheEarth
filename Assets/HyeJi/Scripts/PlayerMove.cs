@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Voice.PUN;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class PlayerMove : PlayerStateBase, IPunObservable
 {
@@ -52,7 +53,6 @@ public class PlayerMove : PlayerStateBase, IPunObservable
     PhotonVoiceView voiceView;
     bool isTalking = false;
 
-
     void Start()
     {
         cc = GetComponent<CharacterController>();
@@ -60,12 +60,9 @@ public class PlayerMove : PlayerStateBase, IPunObservable
         pv = GetComponent<PhotonView>();
         voiceView = GetComponent<PhotonVoiceView>();
 
-        print("111111");
-
         if(pv.IsMine)
         {
             // 메인 카메라 찾기
-            print("545454545454545454");
             Camera mainCamera = Camera.main;
             if(mainCamera != null)
             {
