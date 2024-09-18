@@ -94,7 +94,7 @@ public class PlayerMove : PlayerStateBase, IPunObservable
         //Vector3 dir = new Vector3(h, 0, v);
 
         // 카메라의 방향을 기준으로 이동 방향을 설정
-        if (pv.IsMine)
+        if (pv.IsMine && EventSystem.current.currentSelectedGameObject == null)
         {
             Vector3 forward = cameraTransform.forward;
             Vector3 right = cameraTransform.right;
@@ -145,16 +145,26 @@ public class PlayerMove : PlayerStateBase, IPunObservable
             // 애니메이션 연동처리
             if (anim != null)
             {
-                anim.SetFloat("speed", moveDir.magnitude * speedValue);
+                //anim.SetFloat("speed", moveDir.magnitude * speedValue);
+                
+                // 애니메이션 블렌드 처리
+                float animationSpeed = moveDir.magnitude * speedValue;
+                anim.SetFloat("speed", Mathf.Lerp(anim.GetFloat("speed"), animationSpeed, Time.deltaTime * 5f));
             }
 
-            // 뛰는 함수
-            WalkRun();
-
-
+        }
+        else
+        {
+            // 채팅 활성화 시 중력과 이동을 멈춘다
+            yVelocity = 0;
+            // 애니메이션 연동처리 멈춘다
+            if (anim != null)
+            {
+                anim.SetFloat("speed", 0);
+            }
         }
         // isMine 아닐때도 위치 동기화
-        else
+        if(!pv.IsMine)
         {
             transform.position = receivePos;
             transform.rotation = receiveRot;
