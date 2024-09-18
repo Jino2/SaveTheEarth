@@ -104,10 +104,6 @@ public class LoginManager : MonoBehaviour
         ShowPanel(panel_ServiceExit, true);
     }
 
-    // 서비스 나가기에서 예 눌렀을 때
-
-    // 서비스 나가기에서 아니오 눌렀을 때
-
 
     // 나가기 버튼 활성화 (임시 false)
     public void Exit_btn()
