@@ -131,6 +131,8 @@ MonoBehaviour:
   maxScale: 200
   scaleMultiplierX: 0.1
   scaleMultiplierZ: 0.1
+  targetCamera: {fileID: 0}
+  cameraYOffset: 3
 --- !u!114 &5449410746206881286
 MonoBehaviour:
   m_ObjectHideFlags: 0

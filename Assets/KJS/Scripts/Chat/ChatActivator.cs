@@ -15,7 +15,7 @@ public class ChatActivator : MonoBehaviourPun
     private CharacterController characterController; // 캐릭터 컨트롤러 참조
     private MonoBehaviour playerMoveScript; // 플레이어 이동 스크립트 참조
 
-    public Vector2 panelPosition = new Vector2(-457, 383); // 패널 위치 설정값
+    public Vector2 panelOffset = new Vector2(-50f, -50f); // 오른쪽 위에서 오프셋 (간격)
 
     void Start()
     {
@@ -95,8 +95,9 @@ public class ChatActivator : MonoBehaviourPun
                     {
                         // 패널을 Canvas의 자식으로 설정하면서 인스턴스화
                         uiInstance = Instantiate(uiPrefab, canvas.transform);
-                        uiInstance.GetComponent<RectTransform>().anchoredPosition = panelPosition;
-                        Debug.Log($"Panel instantiated as a child of Canvas with position {panelPosition}");
+
+                        // 패널의 위치를 캔버스의 오른쪽 위로 설정
+                        SetPanelToTopRight();
                     }
                     else
                     {
@@ -124,6 +125,27 @@ public class ChatActivator : MonoBehaviourPun
         if (playerMoveScript != null)
         {
             playerMoveScript.enabled = !isUIActive; // PlayerMoveScript 비활성화/활성화
+        }
+    }
+
+    void SetPanelToTopRight()
+    {
+        if (uiInstance != null)
+        {
+            RectTransform rectTransform = uiInstance.GetComponent<RectTransform>();
+
+            if (rectTransform != null)
+            {
+                // 앵커를 오른쪽 위로 설정
+                rectTransform.anchorMin = new Vector2(1, 1);
+                rectTransform.anchorMax = new Vector2(1, 1);
+
+                // 패널의 포지션을 설정 (오프셋만큼 이동)
+                rectTransform.anchoredPosition = panelOffset;
+
+                // 패널의 피벗을 오른쪽 위로 설정
+                rectTransform.pivot = new Vector2(1, 1);
+            }
         }
     }
 
