@@ -3,14 +3,14 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
-using Photon.Pun;  // Photon 네임스페이스 추가
+using Photon.Pun; // Photon 네임스페이스 추가
 
 public class Inventory_KJS : MonoBehaviourPun
 {
-    public static Inventory_KJS instance;  // 싱글톤 인스턴스
+    public static Inventory_KJS instance; // 싱글톤 인스턴스
     public InventoryUI inventoryUI;
-    public List<GameObject> goods = new List<GameObject>();  // 오브젝트 리스트
-    private Dictionary<GoodsType, int> goodsCounts = new Dictionary<GoodsType, int>();  // GoodsType별로 수량을 추적
+    public List<GameObject> goods = new List<GameObject>(); // 오브젝트 리스트
+    private Dictionary<GoodsType, int> goodsCounts = new Dictionary<GoodsType, int>(); // GoodsType별로 수량을 추적
 
     public List<InventoryItem> inventoryItems;
 
@@ -26,7 +26,6 @@ public class Inventory_KJS : MonoBehaviourPun
         {
             Destroy(this);
         }
-
     }
 
     private void Start()
@@ -47,12 +46,11 @@ public class Inventory_KJS : MonoBehaviourPun
         {
             if (type != GoodsType.None)
             {
-                goodsCounts[type] = 0;  // 각 GoodsType의 수량을 0으로 초기화
+                goodsCounts[type] = 0; // 각 GoodsType의 수량을 0으로 초기화
             }
         }
 
         LoadInventoryItems();
-
     }
 
     // 특정 GoodsType의 수량을 반환하는 함수 (데이터 참조용)
@@ -62,6 +60,7 @@ public class Inventory_KJS : MonoBehaviourPun
         {
             return goodsCounts[goodsType];
         }
+
         return 0;
     }
 
@@ -121,28 +120,31 @@ public class Inventory_KJS : MonoBehaviourPun
 
     public void LoadInventoryItems()
     {
-        UserApi.GetUserInventoryList("test", (items) =>
-        {
-            inventoryItems = items;
-
-            goodsCounts.Clear();
-            goods.Clear(); // 기존 리스트 초기화
-
-            foreach (var item in items)
+        UserApi.GetUserInventoryList(
+            id: UserCache.GetInstance().Id,
+            onComplete: (items) =>
             {
-                // InventoryItem의 데이터를 GoodsInfo에 매핑하여 GoodsInfo 인스턴스 생성
-                GoodsInfo goodsInfo = new GameObject($"Item_{item.itemId}").AddComponent<GoodsInfo>();
+                inventoryItems = items;
 
-                // GoodsInfo의 데이터 설정
-                goodsInfo.goodsType = (GoodsType)item.itemId;
-                goodsInfo.count = item.amount;
+                goodsCounts.Clear();
+                goods.Clear(); // 기존 리스트 초기화
 
-                // 인벤토리에 추가 (AddGoods가 수량 업데이트 및 UI 처리를 담당)
-                goodsInfo.AddToInventory();
+                foreach (var item in items)
+                {
+                    // InventoryItem의 데이터를 GoodsInfo에 매핑하여 GoodsInfo 인스턴스 생성
+                    GoodsInfo goodsInfo = new GameObject($"Item_{item.itemId}").AddComponent<GoodsInfo>();
 
-                // goods 리스트에도 추가
-                goods.Add(goodsInfo.gameObject);
+                    // GoodsInfo의 데이터 설정
+                    goodsInfo.goodsType = (GoodsType)item.itemId;
+                    goodsInfo.count = item.amount;
+
+                    // 인벤토리에 추가 (AddGoods가 수량 업데이트 및 UI 처리를 담당)
+                    goodsInfo.AddToInventory();
+
+                    // goods 리스트에도 추가
+                    goods.Add(goodsInfo.gameObject);
+                }
             }
-        });
+        );
     }
 }

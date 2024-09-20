@@ -10,7 +10,7 @@ public class ScoreManager : MonoBehaviour
     {
         scoreText = GetComponent<Text>();
         score = 0;
-        UserApi.GetUserInfo("test", info =>
+        UserApi.GetUserInfo(UserCache.GetInstance().Id, info =>
         {
             score = info.point;
             UpdateScoreText();

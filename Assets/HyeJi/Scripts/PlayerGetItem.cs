@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerGetItem : MonoBehaviour
+public class PlayerGetItem : MonoBehaviour, ICollectible
 {
     private GameObject inventory;
 
     void Start()
     {
-
     }
 
     void Update()
     {
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,5 +38,14 @@ public class PlayerGetItem : MonoBehaviour
 
             print("먹었다!");
         }
+    }
+
+    public void Collect(int itemId)
+    {
+        UserApi.AddItemToUserInventory(
+            UserCache.GetInstance().Id,
+            itemId,
+            (t) => { print("Added to inventory"); }
+        );
     }
 }

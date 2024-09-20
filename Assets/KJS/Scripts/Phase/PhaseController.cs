@@ -19,7 +19,7 @@ public class PhaseController : MonoBehaviour
     {
         DisableEnvironmentObjects();
 
-        UserApi.GetUserInfo("test", info =>
+        UserApi.GetUserInfo(UserCache.GetInstance().Id, info =>
         {
             currentScore = info.point;
             // 점수가 특정 포인트에 도달하면 자식 오브젝트들의 상태를 변경합니다.
