@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class ChallengeListUIController
 {
     private ChallengeApi challengeApi = new ChallengeApi();
-    public string userId = "test";
+    public string userId = UserCache.GetInstance().Id;
     private ScrollView challengeScrollView; 
     private  Action<ChallengeInfo> onChallengeClicked;
 

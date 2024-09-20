@@ -50,10 +50,10 @@ public class ChallengeUploadUIController : MonoBehaviour
         switch (challengeInfo.type)
         {
             case ChallengeType.Transport:
-                challengeApi.TryChallengeTransport("test", selectedImagePath,
+                challengeApi.TryChallengeTransport(UserCache.GetInstance().Id, selectedImagePath,
                     (result) =>
                     {
-                        UserApi.AddPoint("test", 200, (t) =>
+                        UserApi.AddPoint(UserCache.GetInstance().Id, 200, (t) =>
                         {
                             uiDocument.enabled = false;
                             FinishUIController.ShowUIWith(true);
@@ -67,10 +67,10 @@ public class ChallengeUploadUIController : MonoBehaviour
                     });
                 break;
             case ChallengeType.Tumbler:
-                challengeApi.TryChallengeTumbler("test", selectedImagePath,
+                challengeApi.TryChallengeTumbler(UserCache.GetInstance().Id, selectedImagePath,
                     (result) =>
                     {
-                        UserApi.AddPoint("test", 200, (t) =>
+                        UserApi.AddPoint(UserCache.GetInstance().Id, 200, (t) =>
                         {
                             uiDocument.enabled = false;
                             FinishUIController.ShowUIWith(true);
@@ -83,10 +83,10 @@ public class ChallengeUploadUIController : MonoBehaviour
                     });
                 break;
             case ChallengeType.Recycle:
-                challengeApi.TryChallengeRecycling("test", selectedImagePath,
+                challengeApi.TryChallengeRecycling(UserCache.GetInstance().Id, selectedImagePath,
                     (result) =>
                     {
-                        UserApi.AddPoint("test", 200, (t) =>
+                        UserApi.AddPoint(UserCache.GetInstance().Id, 200, (t) =>
                         {
                             uiDocument.enabled = false;
                             FinishUIController.ShowUIWith(true);

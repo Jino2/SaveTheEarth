@@ -33,7 +33,13 @@ public struct UserApi
             {
                 id = id,
             },
-            onSuccess = onComplete,
+            onSuccess = (t) =>
+            {
+                var user = UserCache.GetInstance();
+                user.Id = t.id;
+                user.Point = t.point;
+                onComplete(t);
+            },
             onError = () => { }
         };
         
@@ -41,13 +47,14 @@ public struct UserApi
             .Post(requestInfo);
     }
 
-    public static void GetUserInventoryList(string id, Action<List<InventoryItem>> onComplete)
+    public static void GetUserInventoryList(string id=null, Action<List<InventoryItem>> onComplete = null)
     {
+        id ??= UserCache.GetInstance().Id;
         var requestInfo = new HttpRequestInfo<string, InventoryItemListResponseDto>
         {
             url = BASE_URL + $"/{id}/inventory",
             requestBody = "",
-            onSuccess = (res) => { onComplete(res.data); },
+            onSuccess = (res) => { onComplete?.Invoke(res.data); },
             onError = () => { }
         };
         HTTPManager.GetInstance()

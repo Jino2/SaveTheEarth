@@ -115,12 +115,12 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
         {
             case ChallengeType.Transport:
                 challengeApi.TryChallengeTransport(
-                    "test",
+                    UserCache.GetInstance().Id,
                     selectedImagePath,
                     (result) =>
                     {
                         uploadButton.SetEnabled(true);
-                        UserApi.AddPoint("test", 200, (t) => { NextPage(true); });
+                        UserApi.AddPoint(UserCache.GetInstance().Id, 200, (t) => { NextPage(true); });
                     },
                     () =>
                     {
@@ -131,12 +131,12 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
                 break;
             case ChallengeType.Tumbler:
                 challengeApi.TryChallengeTumbler(
-                    "test",
+                    UserCache.GetInstance().Id,
                     selectedImagePath,
                     (result) =>
                     {
                         uploadButton.SetEnabled(true);
-                        UserApi.AddPoint("test", 200, (t) => { NextPage(true); });
+                        UserApi.AddPoint(UserCache.GetInstance().Id, 200, (t) => { NextPage(true); });
                     },
                     () =>
                     {
@@ -146,12 +146,12 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
                 break;
             case ChallengeType.Recycle:
                 challengeApi.TryChallengeRecycling(
-                    "test",
+                    UserCache.GetInstance().Id,
                     selectedImagePath,
                     (result) =>
                     {
                         uploadButton.SetEnabled(true);
-                        UserApi.AddPoint("test", 200, (t) => { NextPage(true); });
+                        UserApi.AddPoint(UserCache.GetInstance().Id, 200, (t) => { NextPage(true); });
                     },
                     () =>
                     {
