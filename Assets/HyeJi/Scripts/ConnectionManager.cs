@@ -31,16 +31,19 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     // 로그인 시작
     public void StartLogin()
     {
-        // 게임 버전 설정, 네임 서버에 대한 커넥트를 요청
-        PhotonNetwork.GameVersion = "1.0.0";
-        // 방장의 씬을 기준으로 싱크 맞추기
-        PhotonNetwork.AutomaticallySyncScene = true;
-        // 싱글톤으로 닉네임 텍스트 가져오기
-        PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_NickName.text;
-        //PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_Pw.text;
+        UserApi.Login(LobbyUIManager.lobbyUI.input_NickName.text, (res) =>
+        {
+            // 게임 버전 설정, 네임 서버에 대한 커넥트를 요청
+            PhotonNetwork.GameVersion = "1.0.0";
+            // 방장의 씬을 기준으로 싱크 맞추기
+            PhotonNetwork.AutomaticallySyncScene = true;
+            // 싱글톤으로 닉네임 텍스트 가져오기
+            PhotonNetwork.NickName = res.id;
+            //PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_Pw.text;
 
-        // 접속을 서버에 요청하기
-        PhotonNetwork.ConnectUsingSettings();         
+            // 접속을 서버에 요청하기
+            PhotonNetwork.ConnectUsingSettings();     
+        });
     }
 
     // 연결에 성공했을 때

@@ -24,7 +24,7 @@ public struct UserApi
             .Post(requestInfo);
     }
 
-    public static void Login(string id, string password, Action<LoginUserResponseDto> onComplete)
+    public static void Login(string id, Action<LoginUserResponseDto> onComplete)
     {
         var requestInfo = new HttpRequestInfo<LoginUserRequestDto, LoginUserResponseDto>()
         {
@@ -32,11 +32,13 @@ public struct UserApi
             requestBody = new LoginUserRequestDto()
             {
                 id = id,
-                password = password
             },
             onSuccess = onComplete,
             onError = () => { }
         };
+        
+        HTTPManager.GetInstance()
+            .Post(requestInfo);
     }
 
     public static void GetUserInventoryList(string id, Action<List<InventoryItem>> onComplete)

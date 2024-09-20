@@ -98,7 +98,7 @@ public class HTTPManager : MonoBehaviour
     {
         string bodyJson = JsonUtility.ToJson(requestInfo.requestBody);
         using var request = UnityWebRequest.PostWwwForm(requestInfo.url, bodyJson);
-        if(requestInfo.contentType == null || requestInfo.contentType == "")
+        if(string.IsNullOrEmpty(requestInfo.contentType))
         {
             request.SetRequestHeader("Content-Type","application/json");
 
