@@ -114,10 +114,14 @@ public class InventoryUI : MonoBehaviourPun
     void CreateObject(string prefabName, GoodsType goodsType, bool isButtonClick)
     {
         int currentCount = Inventory_KJS.instance.CurrentGoodsCount(goodsType);
-
         // 현재 아이템이 남아있는지, prefabName과 spawnPoint가 null이 아닌지 확인
         if (currentCount > 0 && prefabName != null && playerTransform != null)
         {
+            UserApi.DeleteItemFromUserInventory(
+                UserCache.GetInstance().Id,
+                (int)goodsType,
+                (res) => { }
+                );
             Vector3 spawnPosition;
 
             // playerTransform을 기준으로 오브젝트 스폰 위치를 계산
