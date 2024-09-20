@@ -15,7 +15,7 @@ public class ChatActivator : MonoBehaviourPun
     private CharacterController characterController; // 캐릭터 컨트롤러 참조
     private MonoBehaviour playerMoveScript; // 플레이어 이동 스크립트 참조
 
-    public Vector2 panelOffset = new Vector2(-50f, -50f); // 오른쪽 위에서 오프셋 (간격)
+    public Vector2 panelPosition = new Vector2(-500f, 0f); // 생성될 패널의 좌표 (X: -1426, Y: -140)
 
     void Start()
     {
@@ -96,8 +96,8 @@ public class ChatActivator : MonoBehaviourPun
                         // 패널을 Canvas의 자식으로 설정하면서 인스턴스화
                         uiInstance = Instantiate(uiPrefab, canvas.transform);
 
-                        // 패널의 위치를 캔버스의 오른쪽 위로 설정
-                        SetPanelToTopRight();
+                        // 패널의 위치를 X: -1426, Y: -140에 설정
+                        SetPanelPosition();
                     }
                     else
                     {
@@ -128,7 +128,8 @@ public class ChatActivator : MonoBehaviourPun
         }
     }
 
-    void SetPanelToTopRight()
+    // 패널을 X: -1426, Y: -140 위치에 배치하는 함수
+    void SetPanelPosition()
     {
         if (uiInstance != null)
         {
@@ -136,15 +137,15 @@ public class ChatActivator : MonoBehaviourPun
 
             if (rectTransform != null)
             {
-                // 앵커를 오른쪽 위로 설정
-                rectTransform.anchorMin = new Vector2(1, 1);
-                rectTransform.anchorMax = new Vector2(1, 1);
+                // 캔버스의 가운데를 기준으로 X: -1426, Y: -140 위치로 설정
+                rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+                rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
 
-                // 패널의 포지션을 설정 (오프셋만큼 이동)
-                rectTransform.anchoredPosition = panelOffset;
+                // 패널의 포지션을 설정 (X: -1426, Y: -140)
+                rectTransform.anchoredPosition = panelPosition;
 
-                // 패널의 피벗을 오른쪽 위로 설정
-                rectTransform.pivot = new Vector2(1, 1);
+                // 피벗을 중앙으로 설정 (필요에 따라 피벗을 변경 가능)
+                rectTransform.pivot = new Vector2(0.5f, 0.5f);
             }
         }
     }

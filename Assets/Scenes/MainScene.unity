@@ -1109,7 +1109,7 @@ MonoBehaviour:
   uiPrefabPath: Chat 1
   pressEText: {fileID: 1438591949}
   playerTransform: {fileID: 0}
-  panelPosition: {x: -457, y: 383}
+  panelOffset: {x: -50, y: -50}
 --- !u!64 &42154664
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1165,7 +1165,7 @@ GameObject:
   - component: {fileID: 42464725}
   - component: {fileID: 42464724}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: PressE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20624,7 +20624,7 @@ GameObject:
   - component: {fileID: 813094628}
   - component: {fileID: 813094627}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: PressE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27088,7 +27088,7 @@ MonoBehaviour:
   uiPrefabPath: Chat 3
   pressEText: {fileID: 298483922}
   playerTransform: {fileID: 0}
-  panelPosition: {x: -457, y: 383}
+  panelOffset: {x: -50, y: -50}
 --- !u!64 &1023880697
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -28064,7 +28064,7 @@ GameObject:
   - component: {fileID: 1070844355}
   - component: {fileID: 1070844354}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: PressE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28826,7 +28826,7 @@ MonoBehaviour:
   uiPrefabPath: Chat 2
   pressEText: {fileID: 79751798}
   playerTransform: {fileID: 0}
-  panelPosition: {x: -457, y: 383}
+  panelOffset: {x: -50, y: -50}
 --- !u!64 &1095313032
 MeshCollider:
   m_ObjectHideFlags: 0
