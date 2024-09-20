@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using TMPro; // 텍스트 메쉬 프로 관련 네임스페이스 추가
-using UnityEngine.UI; // ScrollRect를 위해 추가
+using UnityEngine.UI;
+// 텍스트 메쉬 프로 관련 네임스페이스 추가
+
+// ScrollRect를 위해 추가
 
 public class ChatManager : MonoBehaviour
 {
@@ -22,7 +25,7 @@ public class ChatManager : MonoBehaviour
 
     void Start()
     {
-      
+        ID = UserCache.GetInstance().Id;
 
         // 선택된 챗봇 타입에 따른 URL 설정
         aiUrl = ChatInfo.GetApiUrl(chatType);
@@ -45,7 +48,7 @@ public class ChatManager : MonoBehaviour
     }
 
     // AI 서버에 사용자의 메시지를 전달하고 응답을 받음
-    void SendMessageToAI(string userMessage)
+    void SendMessageToAI(string userMessage, int trashCount = 0)
     {
         string requestUrl = $"{aiUrl}?user_id={ID}"; // user_id를 쿼리 파라미터로 추가
 
@@ -61,7 +64,11 @@ public class ChatManager : MonoBehaviour
         {
             url = requestUrl,
             contentType = "application/x-www-form-urlencoded",
-            requestBody = new Dictionary<string, string> { { "user_message", userMessage } },
+            requestBody = new Dictionary<string, string>
+            {
+                { "user_message", userMessage },
+                { "trash_count", Convert.ToString(trashCount) }
+            },
             onSuccess = (response) =>
             {
                 Debug.Log(response);
@@ -92,14 +99,15 @@ public class ChatManager : MonoBehaviour
     IEnumerator SendPostRequest(string url, string json)
     {
         UnityWebRequest request = new UnityWebRequest(url, "POST");
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
 
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+        if (request.result == UnityWebRequest.Result.ConnectionError ||
+            request.result == UnityWebRequest.Result.ProtocolError)
         {
             Debug.LogError($"Error: {request.error}, Response Code: {request.responseCode}");
             Debug.LogError("Response Body: " + request.downloadHandler.text); // 서버 응답 확인
@@ -111,7 +119,6 @@ public class ChatManager : MonoBehaviour
 
             // 응답 JSON에서 reply만 추출
             AIResponse response = JsonUtility.FromJson<AIResponse>(request.downloadHandler.text);
-
         }
     }
 
@@ -131,6 +138,7 @@ public class ChatManager : MonoBehaviour
                 return "챗봇"; // 기본 값 (정의되지 않은 경우)
         }
     }
+
     string GetBotColorByChatType(ChatInfo.ChatType chatType)
     {
         switch (chatType)
@@ -145,6 +153,7 @@ public class ChatManager : MonoBehaviour
                 return "black"; // 기본값: 검은색
         }
     }
+
     void OnError()
     {
         Debug.LogError("Failed to get a response from the AI server.");
