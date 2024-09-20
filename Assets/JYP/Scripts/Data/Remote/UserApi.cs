@@ -24,7 +24,7 @@ public struct UserApi
             .Post(requestInfo);
     }
 
-    public static void Login(string id, string password, Action<LoginUserResponseDto> onComplete)
+    public static void Login(string id, Action<LoginUserResponseDto> onComplete)
     {
         var requestInfo = new HttpRequestInfo<LoginUserRequestDto, LoginUserResponseDto>()
         {
@@ -32,20 +32,29 @@ public struct UserApi
             requestBody = new LoginUserRequestDto()
             {
                 id = id,
-                password = password
             },
-            onSuccess = onComplete,
+            onSuccess = (t) =>
+            {
+                var user = UserCache.GetInstance();
+                user.Id = t.id;
+                user.Point = t.point;
+                onComplete(t);
+            },
             onError = () => { }
         };
+        
+        HTTPManager.GetInstance()
+            .Post(requestInfo);
     }
 
-    public static void GetUserInventoryList(string id, Action<List<InventoryItem>> onComplete)
+    public static void GetUserInventoryList(string id=null, Action<List<InventoryItem>> onComplete = null)
     {
+        id ??= UserCache.GetInstance().Id;
         var requestInfo = new HttpRequestInfo<string, InventoryItemListResponseDto>
         {
             url = BASE_URL + $"/{id}/inventory",
             requestBody = "",
-            onSuccess = (res) => { onComplete(res.data); },
+            onSuccess = (res) => { onComplete?.Invoke(res.data); },
             onError = () => { }
         };
         HTTPManager.GetInstance()

@@ -11,7 +11,7 @@ public class SellingItemListUIController : MonoBehaviour
 
     private UserInfo userInfo = new UserInfo()
     {
-        id = "test",
+        id = UserCache.GetInstance().Id,
         name = "이름",
         point = 0,
     };
