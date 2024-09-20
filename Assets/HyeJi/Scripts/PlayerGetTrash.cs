@@ -6,6 +6,14 @@ using UnityEngine;
 
 public class PlayerGetTrash : MonoBehaviourPun
 {
+    H_RewardManager rewardManager;
+
+    void Start()
+    {
+        // 오브젝트 찾아서 참조시켜
+        rewardManager = FindObjectOfType<H_RewardManager>();
+    }
+
     // 쓰레기 줍기
     private void OnTriggerEnter(Collider other)
     {
@@ -19,8 +27,8 @@ public class PlayerGetTrash : MonoBehaviourPun
                 photonView.RPC("DestroyTrash", RpcTarget.AllBuffered, trashPV.ViewID);
                           
             }
-
-            //Destroy(other.gameObject);
+            // 쓰줍 카운트 업데이트
+            rewardManager.AddTrashCount();
         }
     }
 
