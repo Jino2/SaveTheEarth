@@ -96,6 +96,15 @@ public class Inventory_KJS : MonoBehaviourPun
 
     public void AddGoods(GoodsInfo goodsInfo)
     {
+        if(goodsInfo?.goodsType == GoodsType.None)
+        {
+            return;
+        }
+        UserApi.AddItemToUserInventory(
+            UserCache.GetInstance().Id,
+            (int)goodsInfo.goodsType,
+            (t) => { print("Added to inventory"); }
+        );
         if (goodsInfo != null)
         {
             // GoodsType에 따라 수량을 증가
