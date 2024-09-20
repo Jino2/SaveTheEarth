@@ -124,8 +124,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
 --- !u!114 &6852060756091639424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,9 +296,10 @@ GameObject:
   - component: {fileID: 4063186555281857001}
   - component: {fileID: 4201330056351693447}
   - component: {fileID: 1979082953195710307}
+  - component: {fileID: 3421660703200693738}
   - component: {fileID: 2070881436194208035}
   - component: {fileID: 2013469580274029064}
-  - component: {fileID: 3421660703200693738}
+  - component: {fileID: -1944456629142908872}
   - component: {fileID: 8723000368947088730}
   - component: {fileID: 8725878366030874055}
   - component: {fileID: 7816876459236099422}
@@ -402,44 +403,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2070881436194208035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8765375452113352518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c36febd40d3fec48ba16be8ada54e89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 2
-  rotSpeed: 200
-  walkSpeed: 2
-  runSpeed: 10
-  cameraTransform: {fileID: 0}
-  rotationSpeed: 10
-  jumpPower: 2
-  jumpMaxCnt: 2
-  moveDir: {x: 0, y: 0, z: 0}
-  voiceIcon: {fileID: 1137566381435327569}
---- !u!114 &2013469580274029064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8765375452113352518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7cd0d54146ddec47be972da808f3bf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 2
-  rotSpeed: 200
-  walkSpeed: 5
-  runSpeed: 10
 --- !u!143 &3421660703200693738
 CharacterController:
   m_ObjectHideFlags: 0
@@ -466,6 +429,54 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!114 &2070881436194208035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8765375452113352518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c36febd40d3fec48ba16be8ada54e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  walkSpeed: 2
+  runSpeed: 10
+  cameraTransform: {fileID: 0}
+  rotationSpeed: 10
+  jumpPower: 2
+  jumpMaxCnt: 2
+  moveDir: {x: 0, y: 0, z: 0}
+  voiceIcon: {fileID: 1137566381435327569}
+--- !u!114 &2013469580274029064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8765375452113352518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cd0d54146ddec47be972da808f3bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  walkSpeed: 5
+  runSpeed: 10
+--- !u!114 &-1944456629142908872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8765375452113352518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f644d4834fe34691b709bf94b785bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8723000368947088730
 MonoBehaviour:
   m_ObjectHideFlags: 0

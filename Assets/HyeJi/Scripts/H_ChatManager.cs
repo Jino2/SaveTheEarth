@@ -7,6 +7,7 @@ using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using UnityEngine.EventSystems;
+using System;
 
 public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
 {
@@ -44,7 +45,12 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
         // 탭 키를 누르면 인풋 필드를 선택하게 한다. 
         if(Input.GetKeyDown(KeyCode.Tab))
         {
-            input_chat.OnPointerClick(new PointerEventData(EventSystem.current));          
+            // 강제로 넣어주기 
+            EventSystem.current.SetSelectedGameObject(input_chat.gameObject);
+            
+            input_chat.OnPointerClick(new PointerEventData(EventSystem.current));    
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;      
         }     
     }
 
@@ -53,7 +59,9 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
         if(input_chat.text.Length > 0)
         {
             // 이벤트에 보낼 내용
-            object[] sendContents = new object[] { PhotonNetwork.NickName, msg };
+            string currentTime = DateTime.Now.ToString("hh:mm:ss");
+            
+            object[] sendContents = new object[] { PhotonNetwork.NickName, msg, currentTime };
             // 송신 옵션
             RaiseEventOptions eventOptions = new RaiseEventOptions();
             eventOptions.Receivers = ReceiverGroup.All;
@@ -61,6 +69,9 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
 
             // 이벤트 송신 시작
             PhotonNetwork.RaiseEvent(1, sendContents, eventOptions, SendOptions.SendUnreliable);
+
+            // 강제로 넣어주고 다시 null 처리
+            EventSystem.current.SetSelectedGameObject(null);
         }
         
     }
@@ -73,7 +84,7 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
         {
             // 받은 내용을 "닉네임 : 채팅 내용" 형식으로 스크롤뷰의 텍스트에 전달한다.
             object[] receiveObject = (object[])photonEvent.CustomData;
-            string receiveMessage = $"\n{receiveObject[0].ToString()} : {receiveObject[1].ToString()}";
+            string receiveMessage = $"\n[{receiveObject[2].ToString()}]{receiveObject[0].ToString()} : {receiveObject[1].ToString()}";
 
             text_chatContent.text += receiveMessage;
             // 보냈으면 인풋필드 비워주기 꼭

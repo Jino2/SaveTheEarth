@@ -32,5 +32,8 @@ public class H_GameManager : MonoBehaviourPun
         GameObject player = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
 
         print(player != null ? "생성!@" : "생성 실패....");
+
+        
+
     }
 }
