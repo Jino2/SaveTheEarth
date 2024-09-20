@@ -37,7 +37,7 @@ public class ShopUIController : MonoBehaviour
             pointLabel.text = point.ToString();
             shop.SoldItem(item.id);
         });
-        UserApi.GetUserInfo("test", info =>
+        UserApi.GetUserInfo(UserCache.GetInstance().Id ?? UserCache.GetInstance().Id, info =>
         {
             point = info.point;
             pointLabel.text = point.ToString();

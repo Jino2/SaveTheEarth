@@ -16,7 +16,7 @@ public class ItemCollector : MonoBehaviour, ICollectible
         
     }
 
-    public void Collect()
+    public void Collect(int itemId)
     {
         print("Added to inventory");
     }

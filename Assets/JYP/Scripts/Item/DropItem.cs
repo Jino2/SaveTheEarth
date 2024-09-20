@@ -4,29 +4,26 @@ using UnityEngine.Serialization;
 
 public class DropItem : MonoBehaviour, IDroppable
 {
-    [SerializeField]
-    private float droppedScale = 0.1f;
-    [SerializeField]
-    private float dropPower = 1f;
+    [SerializeField] private float droppedScale = 0.1f;
+    [SerializeField] private float dropPower = 1f;
 
-    [SerializeField]
-    private float floatingHeight = 1f;
+    [SerializeField] private float floatingHeight = 1f;
 
-    [SerializeField]
-    private float floatingRange = 0.5f;
+    [SerializeField] private float floatingRange = 0.5f;
 
-    [SerializeField]
-    private float floatingSpeed = 1.0f;
+    [SerializeField] private float floatingSpeed = 1.0f;
 
-    [SerializeField]
-    private float pickUpOffset = 1f;
+    [SerializeField] private float pickUpOffset = 1f;
 
-    [SerializeField]
-    private float pickUpSpeed = 1.0f;
+    [SerializeField] private float pickUpSpeed = 1.0f;
+
+    private GoodsInfo goodsInfo;
+
+    private float elapsedTime = 0f;
 
     private ICollectible _collectible;
     private GameObject _collectedTargetObj;
-    
+
     private bool isDropping = false;
     private Vector3 velocity;
 
@@ -36,6 +33,11 @@ public class DropItem : MonoBehaviour, IDroppable
     {
         get => _state;
         set => _state = value;
+    }
+
+    protected void Start()
+    {
+        goodsInfo = GetComponent<GoodsInfo>();
     }
 
     // Update is called once per frame
@@ -92,21 +94,26 @@ public class DropItem : MonoBehaviour, IDroppable
     private void UpdatePickingUp()
     {
         var targetPos = _collectedTargetObj.transform.position + Vector3.up * pickUpOffset;
-        
+
         transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * pickUpSpeed);
         if (Vector3.Distance(transform.position, targetPos) < 0.1f)
         {
-            _collectible.Collect();
+            if (goodsInfo != null)
+            {
+                _collectible.Collect((int)goodsInfo.goodsType);
+            }
+
             Destroy(gameObject);
         }
     }
 
     private void UpdateDropped()
     {
-        var newPosY = Mathf.PingPong(Time.time * floatingSpeed, floatingRange) + floatingHeight;
+        elapsedTime += Time.deltaTime;
+        var newPosY = Mathf.PingPong(elapsedTime * floatingSpeed, floatingRange) + floatingHeight;
         transform.position = new Vector3(transform.position.x, newPosY, transform.position.z);
 
-        
+
         var colliders = Physics.OverlapSphere(transform.position, pickUpOffset, 1 << LayerMask.NameToLayer("Player"));
         foreach (var col in colliders)
         {
@@ -117,12 +124,13 @@ public class DropItem : MonoBehaviour, IDroppable
     private void PickedUpBy(Collider other)
     {
         if (_state == IDroppable.DropState.PickingUp) return;
-        
+
         if (!other.gameObject.TryGetComponent(out _collectible))
         {
             return;
         }
-    
+
+
         _collectedTargetObj = other.gameObject;
         _state = IDroppable.DropState.PickingUp;
     }
@@ -135,5 +143,6 @@ public class DropItem : MonoBehaviour, IDroppable
         velocity = transform.forward * dropPower;
         transform.localScale = Vector3.one * droppedScale;
         isDropping = true;
+        elapsedTime = 0f;
     }
 }

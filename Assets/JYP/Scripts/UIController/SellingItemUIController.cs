@@ -37,7 +37,7 @@ public class SellingItemUIController
                 .SetMessage("구매하시겠습니까?")
                 .SetOnConfirm(() =>
                 {
-                    UserApi.BuyItem("test", item.id, 1, (t) =>
+                    UserApi.BuyItem(UserCache.GetInstance().Id, item.id, 1, (t) =>
                     {
                         onBuyItem(item);
                         Debug.Log("구매완료");
