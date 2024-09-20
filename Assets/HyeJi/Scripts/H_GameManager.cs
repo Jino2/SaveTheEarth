@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class H_GameManager : MonoBehaviourPun
 {
+    public Transform spawnOffset;
+
     void Start()
     {
         StartCoroutine(SpawnPlayer());
@@ -18,7 +20,6 @@ public class H_GameManager : MonoBehaviourPun
 
     void Update()
     {
-        
     }
 
     IEnumerator SpawnPlayer()
@@ -28,12 +29,12 @@ public class H_GameManager : MonoBehaviourPun
         Vector2 randomPos = Random.insideUnitCircle * 5.0f;
         Vector3 initPosition = new Vector3(randomPos.x, 1.0f, randomPos.y);
 
+        if (spawnOffset != null)
+            initPosition += spawnOffset.position;
+
         // 플레이어를 생성한다
         GameObject player = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
 
         print(player != null ? "생성!@" : "생성 실패....");
-
-        
-
     }
 }
