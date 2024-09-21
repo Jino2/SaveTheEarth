@@ -9,6 +9,11 @@ public class VoiceManager : MonoBehaviourPun
     // 레코더를 먼저 캐싱
     Recorder recoder;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+    
     void Start()
     {
         recoder = GetComponent<Recorder>();

@@ -15,7 +15,7 @@ public class H_RewardManager : MonoBehaviour
         trashCount++;
 
         // 플레이어가 trash 오브젝트를 5개 이상 줍고
-        if( trashCount >= clearThreshold)
+        if (trashCount >= clearThreshold)
         {
             ClearEvent();
         }
@@ -24,18 +24,19 @@ public class H_RewardManager : MonoBehaviour
     {
         print("쓰줍 완료");
 
-        // 유저 정보를 가져온 후 AI 서버로 데이터 보내기
-        UserApi.GetUserInfo("Aquaman", userInfo => 
-        {
-            // 보내고 
-            SendMessageToAI(userInfo.id, "쓰레기 5개를 주웠다.", trashCount);
+        // UserCache 에서 정보 가져오기 
+        UserCache userCache = UserCache.GetInstance();
+        string userid = userCache.Id;
+        int userPoints = userCache.Point;
 
-            // 보상 추가
-            UserApi.AddPoint(userInfo.id, userInfo.point, updatedUserInfo => 
-            {
-                print("보상받자");
-            });
-        });       
+        // 보내고 
+        SendMessageToAI(userid, "쓰레기 5개를 주웠다.", trashCount);
+
+        // 보상 추가
+        UserApi.AddPoint(userid, userPoints, updatedUserInfo =>
+        {
+            print("보상받자");
+        });
     }
 
     public void SendMessageToAI(string userid, string message, int trashCount)
@@ -50,15 +51,15 @@ public class H_RewardManager : MonoBehaviour
         {
             url = BASE_URL,
             requestBody = jsonData,
-            onSuccess = response => 
+            onSuccess = response =>
             {
                 Debug.Log("서버 전송 성공");
             },
-            onError = () => 
+            onError = () =>
             {
                 Debug.Log("서버 전송 실패");
             }
         };
         HTTPManager.GetInstance().Post(requestInfo);
-    }  
+    }
 }
