@@ -16,8 +16,6 @@ public class Inventory_KJS : MonoBehaviourPun
 
     private void Awake()
     {
-        // panel_Inventory라는 이름의 오브젝트에서 InventoryUI 컴포넌트를 자동으로 찾고 할당
-
         if (instance == null)
         {
             instance = this;
@@ -33,46 +31,36 @@ public class Inventory_KJS : MonoBehaviourPun
         if (other.gameObject.CompareTag("Item"))
         {
             GoodsInfo goodsInfo = other.gameObject.GetComponent<GoodsInfo>();
+            PhotonView itemPV = other.gameObject.GetPhotonView();
 
-            if (goodsInfo != null)
+            if (goodsInfo != null && itemPV != null)
             {
                 // 로컬 클라이언트에서 아이템을 인벤토리에 추가
                 Inventory_KJS.instance.AddGoods(goodsInfo);
 
-                // 모든 클라이언트에 아이템 비활성화 요청
-                photonView.RPC("RPC_DisableItem", RpcTarget.AllBuffered, other.gameObject.GetPhotonView().ViewID);
+                // 모든 클라이언트에 아이템 비활성화 요청 (버퍼링 없이)
+                photonView.RPC("DisableItem", RpcTarget.All, itemPV.ViewID);
             }
         }
     }
 
-    // 아이템 비활성화 및 리스트에 추가를 네트워크 상에서 동기화
     [PunRPC]
-    public void RPC_DisableItem(int viewID)
+    public void DisableItem(int viewID)
     {
-        PhotonView targetPhotonView = PhotonView.Find(viewID);
+        PhotonView targetPV = PhotonView.Find(viewID);
 
-        if (targetPhotonView != null)
+        if (targetPV != null)
         {
-            GameObject item = targetPhotonView.gameObject;
+            GameObject item = targetPV.gameObject;
 
             if (item != null)
             {
-                // 오브젝트 비활성화
-                item.SetActive(false);
-
-                // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
+                // 오브젝트 정보를 미리 저장
                 Inventory_KJS.instance.AddGetObject(item);
 
-                Debug.Log($"RPC: {item.name} 비활성화 완료.");
+                // 오브젝트 삭제
+                Destroy(item);
             }
-            else
-            {
-                Debug.LogError($"RPC: 해당 ViewID({viewID})로 게임 오브젝트를 찾을 수 없습니다.");
-            }
-        }
-        else
-        {
-            Debug.LogError($"RPC: ViewID {viewID}에 대한 PhotonView를 찾을 수 없습니다.");
         }
     }
 
