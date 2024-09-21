@@ -16,8 +16,6 @@ public class Inventory_KJS : MonoBehaviourPun
 
     private void Awake()
     {
-        // panel_Inventory라는 이름의 오브젝트에서 InventoryUI 컴포넌트를 자동으로 찾고 할당
-
         if (instance == null)
         {
             instance = this;
@@ -25,6 +23,44 @@ public class Inventory_KJS : MonoBehaviourPun
         else if (!photonView.IsMine)
         {
             Destroy(this);
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Item"))
+        {
+            GoodsInfo goodsInfo = other.gameObject.GetComponent<GoodsInfo>();
+            PhotonView itemPV = other.gameObject.GetPhotonView();
+
+            if (goodsInfo != null && itemPV != null)
+            {
+                // 로컬 클라이언트에서 아이템을 인벤토리에 추가
+                Inventory_KJS.instance.AddGoods(goodsInfo);
+
+                // 모든 클라이언트에 아이템 비활성화 요청 (버퍼링 없이)
+                photonView.RPC("DisableItem", RpcTarget.All, itemPV.ViewID);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void DisableItem(int viewID)
+    {
+        PhotonView targetPV = PhotonView.Find(viewID);
+
+        if (targetPV != null)
+        {
+            GameObject item = targetPV.gameObject;
+
+            if (item != null)
+            {
+                // 오브젝트 정보를 미리 저장
+                Inventory_KJS.instance.AddGetObject(item);
+
+                // 오브젝트 삭제
+                Destroy(item);
+            }
         }
     }
 
