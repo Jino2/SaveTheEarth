@@ -28,6 +28,39 @@ public class Inventory_KJS : MonoBehaviourPun
         }
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Item"))
+        {
+            GoodsInfo goodsInfo = other.gameObject.GetComponent<GoodsInfo>();
+
+            if (goodsInfo != null)
+            {
+                // 로컬 클라이언트에서 아이템을 인벤토리에 추가
+                Inventory_KJS.instance.AddGoods(goodsInfo);
+
+                // 모든 클라이언트에 아이템 비활성화 요청
+                photonView.RPC("RPC_DisableItem", RpcTarget.AllBuffered, other.gameObject.GetPhotonView().ViewID);
+            }
+        }
+    }
+
+    // 아이템 비활성화 및 리스트에 추가를 네트워크 상에서 동기화
+    [PunRPC]
+    void RPC_DisableItem(int viewID)
+    {
+        GameObject item = PhotonView.Find(viewID).gameObject;
+
+        if (item != null)
+        {
+            // 오브젝트 비활성화
+            item.SetActive(false);
+
+            // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
+            Inventory_KJS.instance.AddGetObject(item);
+        }
+    }
+
     private void Start()
     {
         GameObject panelInventory = GameObject.Find("Canvas");
