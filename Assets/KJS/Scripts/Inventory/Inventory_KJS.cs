@@ -47,17 +47,32 @@ public class Inventory_KJS : MonoBehaviourPun
 
     // 아이템 비활성화 및 리스트에 추가를 네트워크 상에서 동기화
     [PunRPC]
-    void RPC_DisableItem(int viewID)
+    public void RPC_DisableItem(int viewID)
     {
-        GameObject item = PhotonView.Find(viewID).gameObject;
+        PhotonView targetPhotonView = PhotonView.Find(viewID);
 
-        if (item != null)
+        if (targetPhotonView != null)
         {
-            // 오브젝트 비활성화
-            item.SetActive(false);
+            GameObject item = targetPhotonView.gameObject;
 
-            // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
-            Inventory_KJS.instance.AddGetObject(item);
+            if (item != null)
+            {
+                // 오브젝트 비활성화
+                item.SetActive(false);
+
+                // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
+                Inventory_KJS.instance.AddGetObject(item);
+
+                Debug.Log($"RPC: {item.name} 비활성화 완료.");
+            }
+            else
+            {
+                Debug.LogError($"RPC: 해당 ViewID({viewID})로 게임 오브젝트를 찾을 수 없습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogError($"RPC: ViewID {viewID}에 대한 PhotonView를 찾을 수 없습니다.");
         }
     }
 

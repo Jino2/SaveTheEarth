@@ -49,6 +49,7 @@ MonoBehaviour:
   - DeactivateUI_RPC
   - ToggleUI_RPC
   - DestroyTrash
+  - RPC_DisableItem
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
