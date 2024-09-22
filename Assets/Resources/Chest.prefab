@@ -160,8 +160,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   droppedScale: 0.1
-  dropPower: 1
-  floatingHeight: 1
+  dropPower: 2
+  floatingHeight: 0.2
   floatingRange: 0.5
   floatingSpeed: 1
   pickUpOffset: 1
