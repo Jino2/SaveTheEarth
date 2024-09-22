@@ -36,5 +36,23 @@ public class H_GameManager : MonoBehaviourPun
         GameObject player = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
 
         print(player != null ? "생성!@" : "생성 실패....");
+
+        // 아바타 색상 설정 추가
+        if(player != null)
+        {
+            H_AvatarColorManager avatarColorManager = player.GetComponent<H_AvatarColorManager>();
+            if(avatarColorManager != null)
+            {
+                avatarColorManager.SetAvatarColor(PhotonNetwork.LocalPlayer.ActorNumber);
+            }
+            else
+            {
+                print("아바타가 플레이어한테 업슴");
+            }
+        }
+        else
+        {
+            print("플레이어 생성 실패 . ..");
+        }
     }
 }
