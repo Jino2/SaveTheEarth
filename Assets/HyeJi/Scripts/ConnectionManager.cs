@@ -39,10 +39,23 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             PhotonNetwork.AutomaticallySyncScene = true;
             // 싱글톤으로 닉네임 텍스트 가져오기
             PhotonNetwork.NickName = res.id;
-            //PhotonNetwork.NickName = LobbyUIManager.lobbyUI.input_Pw.text;
 
             // 접속을 서버에 요청하기
-            PhotonNetwork.ConnectUsingSettings();     
+            PhotonNetwork.ConnectUsingSettings();
+
+            // 패널 전환: 로그인 패널을 끄고 환영 메시지 출력
+            if (LobbyUIManager.lobbyUI != null)
+            {
+                // 환영 메시지를 PhotonNetwork.NickName으로 설정
+                LobbyUIManager.lobbyUI.SetWelcomeMessage(PhotonNetwork.NickName);
+                // 패널 전환 및 환영 메시지 출력
+                LobbyUIManager.lobbyUI.ShowPanel_login();  
+                Debug.Log("환영 메시지 출력 완료");
+            }
+            else
+            {
+                Debug.LogError("LobbyUIManager를 찾을 수 없습니다.");
+            }
         });
     }
 
