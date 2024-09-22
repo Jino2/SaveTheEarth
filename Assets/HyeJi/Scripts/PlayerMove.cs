@@ -8,7 +8,7 @@ using Photon.Voice.PUN;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class PlayerMove : PlayerStateBase, IPunObservable
+public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
 {
     // PhotonView
     PhotonView pv;
@@ -262,5 +262,14 @@ public class PlayerMove : PlayerStateBase, IPunObservable
 
             isTalking = (bool)stream.ReceiveNext();
         }
+    }
+
+    public void Collect(int itemId)
+    {
+        UserApi.AddItemToUserInventory(
+            UserCache.GetInstance().Id,
+            itemId,
+            (t) => { print("Added to inventory"); }
+        );
     }
 }

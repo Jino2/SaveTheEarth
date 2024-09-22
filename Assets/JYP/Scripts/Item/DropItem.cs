@@ -1,8 +1,9 @@
 using System;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class DropItem : MonoBehaviour, IDroppable
+public class DropItem : MonoBehaviourPun, IDroppable
 {
     [SerializeField] private float droppedScale = 0.1f;
     [SerializeField] private float dropPower = 1f;
@@ -117,6 +118,7 @@ public class DropItem : MonoBehaviour, IDroppable
         var colliders = Physics.OverlapSphere(transform.position, pickUpOffset, 1 << LayerMask.NameToLayer("Player"));
         foreach (var col in colliders)
         {
+            print("PickedUpBy : " + col.gameObject.name);
             PickedUpBy(col);
         }
     }
@@ -124,7 +126,6 @@ public class DropItem : MonoBehaviour, IDroppable
     private void PickedUpBy(Collider other)
     {
         if (_state == IDroppable.DropState.PickingUp) return;
-
         if (!other.gameObject.TryGetComponent(out _collectible))
         {
             return;
@@ -138,11 +139,17 @@ public class DropItem : MonoBehaviour, IDroppable
 
     public void Drop()
     {
+        photonView.RPC("RPC_Drop", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void RPC_Drop()
+    {
         if (_state == IDroppable.DropState.Drop) return;
         _state = IDroppable.DropState.Drop;
         velocity = transform.forward * dropPower;
         transform.localScale = Vector3.one * droppedScale;
         isDropping = true;
-        elapsedTime = 0f;
+        elapsedTime = 0f; 
     }
 }

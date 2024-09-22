@@ -16,8 +16,6 @@ public class Inventory_KJS : MonoBehaviourPun
 
     private void Awake()
     {
-        // panel_Inventory라는 이름의 오브젝트에서 InventoryUI 컴포넌트를 자동으로 찾고 할당
-
         if (instance == null)
         {
             instance = this;
@@ -100,11 +98,14 @@ public class Inventory_KJS : MonoBehaviourPun
         {
             return;
         }
-        UserApi.AddItemToUserInventory(
-            UserCache.GetInstance().Id,
-            (int)goodsInfo.goodsType,
-            (t) => { print("Added to inventory"); }
-        );
+        {
+            UserApi.AddItemToUserInventory(
+                UserCache.GetInstance().Id,
+                (int)goodsInfo.goodsType,
+                (t) => { print("Added to inventory"); }
+            );
+        }
+        
         if (goodsInfo != null)
         {
             // GoodsType에 따라 수량을 증가
