@@ -79,7 +79,8 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         }
 
         challengeProcessContainer.Clear();
-
+        _currentBaseChallengeUIController.Root.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+        print($"{_currentBaseChallengeUIController.Root.style.width.value.value}");
         challengeProcessContainer.Add(_currentBaseChallengeUIController.Root);
         _currentBaseChallengeUIController.BindType(currentChallengeType);
     }
