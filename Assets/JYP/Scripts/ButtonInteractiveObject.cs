@@ -61,7 +61,7 @@ public class ButtonInteractiveObject : MonoBehaviourPun
             interactGuideText.enabled = true;
             
         }
-        else if(colliders.Length == 0 && interactable)
+        else if(!isCurrentUserOverlapped && interactable)
         {
             print("O");
             interactable = false;
