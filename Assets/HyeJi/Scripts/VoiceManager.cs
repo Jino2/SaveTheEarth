@@ -13,15 +13,24 @@ public class VoiceManager : MonoBehaviourPun
     {
         DontDestroyOnLoad(this.gameObject);
     }
-    
+
     void Start()
     {
         recoder = GetComponent<Recorder>();
+
+        if (PhotonNetwork.InRoom)
+        {
+            Debug.Log("방에 정상적으로 연결되었습니다.");
+        }
+        else
+        {
+            Debug.LogError("Photon Room에 연결되지 않았습니다.");
+        }
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             // 전송을 false 시킨다 (값 거꾸로 넣어주기)
             recoder.TransmitEnabled = !recoder.TransmitEnabled;

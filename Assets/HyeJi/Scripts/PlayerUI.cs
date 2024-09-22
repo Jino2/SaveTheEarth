@@ -7,13 +7,7 @@ public class PlayerUI : MonoBehaviour
 {
     [SerializeField] TMP_InputField inputField;
     [SerializeField] TMP_Text nickName;
-    
-    void Start()
-    {
-        
-    }
-
-    
+     
     void Update()
     {
         // 항상 메인 카메라에 보이도록 회전 시킨다
