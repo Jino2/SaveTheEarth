@@ -19,6 +19,9 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
 
     const byte chattingEvent = 1;
 
+    // 현재 입력중인 내용 저장할 변수
+    private string currentInput = "";
+
     private void OnEnable()
     {
         // 델리게이트에 먼저 등록 (함수 연결)
@@ -51,7 +54,8 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
             input_chat.OnPointerClick(new PointerEventData(EventSystem.current));    
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;      
-        }     
+        }  
+        currentInput = input_chat.text;   
     }
 
     void SendMyMessage(string msg)
@@ -70,6 +74,8 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
             // 이벤트 송신 시작
             PhotonNetwork.RaiseEvent(1, sendContents, eventOptions, SendOptions.SendUnreliable);
 
+            // 입력 필드 비우기
+            input_chat.text = "";
             // 강제로 넣어주고 다시 null 처리
             EventSystem.current.SetSelectedGameObject(null);
         }
@@ -88,7 +94,8 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
 
             text_chatContent.text += receiveMessage;
             // 보냈으면 인풋필드 비워주기 꼭
-            input_chat.text = "";
+            input_chat.text = currentInput;
+            input_chat.ActivateInputField();
         }
 
         img_chatBackground.color = new Color32(255, 255, 255, 50);
