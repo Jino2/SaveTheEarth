@@ -55,7 +55,7 @@ public struct UserApi
             url = BASE_URL + $"/{id}/inventory",
             requestBody = "",
             onSuccess = (res) => { onComplete?.Invoke(res.data); },
-            onError = () => { }
+            onError = () => {  }
         };
         HTTPManager.GetInstance()
             .Get(requestInfo);

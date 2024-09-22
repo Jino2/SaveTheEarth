@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class ButtonInteractiveObject : MonoBehaviour
+public class ButtonInteractiveObject : MonoBehaviourPun
 {
     [SerializeField]
     private KeyCode interactKeyCode = KeyCode.E;
@@ -42,10 +43,19 @@ public class ButtonInteractiveObject : MonoBehaviour
     private void CheckInteraction()
     {
         var colliders = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
-    
-        if (colliders.Length != 0 && !interactable)
+        var isCurrentUserOverlapped = false;
+        foreach (var collider in colliders)
         {
-            print("X");
+            if (collider.TryGetComponent<PhotonView>(out var pv))
+            {
+                if (pv.IsMine)
+                {
+                    isCurrentUserOverlapped = true;
+                }
+            }
+        }
+        if (isCurrentUserOverlapped && !interactable)
+        {
             interactable = true;
             interactGuideText.text = $"Press {interactKeyCode.ToString()}";
             interactGuideText.enabled = true;

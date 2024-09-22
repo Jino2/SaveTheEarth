@@ -136,11 +136,14 @@ public class Inventory_KJS : MonoBehaviourPun
         {
             return;
         }
-        UserApi.AddItemToUserInventory(
-            UserCache.GetInstance().Id,
-            (int)goodsInfo.goodsType,
-            (t) => { print("Added to inventory"); }
-        );
+        {
+            UserApi.AddItemToUserInventory(
+                UserCache.GetInstance().Id,
+                (int)goodsInfo.goodsType,
+                (t) => { print("Added to inventory"); }
+            );
+        }
+        
         if (goodsInfo != null)
         {
             // GoodsType에 따라 수량을 증가
