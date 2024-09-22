@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerUI : MonoBehaviour
 {
     [SerializeField] TMP_InputField inputField;
-    [SerializeField] TMP_Text nickName;
+    [SerializeField] public TMP_Text nickName;
      
     void Update()
     {
