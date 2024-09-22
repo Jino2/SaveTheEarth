@@ -1,102 +1,58 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using TMPro;
-
 public class UserLoginUI : MonoBehaviourPunCallbacks
 {
-    public TextMeshProUGUI playerNameText;  // 유저 이름을 표시할 TextMeshProUGUI
+    public TextMeshProUGUI playerNameText;  // 닉네임을 표시할 TextMeshProUGUI
 
     private void Start()
     {
-        // Photon 서버에 연결이 이미 되어 있는지 확인하고 로그 출력
-        Debug.Log("Checking Photon Connection...");
+        // Photon 서버에 연결 상태를 확인
         if (PhotonNetwork.IsConnected)
         {
-            Debug.Log("Already connected to Photon");
+            Debug.Log("Photon에 이미 연결되어 있음");
+            // Photon 네트워크에 이미 연결된 경우 닉네임을 출력
+            DisplayPlayerName();
         }
         else
         {
-            Debug.Log("Connecting to Photon...");
+            Debug.Log("Photon에 연결 시도 중...");
             PhotonNetwork.ConnectUsingSettings();
         }
     }
 
-    // Photon 서버에 접속 성공하면 호출
+    // Photon 서버에 연결되면 호출
     public override void OnConnectedToMaster()
     {
-        Debug.Log("OnConnectedToMaster called");
-
-        // 임시로 Photon 닉네임 설정
-        PhotonNetwork.NickName = "Player_" + Random.Range(1000, 9999);
-        Debug.Log("PhotonNetwork.NickName: " + PhotonNetwork.NickName);
+        Debug.Log("Photon 서버에 연결 성공");
 
         // Photon 로비에 참가
         PhotonNetwork.JoinLobby();
     }
 
-    // 로비 참가 성공하면 호출
+    // 로비 참가 성공 시 호출
     public override void OnJoinedLobby()
     {
-        Debug.Log("OnJoinedLobby called");
+        Debug.Log("Photon 로비에 참가 성공");
 
-        // 닉네임이 null이거나 비어있지 않은지 확인
-        if (!string.IsNullOrEmpty(PhotonNetwork.NickName))
-        {
-            Debug.Log("PhotonNetwork.NickName: " + PhotonNetwork.NickName);
-
-            // 플레이어의 PlayerUI 컴포넌트를 찾기 위한 시도
-            Invoke("FindPlayerUI", 1f); // 1초 딜레이 후 PlayerUI 컴포넌트를 찾기
-        }
-        else
-        {
-            Debug.LogError("PhotonNetwork.NickName is null or empty.");
-        }
+        // 닉네임을 출력
+        DisplayPlayerName();
     }
 
-    // 플레이어의 자식 오브젝트에서 PlayerUI 컴포넌트를 찾는 함수
-    private void FindPlayerUI()
+    // 닉네임을 출력하는 함수
+    private void DisplayPlayerName()
     {
-        // 로컬 플레이어의 PhotonView를 통해 오브젝트를 찾는다
-        Debug.Log("Finding Player object...");
-        GameObject player = PhotonView.Find(PhotonNetwork.LocalPlayer.ActorNumber)?.gameObject;
-
-        if (player != null)
+        if (!string.IsNullOrEmpty(PhotonNetwork.NickName))
         {
-            Debug.Log($"Player object found: {player.name}");
-
-            // 플레이어의 자식 오브젝트 PlayerInfoUI에서 PlayerUI를 찾는다
-            Transform playerInfoUI = player.transform.Find("PlayerInfoUI");
-
-            if (playerInfoUI != null)
-            {
-                Debug.Log($"PlayerInfoUI found: {playerInfoUI.name}");
-
-                PlayerUI playerUI = playerInfoUI.GetComponent<PlayerUI>();
-
-                if (playerUI != null)
-                {
-                    Debug.Log($"PlayerUI found: {playerUI.nickName.text}");
-
-                    // PlayerUI에서 닉네임 정보를 TMP로 출력
-                    playerNameText.text = playerUI.nickName.text;
-                    playerNameText.color = Color.green;  // 닉네임 색상을 초록색으로 설정
-
-                    // 추가로 ForceMeshUpdate 호출 (TextMeshPro 내용 강제로 갱신)
-                    playerNameText.ForceMeshUpdate();
-                }
-                else
-                {
-                    Debug.LogError("PlayerUI component not found in PlayerInfoUI.");
-                }
-            }
-            else
-            {
-                Debug.LogError("PlayerInfoUI not found under player object.");
-            }
+            // 닉네임이 설정되어 있으면 TextMeshPro에 표시
+            playerNameText.text = $"{PhotonNetwork.NickName}";
+            playerNameText.color = Color.green;  // 닉네임 색상을 초록색으로 설정
+            Debug.Log($"플레이어 닉네임: {PhotonNetwork.NickName}");
         }
         else
         {
-            Debug.LogError($"Player object not found with ActorNumber: {PhotonNetwork.LocalPlayer.ActorNumber}");
+            Debug.LogError("PhotonNetwork.NickName이 설정되지 않았습니다.");
+            playerNameText.text = "닉네임이 설정되지 않았습니다.";
         }
     }
 }
