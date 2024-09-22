@@ -26,7 +26,7 @@ public class H_GameManager : MonoBehaviourPun
     {
         yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
 
-        Vector2 randomPos = Random.insideUnitCircle * 5.0f;
+        Vector2 randomPos = Random.insideUnitCircle * 2.0f;
         Vector3 initPosition = new Vector3(randomPos.x, 1.0f, randomPos.y);
 
         if (spawnOffset != null)
