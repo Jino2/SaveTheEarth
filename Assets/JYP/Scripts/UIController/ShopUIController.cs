@@ -10,12 +10,13 @@ public class ShopUIController : MonoBehaviour
     public Shop shop;
     public UIDocument uiDocument;
     public CinemachineVirtualCamera shopUICamera;
+    public ButtonInteractiveObject interactiveObject;
     
     private Button closeButton;
     private Label pointLabel;
     private int point = 0;
     public Sprite[] itemPreviewSprites;
-    
+    private GameObject shoppingPlayerObject;
     private void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -28,6 +29,12 @@ public class ShopUIController : MonoBehaviour
     public void ShowShopUI()
     {
         if (uiDocument.enabled) return;
+        this.shoppingPlayerObject = interactiveObject.InteractedObject;
+        shoppingPlayerObject.TryGetComponent<PlayerMove>(out var playerMove);
+        if(playerMove != null)
+        {
+            playerMove.controllable = false;
+        }
         uiDocument.enabled = true;
         shopUICamera.gameObject.SetActive(true);
         var sellingItemListController = new SellingItemListUIController();
@@ -57,6 +64,11 @@ public class ShopUIController : MonoBehaviour
     void HideShopUI()
     {
         if (!uiDocument.enabled) return;
+        shoppingPlayerObject.TryGetComponent<PlayerMove>(out var playerMove);
+        if(playerMove != null)
+        {
+            playerMove.controllable = true;
+        }
         uiDocument.enabled = false;
         shopUICamera.gameObject.SetActive(false);
     }

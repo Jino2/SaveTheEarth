@@ -446,6 +446,7 @@ MonoBehaviour:
   walkSpeed: 2
   runSpeed: 10
   cameraTransform: {fileID: 0}
+  controllable: 1
   rotationSpeed: 10
   jumpPower: 2
   jumpMaxCnt: 2

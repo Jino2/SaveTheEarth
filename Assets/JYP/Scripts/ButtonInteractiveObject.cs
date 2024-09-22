@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class ButtonInteractiveObject : MonoBehaviourPun
 {
+    
+    public  GameObject InteractedObject { get; private set; } = null;
     [SerializeField]
     private KeyCode interactKeyCode = KeyCode.E;
 
@@ -51,6 +53,7 @@ public class ButtonInteractiveObject : MonoBehaviourPun
                 if (pv.IsMine)
                 {
                     isCurrentUserOverlapped = true;
+                    InteractedObject = collider.gameObject;
                 }
             }
         }
@@ -66,6 +69,7 @@ public class ButtonInteractiveObject : MonoBehaviourPun
             print("O");
             interactable = false;
             interactGuideText.enabled = false;
+            InteractedObject = null;
         }
     }
     

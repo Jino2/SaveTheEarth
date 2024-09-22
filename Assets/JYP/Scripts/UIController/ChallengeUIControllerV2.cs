@@ -12,6 +12,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         ChallengeComplete,
     }
 
+    public ButtonInteractiveObject interactiveObject;
     public UIDocument uiDocument;
     public CinemachineVirtualCamera challengeUICamera;
     private VisualElement challengeProcessContainer;
@@ -19,7 +20,8 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     public VisualTreeAsset[] challengeProcessAssets;
     private Button closeButton;
     public Sprite[] challengeTypeSprites;
-    
+    private GameObject currentPlayerCharacter;
+
     private readonly BaseChallengeUIController[] controllers =
     {
         new ChallengeSelectUIController(),
@@ -37,7 +39,6 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     void Start()
     {
         uiDocument = GetComponent<UIDocument>();
-
     }
 
 
@@ -87,9 +88,15 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
     public void TryChallenge()
     {
-        GameObject player = GetCurrentPlayerCharacter();
+        currentPlayerCharacter = interactiveObject.InteractedObject;
+        currentPlayerCharacter.TryGetComponent<PlayerMove>(out var pm);
+        if (pm != null)
+        {
+            pm.controllable = false;
+        }
+
         OpenChallengeUI();
-        SetCamera(player);
+        SetCamera(currentPlayerCharacter);
     }
 
     #region Private Methods Block
@@ -113,12 +120,19 @@ public class ChallengeUIControllerV2 : MonoBehaviour
                 );
             print(t);
         }
+
         isTryingChallenge = true;
         GoToProcess(EChallengeProcess.SelectChallenge);
     }
 
     void CloseChallengeUI()
     {
+        currentPlayerCharacter.TryGetComponent<PlayerMove>(out var pm);
+        if (pm != null)
+        {
+            pm.controllable = true;
+        }
+
         uiDocument.enabled = false;
         closeButton.clicked -= CloseChallengeUI;
         challengeUICamera.gameObject.SetActive(false);

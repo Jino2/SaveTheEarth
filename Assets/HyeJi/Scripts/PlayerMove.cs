@@ -1,4 +1,5 @@
-﻿using Cinemachine;
+﻿using System;
+using Cinemachine;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,9 +23,10 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
     // Animator
     Animator anim;
 
+    public bool controllable = true; 
     // 회전 속도 조절할 변수
     public float rotationSpeed = 10f;
-
+    
     // 점프에 관한 변수 
     public float jumpPower = 2f;
     private float gravity = -9.81f;
@@ -39,7 +41,7 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
     float speedValue = 1;
     private bool isRunning = false;
     private float runningTime = 0;
-
+    
     // 도착 위치
     Vector3 receivePos;
     // 회전해야하는 값
@@ -89,6 +91,7 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
 
     void Update()
     {
+        
         float v = Input.GetAxis("Vertical");
         float h = Input.GetAxis("Horizontal");
         //Vector3 dir = new Vector3(h, 0, v);
@@ -96,6 +99,7 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
         // 카메라의 방향을 기준으로 이동 방향을 설정
         if (pv.IsMine && EventSystem.current.currentSelectedGameObject == null)
         {
+            if (!controllable) return;
             Vector3 forward = cameraTransform.forward;
             Vector3 right = cameraTransform.right;
 
