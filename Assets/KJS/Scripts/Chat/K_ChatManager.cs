@@ -71,8 +71,8 @@ public class ChatManager : MonoBehaviour
             },
             onSuccess = (response) =>
             {
-                Debug.Log(response);
-                DisplayResponseOnUI(response); // 응답을 UI에 표시하는 메서드 호출
+                var aiResponse = JsonUtility.FromJson<AIResponse>(response); // JSON 응답을 객체로 역직렬화
+                DisplayResponseOnUI(aiResponse.message); // 응답을 UI에 표시하는 메서드 호출
             },
             onError = (() =>
             {
@@ -96,31 +96,6 @@ public class ChatManager : MonoBehaviour
         textchat.text += $"\n<color={color}>{botName}:</color> {response}";
     }
 
-    IEnumerator SendPostRequest(string url, string json)
-    {
-        UnityWebRequest request = new UnityWebRequest(url, "POST");
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
-
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.ConnectionError ||
-            request.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.LogError($"Error: {request.error}, Response Code: {request.responseCode}");
-            Debug.LogError("Response Body: " + request.downloadHandler.text); // 서버 응답 확인
-            OnError();
-        }
-        else
-        {
-            Debug.Log("Response: " + request.downloadHandler.text);
-
-            // 응답 JSON에서 reply만 추출
-            AIResponse response = JsonUtility.FromJson<AIResponse>(request.downloadHandler.text);
-        }
-    }
 
     // ChatType에 따라 챗봇 이름을 반환하는 함수
     string GetBotNameByChatType(ChatInfo.ChatType chatType)
@@ -181,5 +156,5 @@ public class AIRequest
 [Serializable]
 public class AIResponse
 {
-    public string reply; // AI 응답 메시지
+    public string message; // AI 응답 메시지
 }
