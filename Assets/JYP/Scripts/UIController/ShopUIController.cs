@@ -1,3 +1,4 @@
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,7 +9,8 @@ public class ShopUIController : MonoBehaviour
     [SerializeField]
     public Shop shop;
     public UIDocument uiDocument;
-
+    public CinemachineVirtualCamera shopUICamera;
+    
     private Button closeButton;
     private Label pointLabel;
     private int point = 0;
@@ -27,6 +29,7 @@ public class ShopUIController : MonoBehaviour
     {
         if (uiDocument.enabled) return;
         uiDocument.enabled = true;
+        shopUICamera.gameObject.SetActive(true);
         var sellingItemListController = new SellingItemListUIController();
         closeButton = uiDocument.rootVisualElement.Q<Button>("closeButton");
         pointLabel = uiDocument.rootVisualElement.Q<Label>("point");
@@ -55,5 +58,6 @@ public class ShopUIController : MonoBehaviour
     {
         if (!uiDocument.enabled) return;
         uiDocument.enabled = false;
+        shopUICamera.gameObject.SetActive(false);
     }
 }
