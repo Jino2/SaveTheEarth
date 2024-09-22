@@ -18,7 +18,7 @@ public class SellingItemListUIController : MonoBehaviour
 
     public void InitList(VisualElement root, Sprite[] itemPreview,VisualTreeAsset itemTemplate, Action<SellingItem> onBuyItem)
     {
-        ItemApi.GetItemsWithInventory(userInfo.id, (list) =>
+        ItemApi.GetItemsWithInventory((list) =>
             {
                 sellingItems = list.Select(dto => new SellingItem()
                     {

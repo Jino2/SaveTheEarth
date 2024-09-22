@@ -20,11 +20,11 @@ public struct ItemApi
     }
     
     
-    public static void GetItemsWithInventory(string userId, Action<List<ItemWithInventory>> onComplete)
+    public static void GetItemsWithInventory(Action<List<ItemWithInventory>> onComplete)
     {
         var requestInfo = new HttpRequestInfo<string, ItemWithInventoryListDto>
         {
-            url = BaseURL + $"/users/{userId}/selling",
+            url = BaseURL + $"/selling",
             requestBody = "",
             onSuccess = (res) => { onComplete(res.data); },
             onError = () => { ; }

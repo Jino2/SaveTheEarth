@@ -32,7 +32,7 @@ public class Shop : MonoBehaviour
                 resourcePath = "Sword";
                 break;
             case GoodsType.Rock:
-                resourcePath = "Rock";
+                resourcePath = "Rock 01";
                 break;
             case GoodsType.None:
             default:
