@@ -41,9 +41,9 @@ public class Shop : MonoBehaviour
 
         if (resourcePath == "")
             return;
-
-        var go = PhotonNetwork.Instantiate(resourcePath, transform.position, transform.rotation);
+        var go = PhotonNetwork.Instantiate(resourcePath, transform.position + Vector3.up, transform.rotation);
         go.TryGetComponent<IDroppable>(out var item);
         item?.Drop();
+
     }
 }
