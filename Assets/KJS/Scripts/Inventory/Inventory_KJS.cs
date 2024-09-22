@@ -94,7 +94,7 @@ public class Inventory_KJS : MonoBehaviourPun
 
     public void AddGoods(GoodsInfo goodsInfo)
     {
-        if(goodsInfo?.goodsType == GoodsType.None)
+        if (goodsInfo?.goodsType == GoodsType.None)
         {
             return;
         }
@@ -105,7 +105,7 @@ public class Inventory_KJS : MonoBehaviourPun
                 (t) => { print("Added to inventory"); }
             );
         }
-        
+
         if (goodsInfo != null)
         {
             // GoodsType에 따라 수량을 증가
@@ -134,10 +134,8 @@ public class Inventory_KJS : MonoBehaviourPun
             id: UserCache.GetInstance().Id,
             onComplete: (items) =>
             {
-                inventoryItems = items;
-
-                goodsCounts.Clear();
-                goods.Clear(); // 기존 리스트 초기화
+                goodsCounts.Clear(); // 수량 초기화
+                goods.Clear(); // 기존 오브젝트 리스트 초기화
 
                 foreach (var item in items)
                 {
@@ -148,11 +146,29 @@ public class Inventory_KJS : MonoBehaviourPun
                     goodsInfo.goodsType = (GoodsType)item.itemId;
                     goodsInfo.count = item.amount;
 
-                    // 인벤토리에 추가 (AddGoods가 수량 업데이트 및 UI 처리를 담당)
-                    goodsInfo.AddToInventory();
+                    // 이미 추가된 goodsType인지 확인하고, 중복되지 않도록 설정
+                    if (goodsCounts.ContainsKey(goodsInfo.goodsType))
+                    {
+                        goodsCounts[goodsInfo.goodsType] = item.amount;  // 새롭게 수량 설정
+                    }
+                    else
+                    {
+                        goodsCounts.Add(goodsInfo.goodsType, item.amount);
+                    }
 
-                    // goods 리스트에도 추가
-                    goods.Add(goodsInfo.gameObject);
+                    // UI 업데이트 (필요한 경우)
+                    if (inventoryUI != null)
+                    {
+                        inventoryUI.UpdateText(goodsInfo.goodsType);
+                    }
+
+                    // goods 리스트에도 추가 (중복 방지)
+                    if (!goods.Contains(goodsInfo.gameObject))
+                    {
+                        goods.Add(goodsInfo.gameObject);
+                    }
+
+                    Debug.Log($"{goodsInfo.goodsType}을 인벤토리에 추가했습니다.");
                 }
             }
         );
