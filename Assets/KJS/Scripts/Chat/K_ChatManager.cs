@@ -175,6 +175,7 @@ public class AIRequest
 {
     public string user_message;
     public string user_id; // 추가 필드
+    public int trash_count;
 }
 
 [Serializable]
