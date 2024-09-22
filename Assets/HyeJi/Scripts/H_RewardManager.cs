@@ -40,16 +40,12 @@ public class H_RewardManager : MonoBehaviour
         // UserCache 에서 정보 가져오기 
         UserCache userCache = UserCache.GetInstance();
         string userid = userCache.Id;
-        int userPoints = userCache.Point;
-
-        // 현재 유저의 포인트에 보상 포인트 더하기
-        int updatedPoints = userPoints + rewardPoint;
 
         // AI 서버에 메시지 전송
         SendMessageToAI(userid, "쓰레기 5개를 주웠습니다.", trashCount, () =>
         {
             // AI 메시지 전송 성공 시, 보상 포인트 지급
-            UserApi.AddPoint(userid, updatedPoints, updatedUserInfo =>
+            UserApi.AddPoint(userid, rewardPoint, updatedUserInfo =>
             {
                 Debug.Log($"보상 {rewardPoint} 포인트 적용 완료, 사용자 총 포인트: {updatedUserInfo.point}");
             });
