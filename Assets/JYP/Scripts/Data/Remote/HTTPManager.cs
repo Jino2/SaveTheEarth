@@ -111,6 +111,7 @@ public class HTTPManager : MonoBehaviour
         byte[] jsonToSend = new UTF8Encoding().GetBytes(bodyJson);
         request.uploadHandler = new UploadHandlerRaw(jsonToSend);
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        Debug.Log($"{request.url} - {request.method} - size: {request.uploadHandler.data.Length}");
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)

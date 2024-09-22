@@ -270,10 +270,6 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
 
     public void Collect(int itemId)
     {
-        UserApi.AddItemToUserInventory(
-            UserCache.GetInstance().Id,
-            itemId,
-            (t) => { print("Added to inventory"); }
-        );
+        // do nothing
     }
 }
