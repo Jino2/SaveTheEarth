@@ -6,12 +6,12 @@ using static ChatInfo;
 
 public class H_RewardManager : MonoBehaviour
 {
+    // 미션 완료 여부 체크
+    private bool missionCompleted = false;
     public int trashCount = 0;
     public int clearThreshold = 5;
     public int rewardPoint = 10;
 
-    // URL 추가
-    public static string BASE_URL = "http://54.180.232.125/users";
     // AI URL
     private string aiUrl;
     // 챗봇 타입을 저장
