@@ -22,12 +22,8 @@ public class LobbyUIManager : MonoBehaviour
     string log;
     // 사용자 닉네임
     public TMP_InputField input_NickName;
-    // 사용자 pw
-    public TMP_InputField input_Pw;
-
-    //public TMP_Text text_LoginSC;
-    //public TMP_Text text_TakeCare;
-    
+    // 환영합니다 문구
+    public TMP_Text text_welcomeText;
 
     // 방 셋팅 (방 이름, 최대 플레이어 수 배열로 받기)
     public TMP_InputField[] roomSetting;
@@ -80,6 +76,8 @@ public class LobbyUIManager : MonoBehaviour
 
         // Remain 창 활성화
         panel_Remain.gameObject.SetActive(true);
+
+        SetWelcomeMessage();
     }
 
     public void ShowPanel_Remain()
@@ -94,5 +92,21 @@ public class LobbyUIManager : MonoBehaviour
         log += message + "\n";
         // 로그 찍기
         text_LogText.text = log;
+    }
+
+    public void SetWelcomeMessage()
+    {
+        string userName = input_NickName.text;
+
+        // 사용자 이름이 입력된 경우에만 환영 메시지를 출력
+        if (!string.IsNullOrEmpty(userName))
+        {
+            // panel_Remain에 있는 환영 메시지 텍스트 설정
+            text_welcomeText.text = $"{userName}님, 환영합니다!";
+        }
+        else
+        {
+            text_welcomeText.text = "사용자 이름을 입력해주세요.";
+        }
     }
 }
