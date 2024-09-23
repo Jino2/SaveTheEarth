@@ -47,6 +47,7 @@ public class H_RewardManager : MonoBehaviour
             // AI 메시지 전송 성공 시, 보상 포인트 지급
             UserApi.AddPoint(userid, rewardPoint, updatedUserInfo =>
             {
+                UserCache.GetInstance().Point += rewardPoint;
                 Debug.Log($"보상 {rewardPoint} 포인트 적용 완료, 사용자 총 포인트: {updatedUserInfo.point}");
             });
         });
