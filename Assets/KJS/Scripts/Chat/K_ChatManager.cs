@@ -42,6 +42,9 @@ public class ChatManager : MonoBehaviour
             input.GetComponent<TMP_InputField>().text = "";
             input.GetComponent<TMP_InputField>().ActivateInputField();
 
+            // 사용자 메시지를 즉시 UI에 출력
+            AddMessageToUI($"<color=black>{ID}:</color> {message}");
+
             // 사용자의 메시지를 AI 서버로 전송
             SendMessageToAI(message);
         }
@@ -93,9 +96,15 @@ public class ChatManager : MonoBehaviour
         string color = GetBotColorByChatType(chatType);
 
         // 텍스트에 Rich Text 태그를 추가하여 색상 적용
-        textchat.text += $"\n<color={color}>{botName}:</color> {response}";
+        AddMessageToUI($"<color={color}>{botName}:</color> {response}");
     }
 
+    // 채팅 내용을 UI에 즉시 추가하는 함수
+    void AddMessageToUI(string message)
+    {
+        chatMessages.Add(message);
+        UpdateChatContent();
+    }
 
     // ChatType에 따라 챗봇 이름을 반환하는 함수
     string GetBotNameByChatType(ChatInfo.ChatType chatType)
