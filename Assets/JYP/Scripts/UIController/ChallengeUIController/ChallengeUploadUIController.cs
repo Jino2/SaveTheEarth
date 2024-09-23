@@ -120,7 +120,12 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
                     (result) =>
                     {
                         uploadButton.SetEnabled(true);
-                        UserApi.AddPoint(UserCache.GetInstance().Id, 200, (t) => { NextPage(true); });
+                        UserApi.AddPoint(UserCache.GetInstance().Id, 200,
+                            (t) =>
+                            {
+                                UserCache.GetInstance().Point = t.point;
+                                NextPage(true);
+                            });
                     },
                     () =>
                     {
@@ -136,7 +141,12 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
                     (result) =>
                     {
                         uploadButton.SetEnabled(true);
-                        UserApi.AddPoint(UserCache.GetInstance().Id, 200, (t) => { NextPage(true); });
+                        UserApi.AddPoint(UserCache.GetInstance().Id, 200,
+                            (t) =>
+                            {
+                                UserCache.GetInstance().Point = t.point;
+                                NextPage(true);
+                            });
                     },
                     () =>
                     {
@@ -151,7 +161,12 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
                     (result) =>
                     {
                         uploadButton.SetEnabled(true);
-                        UserApi.AddPoint(UserCache.GetInstance().Id, 200, (t) => { NextPage(true); });
+                        UserApi.AddPoint(UserCache.GetInstance().Id, 200,
+                            (t) =>
+                            {
+                                UserCache.GetInstance().Point = t.point;
+                                NextPage(true);
+                            });
                     },
                     () =>
                     {
