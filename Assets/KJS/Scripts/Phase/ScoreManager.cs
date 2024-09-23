@@ -1,35 +1,28 @@
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
+using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    private Text scoreText;
+    private TextMeshProUGUI scoreText;
     private int score;
 
     void Start()
     {
-        scoreText = GetComponent<Text>();
+        scoreText = GetComponent<TextMeshProUGUI>();
         score = 0;
         UserApi.GetUserInfo(UserCache.GetInstance().Id, info =>
         {
-            score = info.point;
-            UpdateScoreText();
-
+            UserCache.GetInstance().Point = info.point;
         });
-        UpdateScoreText();
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            score++;
-            UpdateScoreText();
-        }
+        UpdateScoreText();
     }
 
     void UpdateScoreText()
     {
-        scoreText.text = "Score: " + score.ToString();
+        scoreText.text = "보유 포인트: " + UserCache.GetInstance().Point.ToString();
     }
 }
