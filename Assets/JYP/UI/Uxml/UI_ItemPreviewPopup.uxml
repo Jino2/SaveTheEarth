@@ -11,7 +11,7 @@
             <ui:VisualElement name="PointContainer" style="flex-grow: 0; height: 100px; background-color: rgb(151, 71, 255);" />
             <ui:VisualElement name="PurchaseContainer" style="flex-grow: 0; height: 250px;">
                 <ui:VisualElement style="flex-grow: 0; height: 80px;" />
-                <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+                <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font: resource(&apos;Fonts &amp; Materials/MaruBuri-SemiBold_2&apos;); -unity-font-definition: initial;" >
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; width: 70px;" />

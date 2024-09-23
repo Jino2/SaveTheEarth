@@ -1,14 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="Container" style="flex-grow: 0; align-items: flex-start; align-self: flex-start; width: 400px; height: 300px; justify-content: flex-start; left: 0; right: 0; top: 0; bottom: 0; background-color: rgb(243, 243, 243); border-bottom-width: 4px; border-right-width: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; border-right-color: rgba(0, 0, 0, 0.63); border-left-color: rgba(0, 0, 0, 0.63); border-top-color: rgba(0, 0, 0, 0.63); border-bottom-color: rgba(0, 0, 0, 0.63); position: relative;">
         <ui:VisualElement name="Header" style="flex-grow: 0; align-self: stretch; justify-content: space-between; align-items: center; flex-direction: row; background-color: rgb(90, 222, 248); padding-top: 10px; padding-right: 5px; padding-bottom: 10px; padding-left: 5px;">
-            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="txt_Title" style="width: auto; -unity-text-align: upper-center; font-size: 18px;" />
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="txt_Title" style="width: auto; -unity-text-align: upper-center; font-size: 18px; -unity-font: resource(&apos;Fonts &amp; Materials/MaruBuri-SemiBold_2&apos;); -unity-font-definition: initial;" />
         </ui:VisualElement>
         <ui:VisualElement name="Body" style="flex-grow: 1; align-self: stretch; align-items: stretch; justify-content: center;">
-            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="txt_Message" style="width: auto; -unity-text-align: upper-center;" />
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="txt_Message" style="width: auto; -unity-text-align: upper-center; -unity-font: resource(&apos;Fonts &amp; Materials/MaruBuri-SemiBold_2&apos;); -unity-font-definition: initial;" />
         </ui:VisualElement>
         <ui:VisualElement name="Footer" style="flex-grow: 0; width: 100%; flex-direction: row; height: auto; align-items: center; justify-content: space-around; align-self: stretch;">
-            <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_Confirm" style="padding-top: 10px; padding-right: 40px; padding-bottom: 10px; padding-left: 40px; flex-grow: 1;" />
-            <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_Cancel" style="padding-top: 10px; padding-right: 40px; padding-bottom: 10px; padding-left: 40px; flex-grow: 1;" />
+            <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_Confirm" style="padding-top: 10px; padding-right: 40px; padding-bottom: 10px; padding-left: 40px; flex-grow: 1; -unity-font: resource(&apos;Fonts &amp; Materials/MaruBuri-SemiBold_2&apos;); -unity-font-definition: initial;" />
+            <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn_Cancel" style="padding-top: 10px; padding-right: 40px; padding-bottom: 10px; padding-left: 40px; flex-grow: 1; -unity-font: resource(&apos;Fonts &amp; Materials/MaruBuri-SemiBold_2&apos;); -unity-font-definition: initial;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
