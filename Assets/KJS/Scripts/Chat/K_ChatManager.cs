@@ -75,7 +75,7 @@ public class ChatManager : MonoBehaviour
             onSuccess = (response) =>
             {
                 var aiResponse = JsonUtility.FromJson<AIResponse>(response); // JSON 응답을 객체로 역직렬화
-                DisplayResponseOnUI(aiResponse.message); // 응답을 UI에 표시하는 메서드 호출
+                StartCoroutine(DisplayResponseOnUI(aiResponse.message)); // 응답을 UI에 한 글자씩 표시하는 메서드 호출
             },
             onError = (() =>
             {
@@ -87,7 +87,8 @@ public class ChatManager : MonoBehaviour
         HTTPManager.GetInstance().PostWWWForm(request);
     }
 
-    void DisplayResponseOnUI(string response)
+    // AI 응답을 한 글자씩 천천히 출력하는 코루틴
+    IEnumerator DisplayResponseOnUI(string response)
     {
         // chatType에 따라 챗봇 이름을 가져오기
         string botName = GetBotNameByChatType(chatType);
@@ -96,7 +97,22 @@ public class ChatManager : MonoBehaviour
         string color = GetBotColorByChatType(chatType);
 
         // 텍스트에 Rich Text 태그를 추가하여 색상 적용
-        AddMessageToUI($"<color={color}>{botName}:</color> {response}");
+        string message = $"<color={color}>{botName}:</color> ";
+
+        // 현재까지의 모든 메시지를 먼저 출력
+        string fullChatText = string.Join("\n", chatMessages.ToArray());
+        textchat.text = fullChatText + "\n" + message;
+
+        // 한 글자씩 출력
+        foreach (char letter in response.ToCharArray())
+        {
+            message += letter;
+            textchat.text = fullChatText + "\n" + message; // 기존 메시지와 함께 출력
+            yield return new WaitForSeconds(0.05f); // 글자 출력 간 딜레이 설정 (0.05초)
+        }
+
+        // 새로운 메시지 리스트에 추가
+        AddMessageToUI(message);
     }
 
     // 채팅 내용을 UI에 즉시 추가하는 함수
