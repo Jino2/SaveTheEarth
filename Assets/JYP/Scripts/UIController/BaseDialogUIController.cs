@@ -58,7 +58,7 @@ public class BaseDialogUIController : MonoBehaviour
     {
         uiDocument.sortingOrder = 100;
         root = dialogUITemplate.Instantiate();
-        
+ 
         confirmButton = root.Q<Button>("btn_Confirm");
         cancelButton = root.Q<Button>("btn_Cancel");
         titleLabel = root.Q<Label>("txt_Title");
@@ -73,7 +73,6 @@ public class BaseDialogUIController : MonoBehaviour
             onConfirm?.Invoke();
             root.RemoveFromHierarchy();
             uiDocument.enabled = false;
-        
         };
         
         cancelButton.clicked += () =>
@@ -81,10 +80,10 @@ public class BaseDialogUIController : MonoBehaviour
             onCancel?.Invoke();
             root.RemoveFromHierarchy();
             uiDocument.enabled = false;
-        
         };
         uiDocument.enabled = true;
         var container = uiDocument.rootVisualElement.Q<VisualElement>("Container");
+        container.Clear();
         container.Add(root);
         
     }
