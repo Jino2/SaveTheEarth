@@ -1,2 +1,48 @@
 * {
 }
+
+.unity-scroller__slider {
+    color: rgb(3, 174, 210);
+    background-color: rgb(3, 174, 210);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-text-outline-color: rgb(0, 68, 255);
+}
+
+.unity-scroller_high-button {
+    color: rgb(17, 35, 90);
+    background-color: rgb(17, 35, 90);
+}
+
+.unity-scroller_low-button {
+    background-color: rgb(17, 35, 90);
+}
+
+.unity-base-slider__drag-container {
+    color: rgb(0, 33, 255);
+    background-color: rgb(255, 0, 0);
+}
+
+.unity-scroller .unity-base-slider__tracker {
+    -unity-text-outline-color: rgb(13, 67, 255);
+    background-color: rgba(3, 174, 210, 0.84);
+}
+
+.unity-base-slider .unity-base-slider__tracker {
+    background-color: rgb(104, 210, 232);
+}
+
+.unity-base-slider .unity-base-slider__dragger {
+    -unity-text-outline-color: rgb(17, 35, 90);
+}
+
+.unity-base-slider .unity-base-slider__dragger {
+    background-color: rgb(17, 35, 90);
+}
+
+.unity-scroller > .unity-scroller__low-button {
+    background-color: rgb(104, 210, 232);
+}
+
+.unity-scroller > .unity-scroller__high-button {
+    background-color: rgb(104, 210, 232);
+}
