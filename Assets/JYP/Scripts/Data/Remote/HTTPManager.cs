@@ -6,6 +6,8 @@ using UnityEngine.Networking;
 
 public class HTTPManager : MonoBehaviour
 {
+    public const string BACKEND_URL = "http://54.180.232.125";
+    public const string AI_URL = "https://b6be-222-103-183-137.ngrok-free.app";
     private static HTTPManager instance;
 
     // ReSharper disable Unity.PerformanceAnalysis

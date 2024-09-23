@@ -111,4 +111,5 @@ public class LobbyUIManager : MonoBehaviour
             text_welcomeText.text = "사용자 이름을 입력해주세요.";
         }
     }
+    
 }
