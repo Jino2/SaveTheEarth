@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
     [SerializeField] TMP_InputField inputField;
     [SerializeField] public TMP_Text nickName;
+    [SerializeField] Image ChatBallon;
      
     void Update()
     {

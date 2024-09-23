@@ -11,6 +11,8 @@ using System;
 
 public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
 {
+    PlayerUI playerUI;
+
     public ScrollRect scrollChatWindow;
     public TMP_Text text_chatContent;
     public TMP_InputField input_chat;
@@ -41,6 +43,8 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
         scrollChatWindow.content.pivot = Vector2.zero;
         img_chatBackground = scrollChatWindow.transform.GetComponent<Image>();
         img_chatBackground.color = new Color32(255, 255, 255, 10);
+
+        //playerUI = GetComponent<PlayerUI>();
     }
 
     void Update()
@@ -55,6 +59,7 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;      
         }  
+        // 기존에 작성하던 채팅 창 내용 유지하기
         currentInput = input_chat.text;   
     }
 
