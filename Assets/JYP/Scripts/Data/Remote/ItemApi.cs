@@ -4,7 +4,7 @@ using UnityEngine;
 
 public struct ItemApi
 {
-    private static readonly string BaseURL = "http://54.180.232.125/items";
+    private static readonly string BaseURL = $"{HTTPManager.BACKEND_URL}/items";
 
     public static void GetItems(Action<List<ItemDto>> onComplete)
     {

@@ -25,7 +25,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         // 해상도 조절
-        Screen.SetResolution(640, 480, FullScreenMode.Windowed);
+        Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
     }
 
     // 로그인 시작
