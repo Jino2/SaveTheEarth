@@ -8,7 +8,6 @@ public class PlayerUI : MonoBehaviour
 {
     [SerializeField] TMP_InputField inputField;
     [SerializeField] public TMP_Text nickName;
-    [SerializeField] Image ChatBallon;
      
     void Update()
     {

@@ -9,9 +9,12 @@ using Photon.Realtime;
 using UnityEngine.EventSystems;
 using System;
 
-public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
+public class H_ChatManager : MonoBehaviourPun, IOnEventCallback, IPunObservable
 {
-    PlayerUI playerUI;
+    // 말풍선
+    public GameObject chatContent;
+    public GameObject img_chatBox;
+    public TMP_Text text_chatBox;
 
     public ScrollRect scrollChatWindow;
     public TMP_Text text_chatContent;
@@ -32,6 +35,9 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
 
     void Start()
     {
+        // 말풍선 채팅창 찾기
+        chatContent = GameObject.Find("Player").transform.GetChild(2).GetChild(2).gameObject;
+
         // 일단 시작할 때 텍스트를 비워주기 
         input_chat.text = "";
         text_chatContent.text = "";
@@ -43,8 +49,6 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
         scrollChatWindow.content.pivot = Vector2.zero;
         img_chatBackground = scrollChatWindow.transform.GetComponent<Image>();
         img_chatBackground.color = new Color32(255, 255, 255, 10);
-
-        //playerUI = GetComponent<PlayerUI>();
     }
 
     void Update()
@@ -119,4 +123,8 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
         PhotonNetwork.NetworkingClient.RemoveCallbackTarget(this);
     }
 
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        throw new NotImplementedException();
+    }
 }
