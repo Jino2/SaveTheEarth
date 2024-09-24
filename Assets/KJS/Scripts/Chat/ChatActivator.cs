@@ -4,6 +4,12 @@ using TMPro;
 using UnityEngine;
 using Photon.Pun;
 
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using Photon.Pun;
+
 public class ChatActivator : MonoBehaviourPun
 {
     public float activationDistance = 5f; // UI를 활성화할 거리
@@ -42,17 +48,18 @@ public class ChatActivator : MonoBehaviourPun
 
                 if (Input.GetKeyDown(KeyCode.E)) // photonView.IsMine을 사용하지 않음
                 {
-                    ToggleUI(); // 모든 클라이언트에서 UI 상태 변경
+                    ToggleUI(); // UI 상태를 활성화
                 }
             }
             else
             {
                 pressEText.gameObject.SetActive(false);
+            }
 
-                if (isUIActive)
-                {
-                    DeactivateUI(); // 모든 클라이언트에서 UI 비활성화
-                }
+            // Esc 키를 누르면 UI 비활성화
+            if (isUIActive && Input.GetKeyDown(KeyCode.Escape))
+            {
+                DeactivateUI(); // UI 비활성화
             }
         }
     }
@@ -80,10 +87,10 @@ public class ChatActivator : MonoBehaviourPun
 
     void ToggleUI()
     {
-        isUIActive = !isUIActive;
-
-        if (isUIActive)
+        if (!isUIActive) // UI가 비활성화 상태일 때만 활성화
         {
+            isUIActive = true;
+
             if (uiInstance == null)
             {
                 GameObject uiPrefab = Resources.Load<GameObject>(uiPrefabPath); // 프리팹 로드
@@ -113,18 +120,11 @@ public class ChatActivator : MonoBehaviourPun
             {
                 uiInstance.SetActive(true); // 이미 생성된 UI를 활성화
             }
-        }
-        else
-        {
-            if (uiInstance != null)
-            {
-                uiInstance.SetActive(false); // UI를 비활성화
-            }
-        }
 
-        if (playerMoveScript != null)
-        {
-            playerMoveScript.enabled = !isUIActive; // PlayerMoveScript 비활성화/활성화
+            if (playerMoveScript != null)
+            {
+                playerMoveScript.enabled = false; // PlayerMoveScript 비활성화
+            }
         }
     }
 
