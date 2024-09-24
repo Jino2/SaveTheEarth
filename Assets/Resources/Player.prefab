@@ -201,8 +201,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 77.46, y: -70.525}
-  m_SizeDelta: {x: 134.92, y: 0}
+  m_AnchoredPosition: {x: 1761.6682, y: -544.5}
+  m_SizeDelta: {x: 269.84, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6876011710505072307
 CanvasRenderer:
@@ -236,7 +236,7 @@ MonoBehaviour:
 
     New Text
 
-    New Text'
+    New TextNew Text'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8c7e89ad1f077d14c8b77fe65b15b7cf, type: 2}
   m_sharedMaterial: {fileID: 3074293785448181969, guid: 8c7e89ad1f077d14c8b77fe65b15b7cf,
@@ -358,7 +358,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 24}
+  m_AnchoredPosition: {x: 614, y: -46}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &3860851876669295841
@@ -389,7 +389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 10626587dbf638346aae874d2831148d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -572,6 +572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputField: {fileID: 0}
   nickName: {fileID: 7445281947340724701}
+  ChatBallon: {fileID: 0}
 --- !u!1 &8765375452113352518
 GameObject:
   m_ObjectHideFlags: 0
