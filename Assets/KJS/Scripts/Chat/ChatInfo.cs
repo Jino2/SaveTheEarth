@@ -23,11 +23,11 @@ public class ChatInfo : MonoBehaviour
         switch (botType)
         {
             case ChatType.Turtle:
-                return $"{HTTPManager.AI_URL}/chat/turtle";
+                return $"https://7c3f-222-103-183-137.ngrok-free.app/chat/turtle";
             case ChatType.ClownFish:
-                return $"{HTTPManager.AI_URL}/chat/clownfish";
+                return $"https://7c3f-222-103-183-137.ngrok-free.app/chat/clownfish";
             case ChatType.Dolphin:
-                return $"{HTTPManager.AI_URL}/chat/dolphin";
+                return $"https://7c3f-222-103-183-137.ngrok-free.app/chat/dolphin";
             default:
                 throw new System.ArgumentOutOfRangeException();
         }
