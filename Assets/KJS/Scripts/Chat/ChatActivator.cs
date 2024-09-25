@@ -43,10 +43,10 @@ public class ChatActivator : MonoBehaviourPun
         {
             pressEText.gameObject.SetActive(true);
 
-            // E키를 눌렀을 때 UI를 활성화
+            // E키를 눌렀을 때 UI를 활성화하거나 비활성화
             if (Input.GetKeyDown(KeyCode.E) && pv.IsMine && EventSystem.current.currentSelectedGameObject == null)
             {
-                ToggleUI();  // E키로 UI를 활성화
+                ToggleUI();
             }
         }
         else
@@ -54,21 +54,20 @@ public class ChatActivator : MonoBehaviourPun
             pressEText.gameObject.SetActive(false);
         }
 
-        // 마우스 입력 차단: UI가 활성화된 경우 마우스 입력을 막음
+        // UI 활성화 여부와 상관없이 Escape 키를 감지해 UI를 비활성화
+        if (isUIActive && Input.GetKeyDown(KeyCode.Escape))
+        {
+            DeactivateUI();
+        }
+
+        // UI가 활성화된 상태가 아닐 때만 마우스 입력을 처리
         if (!isUIActive && pv.IsMine && EventSystem.current.currentSelectedGameObject == null)
         {
             HandleCameraRotation();  // 카메라 회전 허용
         }
         else
         {
-            // UI가 활성화된 상태에서는 마우스 입력을 차단
-            BlockMouseInput();
-        }
-
-        // Esc 키를 눌렀을 때 UI를 비활성화
-        if (isUIActive && Input.GetKeyDown(KeyCode.Escape))
-        {
-            DeactivateUI();
+            BlockMouseInput(); // UI가 활성화되면 마우스 입력 차단
         }
     }
 
@@ -96,34 +95,39 @@ public class ChatActivator : MonoBehaviourPun
     // UI를 켤 때 카메라의 현재 상태를 저장하고 고정
     void ToggleUI()
     {
-        if (isUIActive) return;  // 이미 활성화된 상태라면 아무 동작도 하지 않음
-
-        isUIActive = true;
-
-        // UI가 활성화되기 직전의 카메라 위치와 회전을 저장
-        cameraInitialPosition = cameraTransform.position;
-        cameraInitialRotation = cameraTransform.rotation;
-
-        if (uiInstance == null)
+        if (isUIActive)
         {
-            GameObject uiPrefab = Resources.Load<GameObject>(uiPrefabPath);
-            if (uiPrefab != null)
-            {
-                GameObject canvas = GameObject.Find("Canvas");
-                if (canvas != null)
-                {
-                    uiInstance = Instantiate(uiPrefab, canvas.transform);
-                    SetPanelPosition();
-
-                    chatInputField = uiInstance.GetComponentInChildren<TMP_InputField>();
-                    chatInputField?.ActivateInputField();
-                }
-            }
+            DeactivateUI();  // UI가 이미 활성화되어 있으면 비활성화
         }
         else
         {
-            uiInstance.SetActive(true);
-            chatInputField?.ActivateInputField();
+            isUIActive = true;
+
+            // UI가 활성화되기 직전의 카메라 위치와 회전을 저장
+            cameraInitialPosition = cameraTransform.position;
+            cameraInitialRotation = cameraTransform.rotation;
+
+            if (uiInstance == null)
+            {
+                GameObject uiPrefab = Resources.Load<GameObject>(uiPrefabPath);
+                if (uiPrefab != null)
+                {
+                    GameObject canvas = GameObject.Find("Canvas");
+                    if (canvas != null)
+                    {
+                        uiInstance = Instantiate(uiPrefab, canvas.transform);
+                        SetPanelPosition();
+
+                        chatInputField = uiInstance.GetComponentInChildren<TMP_InputField>();
+                        chatInputField?.ActivateInputField();
+                    }
+                }
+            }
+            else
+            {
+                uiInstance.SetActive(true);
+                chatInputField?.ActivateInputField();
+            }
         }
     }
 
