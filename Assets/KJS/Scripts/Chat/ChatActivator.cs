@@ -18,11 +18,12 @@ public class ChatActivator : MonoBehaviourPun
     public Transform cameraTransform;  // 카메라 Transform 추가
     public float mouseSensitivity = 100f;  // 마우스 감도
 
-    // 카메라 위치와 회전값을 저장할 변수
     private Vector3 cameraInitialPosition;
     private Quaternion cameraInitialRotation;
 
     private PhotonView pv;
+
+    public NPCMovement npcMovement; // Inspector에서 할당할 NPCMovement 스크립트
 
     void Start()
     {
@@ -74,7 +75,6 @@ public class ChatActivator : MonoBehaviourPun
     // 마우스 움직임에 따른 카메라 회전 처리
     void HandleCameraRotation()
     {
-        // 마우스 이동 입력
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
@@ -88,11 +88,10 @@ public class ChatActivator : MonoBehaviourPun
     // 마우스 이동을 차단하는 함수 (입력값을 0으로)
     void BlockMouseInput()
     {
-        // 마우스 X와 Y축 입력을 차단
         Input.ResetInputAxes();  // 모든 입력 축을 리셋 (마우스 입력 포함)
     }
 
-    // UI를 켤 때 카메라의 현재 상태를 저장하고 고정
+    // UI를 켤 때 NPCMovement를 비활성화
     void ToggleUI()
     {
         if (isUIActive)
@@ -106,6 +105,12 @@ public class ChatActivator : MonoBehaviourPun
             // UI가 활성화되기 직전의 카메라 위치와 회전을 저장
             cameraInitialPosition = cameraTransform.position;
             cameraInitialRotation = cameraTransform.rotation;
+
+            // Inspector에서 할당된 npcMovement가 있을 때만 비활성화
+            if (npcMovement != null)
+            {
+                npcMovement.enabled = false;  // NPCMovement 비활성화
+            }
 
             if (uiInstance == null)
             {
@@ -153,6 +158,12 @@ public class ChatActivator : MonoBehaviourPun
             chatInputField.text = "";
         }
 
+        // UI 비활성화 시 NPCMovement 다시 활성화
+        if (npcMovement != null)
+        {
+            npcMovement.enabled = true;
+        }
+
         // Esc로 UI 비활성화 시 마우스 입력을 다시 받도록 설정
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -160,7 +171,6 @@ public class ChatActivator : MonoBehaviourPun
         EventSystem.current.SetSelectedGameObject(null);
     }
 
-    // 로컬 플레이어의 Transform을 찾는 코루틴
     private IEnumerator FindLocalPlayer()
     {
         while (playerTransform == null)
