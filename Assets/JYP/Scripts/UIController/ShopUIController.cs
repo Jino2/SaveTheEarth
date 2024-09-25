@@ -1,3 +1,4 @@
+using System.Collections;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,6 +18,7 @@ public class ShopUIController : MonoBehaviour
     private int point = 0;
     public Sprite[] itemPreviewSprites;
     private GameObject shoppingPlayerObject;
+    private ListView shopListView;
     private void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -24,6 +26,12 @@ public class ShopUIController : MonoBehaviour
 
     private void Update()
     {
+
+        if (uiDocument.enabled)
+        {
+            print(shopListView.ClassListContains("hide--bottom"));
+        }
+        
     }
 
     public void ShowShopUI()
@@ -39,7 +47,9 @@ public class ShopUIController : MonoBehaviour
         shopUICamera.gameObject.SetActive(true);
         var sellingItemListController = new SellingItemListUIController();
         closeButton = uiDocument.rootVisualElement.Q<Button>("closeButton");
+        shopListView = uiDocument.rootVisualElement.Q<ListView>("ListView_SellingItemList");
         pointLabel = uiDocument.rootVisualElement.Q<Label>("point");
+        
         closeButton.clicked += OnCloseButtonClicked;
         sellingItemListController.InitList(uiDocument.rootVisualElement,itemPreviewSprites, sellingItemTemplate, item =>
         {
@@ -52,23 +62,36 @@ public class ShopUIController : MonoBehaviour
             point = info.point;
             pointLabel.text = point.ToString();
         });
-        
+        StartCoroutine(AnimateUI());
+    }
+
+    private IEnumerator AnimateUI()
+    {
+        yield return new WaitForSeconds(0.1f);
+        shopListView.RemoveFromClassList("hide--bottom");
+
     }
 
     private void OnCloseButtonClicked()
     {
         print("Close button clicked");
-        HideShopUI();
+        closeButton.clicked -= OnCloseButtonClicked;
+        StartCoroutine(DelayedHideShopUI());
     }
-
-    void HideShopUI()
+    
+    private IEnumerator DelayedHideShopUI()
     {
-        if (!uiDocument.enabled) return;
+        if (!uiDocument.enabled) yield break;
+        
         shoppingPlayerObject.TryGetComponent<PlayerMove>(out var playerMove);
         if(playerMove != null)
         {
             playerMove.controllable = true;
         }
+
+        yield return new WaitForSeconds(0.1f);
+        shopListView.AddToClassList("hide--bottom");
+        yield return new WaitForSeconds(0.8f);
         uiDocument.enabled = false;
         shopUICamera.gameObject.SetActive(false);
     }

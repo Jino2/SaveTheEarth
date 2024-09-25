@@ -53,5 +53,6 @@ public class SellingItemListUIController : MonoBehaviour
 
         sellingListView.focusable = false;
         // sellingListView.fixedItemHeight = 45;
+
     }
 }
