@@ -15,7 +15,7 @@ public class PlayerUI : MonoBehaviour
     // 말풍선 UI
     public GameObject img_ChatBallon;
     // 말풍선 Text
-    public TMP_Text text_ChatContent;
+    //public TMP_Text text_ChatContent;
 
 
     private void Start()
@@ -49,16 +49,20 @@ public class PlayerUI : MonoBehaviour
     public void ChatOnDisplay(string message)
     {
         // 텍스트 출력
-        text_ChatContent.text = message;
+        //text_ChatContent.text = message;
         // 말풍선 UI 활성화
         img_ChatBallon.SetActive(true);
 
         // 3초 지나면 말풍선 숨기기
+        StartCoroutine(HideChatBallon());
 
     }
 
-    // 말풍선 숨기는 함수
-
+    // 말풍선 숨기는 코루틴 함수
+    IEnumerator HideChatBallon()
+    {
+        yield return new WaitForSeconds(3.0f);
+    }
 
 
 }
