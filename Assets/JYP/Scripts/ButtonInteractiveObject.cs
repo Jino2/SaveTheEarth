@@ -25,6 +25,9 @@ public class ButtonInteractiveObject : MonoBehaviourPun
     [SerializeField]
     private UnityEvent onInteract;
     
+    [SerializeField]
+    private string interactMessage = "상호작용";
+    
     private bool interactable = false;
     
     private void Start()
@@ -60,7 +63,7 @@ public class ButtonInteractiveObject : MonoBehaviourPun
         if (isCurrentUserOverlapped && !interactable)
         {
             interactable = true;
-            interactGuideText.text = $"Press {interactKeyCode.ToString()}";
+            interactGuideText.text = $"{interactKeyCode.ToString()} 키를 눌러 {interactMessage}하세요!";
             interactGuideText.enabled = true;
             
         }
