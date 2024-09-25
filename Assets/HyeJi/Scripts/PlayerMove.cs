@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 using Photon.Voice.PUN;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Photon.Pun.Demo.PunBasics;
+using TMPro;
 
 public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
 {
@@ -62,7 +64,7 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
         pv = GetComponent<PhotonView>();
         voiceView = GetComponent<PhotonVoiceView>();
 
-        if(pv.IsMine)
+        if (pv.IsMine)
         {
             // 메인 카메라 찾기
             Camera mainCamera = Camera.main;
@@ -234,8 +236,8 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
 
     IEnumerator GoToMainy()
     {
-        // 방장이 z 버튼 활성화 시 씬 이동을 한다
-        if(PhotonNetwork.IsMasterClient && pv.IsMine && Input.GetKeyDown(KeyCode.Z))
+        // 방장이 숫자0 버튼 활성화 시 씬 이동을 한다
+        if(PhotonNetwork.IsMasterClient && pv.IsMine && Input.GetKeyDown(KeyCode.Alpha0))
         {
             yield return new WaitForSeconds(2.0f);
 

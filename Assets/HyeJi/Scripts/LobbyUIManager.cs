@@ -18,9 +18,10 @@ public class LobbyUIManager : MonoBehaviour
     public Button btn_Check;
     public Image img_Logining;
 
-    // 로그 텍스트
-    public TMP_Text text_LogText;
-    string log;
+    //// 로그 텍스트
+    //public TMP_Text text_LogText;
+    //string log;
+
     // 사용자 닉네임
     public TMP_InputField input_NickName;
     // 환영합니다 ㅇㅇ 어쩌구 문구
@@ -85,13 +86,13 @@ public class LobbyUIManager : MonoBehaviour
         panel_Remain.gameObject.SetActive(false);
     }
 
-    public void PrintLog(string message)
-    {
-        // 로그 더하기
-        log += message + "\n";
-        // 로그 찍기
-        text_LogText.text = log;
-    }
+    //public void PrintLog(string message)
+    //{
+    //    // 로그 더하기
+    //    log += message + "\n";
+    //    // 로그 찍기
+    //    text_LogText.text = log;
+    //}
 
     public void SetWelcomeMessage(string userName)
     {

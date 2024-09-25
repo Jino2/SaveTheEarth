@@ -12,18 +12,11 @@ public class PlayerUI : MonoBehaviour
 
     // 포톤뷰
     PhotonView pv;
-    // 말풍선 UI
-    public GameObject img_ChatBallon;
-    // 말풍선 Text
-    //public TMP_Text text_ChatContent;
 
 
     private void Start()
     {
-        pv = GetComponent<PhotonView>();
-
-        // 시작할 때 말풍선 image는 비활성화
-        img_ChatBallon.SetActive(false);     
+        pv = GetComponent<PhotonView>();   
     }
 
     void Update()
@@ -44,25 +37,5 @@ public class PlayerUI : MonoBehaviour
         string userName = inputField.text;
         nickName.text = $"지구를 지키러 오신{userName}님, 환영합니다!";
     }
-
-    // 말풍선을 활성화 시키는 함수
-    public void ChatOnDisplay(string message)
-    {
-        // 텍스트 출력
-        //text_ChatContent.text = message;
-        // 말풍선 UI 활성화
-        img_ChatBallon.SetActive(true);
-
-        // 3초 지나면 말풍선 숨기기
-        StartCoroutine(HideChatBallon());
-
-    }
-
-    // 말풍선 숨기는 코루틴 함수
-    IEnumerator HideChatBallon()
-    {
-        yield return new WaitForSeconds(3.0f);
-    }
-
 
 }
