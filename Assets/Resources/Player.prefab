@@ -553,7 +553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputField: {fileID: 0}
   nickName: {fileID: 7445281947340724701}
-  img_ChatBallon: {fileID: 0}
+  img_ChatBallon: {fileID: 4545711872145916434}
 --- !u!1 &8765375452113352518
 GameObject:
   m_ObjectHideFlags: 0

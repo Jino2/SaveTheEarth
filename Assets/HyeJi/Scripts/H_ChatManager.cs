@@ -22,6 +22,7 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
     // 현재 입력중인 내용 저장할 변수
     private string currentInput = "";
 
+
     private void OnEnable()
     {
         // 델리게이트에 먼저 등록 (함수 연결)
@@ -41,6 +42,7 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
         scrollChatWindow.content.pivot = Vector2.zero;
         img_chatBackground = scrollChatWindow.transform.GetComponent<Image>();
         img_chatBackground.color = new Color32(255, 255, 255, 10);
+
     }
 
     void Update()
@@ -63,7 +65,12 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
     {
         if(input_chat.text.Length > 0)
         {
+            // 메세지 출력하는 함수 자체를 불러온다.
+            
+
             // 이벤트에 보낼 내용
+
+            // 현재 시간 출력
             string currentTime = DateTime.Now.ToString("hh:mm:ss");
             
             object[] sendContents = new object[] { PhotonNetwork.NickName, msg, currentTime };

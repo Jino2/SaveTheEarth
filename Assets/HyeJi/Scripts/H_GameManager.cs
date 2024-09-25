@@ -8,6 +8,7 @@ public class H_GameManager : MonoBehaviourPun
 {
     public Transform spawnOffset;
 
+
     void Start()
     {
         StartCoroutine(SpawnPlayer());

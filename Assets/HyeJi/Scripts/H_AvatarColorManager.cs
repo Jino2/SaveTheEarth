@@ -17,7 +17,7 @@ public class H_AvatarColorManager : MonoBehaviourPun
         if (avatarRenderer != null)
         {
             avatarRenderer.material.color = avatarColor;
-            avatarRenderer.material.SetColor("_EmissionColor", avatarColor * 3f);
+            avatarRenderer.material.SetColor("_EmissionColor", avatarColor * 2f);
         }
 
         // RPC
