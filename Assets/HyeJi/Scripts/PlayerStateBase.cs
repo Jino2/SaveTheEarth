@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 public class PlayerStateBase : MonoBehaviourPun
 {
@@ -11,6 +12,10 @@ public class PlayerStateBase : MonoBehaviourPun
     public float walkSpeed = 5;
     public float runSpeed = 10;
 
+    // 말풍선 관련
+    //public GameObject img_chatBallon;
+    public Text text_talkBox;
+
     PlayerUI playerUI;
 
     void Start()
@@ -19,7 +24,6 @@ public class PlayerStateBase : MonoBehaviourPun
         {
             gameObject.AddComponent<Inventory_KJS>();
         }
-
         // PlayerUI
         playerUI = GetComponentInChildren<PlayerUI>();
         // 생성한 플레이어의 닉네임과 컬러를 입력한다. (나 : 녹색, 상대 : 다른색 암거나)
@@ -32,5 +36,19 @@ public class PlayerStateBase : MonoBehaviourPun
     void Update()
     {
         
+    }
+
+    public void ShowTalkBox(string msg)
+    {
+
+        photonView.RPC("RPC_ShowTalkBox", RpcTarget.All, msg);
+    }
+
+    [PunRPC]
+    void RPC_ShowTalkBox(string msg)
+    {
+        text_talkBox.gameObject.SetActive(true);
+        text_talkBox.text = msg;
+
     }
 }

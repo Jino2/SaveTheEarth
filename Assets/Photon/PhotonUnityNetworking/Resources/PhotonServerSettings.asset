@@ -54,6 +54,7 @@ MonoBehaviour:
   - DisableItem
   - RPC_Drop
   - RPC_SetAvatarColor
+  - RPC_ShowTalkBox
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

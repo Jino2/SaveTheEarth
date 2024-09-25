@@ -202,7 +202,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 1761.6682, y: -544.5}
-  m_SizeDelta: {x: 1203.92, y: 193.68}
+  m_SizeDelta: {x: 1473.67, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6876011710505072307
 CanvasRenderer:
@@ -260,10 +260,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 30
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -296,7 +296,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 510.27374, y: 0, z: 0, w: 0}
+  m_margin: {x: 510.27374, y: -329.01, z: 0, w: -81.15673}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -335,7 +335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8889635411261133604
 RectTransform:
   m_ObjectHideFlags: 0
@@ -354,7 +354,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 465.3, y: 43}
-  m_SizeDelta: {x: 3523.3364, y: 1089}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &3860851876669295841
 CanvasRenderer:
@@ -553,6 +553,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputField: {fileID: 0}
   nickName: {fileID: 7445281947340724701}
+  img_ChatBallon: {fileID: 0}
+  text_ChatContent: {fileID: 0}
 --- !u!1 &8765375452113352518
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,6 +717,7 @@ MonoBehaviour:
   moveSpeed: 2
   walkSpeed: 2
   runSpeed: 10
+  text_talkBox: {fileID: 0}
   cameraTransform: {fileID: 0}
   controllable: 1
   rotationSpeed: 10
@@ -737,6 +740,7 @@ MonoBehaviour:
   moveSpeed: 2
   walkSpeed: 5
   runSpeed: 10
+  text_talkBox: {fileID: 0}
 --- !u!114 &-1944456629142908872
 MonoBehaviour:
   m_ObjectHideFlags: 0
