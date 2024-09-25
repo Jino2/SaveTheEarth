@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 
 public class ChallengeUIControllerV2 : MonoBehaviour
@@ -23,7 +25,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     private GameObject currentPlayerCharacter;
     public AudioClip[] challengeResultSounds;
     public AudioSource audioSource;
-    
+
     private readonly BaseChallengeUIController[] controllers =
     {
         new ChallengeSelectUIController(),
@@ -105,15 +107,14 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     {
         audioSource.PlayOneShot(challengeResultSounds[index]);
     }
-    
+
     public void PlayAnim()
     {
         var anim = currentPlayerCharacter.GetComponentInChildren<Animator>();
-        if(anim != null)
+        if (anim != null)
             anim.SetTrigger("Happy");
     }
-    
-    
+
 
     #region Private Methods Block
 
@@ -151,20 +152,27 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
         uiDocument.enabled = false;
         closeButton.clicked -= CloseChallengeUI;
-        challengeUICamera.gameObject.SetActive(false);
         isTryingChallenge = false;
+        var cam = Camera.main;
+        cam.GetUniversalAdditionalCameraData().renderPostProcessing = true;
+        cam.cullingMask = ~0;
+        challengeUICamera.gameObject.SetActive(false);
     }
 
     private void SetCamera(GameObject playerCharacter)
     {
         challengeUICamera.LookAt = playerCharacter.transform;
+
         challengeUICamera.gameObject.SetActive(true);
+        StartCoroutine(DelayCamOff());
     }
 
-    private GameObject GetCurrentPlayerCharacter()
+    private IEnumerator DelayCamOff()
     {
-        //TODO: implement with Photon 
-        return GameObject.FindWithTag("Player");
+        yield return new WaitForSeconds(1.8f);
+        var cam = Camera.main;
+        cam.GetUniversalAdditionalCameraData().renderPostProcessing = false;
+        cam.cullingMask = 1 << LayerMask.NameToLayer("Player");
     }
 
     #endregion
