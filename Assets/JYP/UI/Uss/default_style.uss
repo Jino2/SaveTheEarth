@@ -73,3 +73,18 @@
     transition-duration: 0.8s;
     translate: 0 809px;
 }
+
+.default--vending-machine {
+    flex-grow: 0;
+    background-image: url("project://database/Assets/JYP/Images/vending-machine.png?fileID=2800000&guid=6ba22294654ca4e5cb5310aff9dcfc7f&type=3#vending-machine");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 0;
+    height: 80%;
+    width: 130%;
+    left: -15%;
+    transition-duration: 0.8s;
+}
+
+.hide--vending-machine {
+    translate: 0 100%;
+}

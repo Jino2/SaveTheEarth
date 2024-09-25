@@ -18,7 +18,7 @@ public class ShopUIController : MonoBehaviour
     private int point = 0;
     public Sprite[] itemPreviewSprites;
     private GameObject shoppingPlayerObject;
-    private ListView shopListView;
+    private VisualElement shopListView;
     private void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -29,7 +29,7 @@ public class ShopUIController : MonoBehaviour
 
         if (uiDocument.enabled)
         {
-            print(shopListView.ClassListContains("hide--bottom"));
+            print(shopListView.ClassListContains("hide--vending-machine"));
         }
         
     }
@@ -47,7 +47,7 @@ public class ShopUIController : MonoBehaviour
         shopUICamera.gameObject.SetActive(true);
         var sellingItemListController = new SellingItemListUIController();
         closeButton = uiDocument.rootVisualElement.Q<Button>("closeButton");
-        shopListView = uiDocument.rootVisualElement.Q<ListView>("ListView_SellingItemList");
+        shopListView = uiDocument.rootVisualElement.Q<VisualElement>("VendingMahcine");
         pointLabel = uiDocument.rootVisualElement.Q<Label>("point");
         
         closeButton.clicked += OnCloseButtonClicked;
@@ -68,7 +68,7 @@ public class ShopUIController : MonoBehaviour
     private IEnumerator AnimateUI()
     {
         yield return new WaitForSeconds(0.1f);
-        shopListView.RemoveFromClassList("hide--bottom");
+        shopListView.RemoveFromClassList("hide--vending-machine");
 
     }
 
@@ -90,7 +90,7 @@ public class ShopUIController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.1f);
-        shopListView.AddToClassList("hide--bottom");
+        shopListView.AddToClassList("hide--vending-machine");
         yield return new WaitForSeconds(0.8f);
         uiDocument.enabled = false;
         shopUICamera.gameObject.SetActive(false);
