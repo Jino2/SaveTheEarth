@@ -3,47 +3,72 @@ using TMPro;
 using System.Collections.Generic;
 using static GoodsInfo;
 using Photon.Pun;  // GoodsInfo의 enum GoodsType을 사용하기 위해 static import
-
-using UnityEngine;
-using Photon.Pun;
-using TMPro;
 using System.Collections;
 
 public class InventoryUI : MonoBehaviourPun
 {
-    public List<GameObject> prefabList;  // 드랍할 프리팹 리스트
-    public Transform playerTransform;    // 플레이어의 Transform
-    public Transform spawnPoint;         // 아이템이 생성될 스폰 포인트 위치
-    public TextMeshProUGUI[] itemCountTexts; // 아이템 수량을 표시할 TextMeshPro 배열
+    public List<GameObject> prefabList;
+    public Transform spawnPoint;
+    public TextMeshProUGUI[] itemCountTexts;  // GoodsType별로 수량을 표시할 TextMeshPro 배열
+    private Transform playerTransform;  // PLAYER 오브젝트의 Transform 저장용 변수
+    private bool isCountReduced = false;  // 수량 감소 중복 방지를 위한 플래그
 
-    private bool isCountReduced = false;
+    private Vector3 initialSpawnOffset;  // 최초 스폰 위치의 플레이어와의 오프셋
+    private bool isFirstSpawn = true;    // 첫 번째 스폰 여부 체크
 
-    private void Start()
+    void Awake()
     {
-        // 플레이어 Transform을 GameManager에서 가져오는 코루틴 시작
-        StartCoroutine(AssignPlayerTransform());
-    }
+        // 비활성화된 상태에서도 로컬 Player 오브젝트의 Transform을 찾아 할당
+        FindLocalPlayerTransform();
 
-    // GameManager에서 플레이어의 Transform을 찾는 코루틴
-    private IEnumerator AssignPlayerTransform()
-    {
-        // GameManager에서 플레이어 오브젝트를 찾을 때까지 반복
-        while (playerTransform == null)
+        // 이 스크립트가 붙어있는 오브젝트가 씬 변경 시 파괴되지 않도록 설정
+        DontDestroyOnLoad(gameObject);
+
+        // 최초 스폰 위치 설정
+        if (isFirstSpawn && spawnPoint != null)
         {
-            GameObject player = GameObject.FindWithTag("Player");  // 태그로 플레이어 오브젝트를 찾음
-            if (player != null)
-            {
-                playerTransform = player.transform;  // 플레이어의 Transform을 할당
-                Debug.Log("Player Transform assigned in InventoryUI.");
-            }
-
-            // 0.5초 간격으로 플레이어를 다시 찾음
-            yield return new WaitForSeconds(0.5f);
+            initialSpawnOffset = spawnPoint.forward * 2f;
+            isFirstSpawn = false;  // 최초 스폰 이후로는 false로 설정
         }
     }
 
-    private void Update()
+    void FindLocalPlayerTransform()
     {
+        // 모든 Player 오브젝트를 찾음
+        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject playerObject in playerObjects)
+        {
+            PhotonView photonView = playerObject.GetComponent<PhotonView>();
+
+            // PhotonView가 있고, 현재 로컬 플레이어가 소유한 객체라면
+            if (photonView != null && photonView.IsMine)
+            {
+                playerTransform = playerObject.transform;
+
+                // 로컬 플레이어의 Transform을 spawnPoint에 할당
+                spawnPoint = playerTransform;
+                break;  // 로컬 플레이어를 찾았으므로 반복문 종료
+            }
+        }
+    }
+
+    void OnEnable()
+    {
+        // 스크립트가 활성화될 때마다 로컬 Player Transform을 확인
+        if (playerTransform == null)
+        {
+            FindLocalPlayerTransform();
+        }
+    }
+
+    void Update()
+    {
+        if (playerTransform == null)
+        {
+            FindLocalPlayerTransform();
+        }
+
         // 숫자 키 입력에 따른 프리팹 생성
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {

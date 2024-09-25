@@ -37,6 +37,12 @@ public class DragAndDrop : MonoBehaviourPun
     private Transform playerTransform; // 로컬 플레이어의 Transform
     private PlayerMove playerMoveScript; // PlayerMove 스크립트 참조
 
+    // 오브젝트가 상승되었는지 여부를 추적하는 플래그
+    private bool isHeightIncreased = false;
+
+    // 드래그 시작 시 오브젝트의 초기 높이를 저장하는 변수 추가
+    private float initialYPosition;
+
     void Start()
     {
         Canvas canvas = FindObjectOfType<Canvas>();  // 씬에서 Canvas 오브젝트를 찾음
@@ -94,13 +100,16 @@ public class DragAndDrop : MonoBehaviourPun
         {
             RaycastHit hit = CastRay();
 
-            if (hit.transform == transform)
+            // 오브젝트를 클릭했을 때 드래그 시작
+            if (hit.transform == transform && !draggable)
             {
                 draggable = true;
 
                 // 드래그 시작 시 오브젝트와 카메라 사이의 z 깊이 계산
-                // 카메라와 오브젝트 사이의 정확한 z 값을 계산
                 dragDepth = Camera.main.WorldToScreenPoint(transform.position).z;
+
+                // 드래그 시작 시 오브젝트의 초기 높이를 저장
+                initialYPosition = transform.position.y;
 
                 // 드래그 시작 위치에서의 월드 좌표 계산
                 Vector3 screenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dragDepth);
@@ -108,6 +117,14 @@ public class DragAndDrop : MonoBehaviourPun
 
                 // 정확한 오브젝트 위치로 조정
                 transform.position = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
+
+                // 처음 드래그를 시작할 때만 높이를 5만큼 상승시킴
+                if (!isHeightIncreased)
+                {
+                    // 처음 클릭할 때만 높이를 5만큼 상승
+                    transform.position = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
+                    isHeightIncreased = true; // 한번만 실행되도록 플래그 설정
+                }
 
                 // 오브젝트를 클릭했을 때 카메라를 이동시킴
                 if (targetCamera != null)
@@ -131,11 +148,8 @@ public class DragAndDrop : MonoBehaviourPun
             Vector3 screenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dragDepth);
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
 
-            // 여기서 Y축 마우스 이동을 Z축 이동으로 변환 (음수 방향으로 이동하도록 변경)
-            float newZPosition = -Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, dragDepth)).y;
-
             // Y축 이동을 Z축 이동으로 반영
-            transform.position = new Vector3(worldPosition.x, transform.position.y, newZPosition);
+            transform.position = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
 
             // 부모 피봇을 중심으로 자식 오브젝트 회전
             if (Input.GetKeyDown(KeyCode.D))
@@ -191,6 +205,85 @@ public class DragAndDrop : MonoBehaviourPun
         }
     }
 
+    void Drop()
+    {
+        // 마우스 왼쪽 버튼을 떼면 (드래그 중인 경우)
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (draggable)
+            {
+                draggable = false;  // 드래그 중지
+                isHeightIncreased = false;  // 드래그를 중지하면 높이 상승 플래그 리셋
+
+                // **드랍 시 높이 초기화**
+                transform.position = new Vector3(transform.position.x, initialYPosition, transform.position.z);
+
+                // **바닥에 스냅 처리**
+                SnapToGround();
+
+                if (panelProximityMover != null && panelProximityMover) // 인벤토리 패널 근처에 있을 때
+                {
+                    // 인벤토리에 아이템 추가
+                    Inventory_KJS.instance.AddGoods(goodsInfo);
+                    Debug.Log($"{goodsInfo.goodsType}이(가) 인벤토리에 저장되었습니다.");
+                }
+
+                // PlayerMove 스크립트 다시 활성화
+                if (playerMoveScript != null)
+                {
+                    playerMoveScript.enabled = true;
+                }
+            }
+        }
+    }
+
+    // **바닥에 스냅하는 함수 추가**
+    void SnapToGround()
+    {
+        // 자식 오브젝트의 BoxCollider 기준으로 SNAP
+        BoxCollider childCollider = childObject.GetComponent<BoxCollider>();
+        if (childCollider != null)
+        {
+            // 자식 BoxCollider의 아래에서 레이캐스트를 발사
+            Vector3 raycastStart = childCollider.bounds.center; // 콜라이더의 중심
+            raycastStart.y = childCollider.bounds.min.y; // 콜라이더의 아래쪽 면
+
+            RaycastHit hit;
+            if (Physics.Raycast(raycastStart, Vector3.down, out hit))
+            {
+                // 스냅하려는 오브젝트가 있다면 그 위치로 이동
+                Vector3 snapPosition = hit.point;
+
+                // 자식 BoxCollider 크기를 기준으로 부모 위치 조정 (y축)
+                float yOffset = childCollider.bounds.extents.y;  // 자식 오브젝트의 y축 콜라이더 크기 절반
+
+                // 부모 오브젝트의 위치를 hit 지점 위로 스냅
+                transform.position = new Vector3(snapPosition.x, snapPosition.y + yOffset, snapPosition.z);
+            }
+        }
+    }
+
+    // 콜라이더에 닿았을 때 오브젝트를 멈춤
+    void OnCollisionEnter(Collision collision)
+    {
+        if (draggable)
+        {
+            // 드래그 중이면 충돌 시 오브젝트를 멈추게 하기 위해 드래그 상태를 종료
+            draggable = false;
+
+            // 충돌 지점으로 오브젝트를 스냅 (접촉 지점으로 이동)
+            ContactPoint contact = collision.contacts[0];
+            Vector3 newPosition = new Vector3(contact.point.x, transform.position.y, contact.point.z);
+            transform.position = newPosition;
+
+            // PlayerMove 스크립트 다시 활성화
+            if (playerMoveScript != null)
+            {
+                playerMoveScript.enabled = true;
+            }
+        }
+    }
+
     // 부모 BoxCollider 크기를 자식 스케일에 맞춰 조정 (x, z는 최소한으로, y는 그대로 반영)
     void UpdateParentColliderSize()
     {
@@ -234,55 +327,6 @@ public class DragAndDrop : MonoBehaviourPun
         RaycastHit hit;
         Physics.Raycast(worldMousePosNear, worldMousePosFar - worldMousePosNear, out hit);
         return hit;
-    }
-
-    void Drop()
-    {
-        // 마우스 왼쪽 버튼을 떼면 (드래그 중인 경우)
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (draggable)
-            {
-                draggable = false;  // 드래그 중지
-
-                // 자식 오브젝트의 BoxCollider 기준으로 SNAP
-                BoxCollider childCollider = childObject.GetComponent<BoxCollider>();
-                if (childCollider != null)
-                {
-                    // 자식 BoxCollider의 아래에서 레이캐스트를 발사
-                    Vector3 raycastStart = childCollider.bounds.center; // 콜라이더의 중심
-                    raycastStart.y = childCollider.bounds.min.y; // 콜라이더의 아래쪽 면
-
-                    RaycastHit hit;
-                    if (Physics.Raycast(raycastStart, Vector3.down, out hit))
-                    {
-                        // 스냅하려는 오브젝트가 있다면 그 위치로 이동
-                        Vector3 snapPosition = hit.point;
-
-                        // 자식 BoxCollider 크기를 기준으로 부모 위치 조정 (y축)
-                        float yOffset = childCollider.bounds.extents.y;  // 자식 오브젝트의 y축 콜라이더 크기 절반
-
-                        // 부모 오브젝트의 위치를 hit 지점 위로 스냅
-                        transform.position = new Vector3(snapPosition.x, snapPosition.y + yOffset, snapPosition.z);
-                    }
-                }
-
-                if (panelProximityMover != null && panelProximityMover) // 인벤토리 패널 근처에 있을 때
-                {
-                    // 인벤토리에 아이템 추가
-                    Inventory_KJS.instance.AddGoods(goodsInfo);
-                    Debug.Log($"{goodsInfo.goodsType}이(가) 인벤토리에 저장되었습니다.");
-
-                    // **비활성화 코드 제거** (gameObject.SetActive(false); 삭제됨)
-                }
-
-                // PlayerMove 스크립트 다시 활성화
-                if (playerMoveScript != null)
-                {
-                    playerMoveScript.enabled = true;
-                }
-            }
-        }
     }
 
     // 카메라를 오브젝트 위치로 이동시키는 함수
