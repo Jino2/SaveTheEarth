@@ -42,7 +42,8 @@ public class ChatActivator : MonoBehaviourPun
             {
                 pressEText.gameObject.SetActive(true); // "Press E" 텍스트 표시
 
-                if (Input.GetKeyDown(KeyCode.E)) // photonView.IsMine을 사용하지 않음
+                // 현재 선택된 오브젝트가 없고, E키를 눌렀을 때만 실행
+                if (Input.GetKeyDown(KeyCode.E) && EventSystem.current.currentSelectedGameObject == null)
                 {
                     ToggleUI(); // UI 상태를 활성화
                 }
