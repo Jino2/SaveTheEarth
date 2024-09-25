@@ -1,0 +1,15 @@
+.default {
+    flex-grow: 1;
+    flex-direction: row-reverse;
+    align-items: stretch;
+    height: 100%;
+    translate: 0 0;
+    transition-duration: 1.2s;
+    transition-timing-function: ease-out;
+}
+
+.hide_left {
+    translate: -55% 0;
+    transition-duration: 1.2s;
+    transition-timing-function: ease-in;
+}

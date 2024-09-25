@@ -1,0 +1,12 @@
+.default {
+    flex-grow: 1;
+    flex-direction: row;
+    transition-duration: 1s;
+}
+
+.hide--left {
+    translate: -200px 0;
+    background-color: rgba(0, 0, 0, 0);
+    transition-duration: 1s;
+    opacity: 0.3;
+}

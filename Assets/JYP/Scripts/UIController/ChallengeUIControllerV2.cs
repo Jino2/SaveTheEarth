@@ -25,7 +25,9 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     private GameObject currentPlayerCharacter;
     public AudioClip[] challengeResultSounds;
     public AudioSource audioSource;
-
+    public Sprite[] challengeGuideSprites;
+    public string[] challengeGuideTexts;
+    
     private readonly BaseChallengeUIController[] controllers =
     {
         new ChallengeSelectUIController(),
@@ -34,6 +36,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     };
 
     private BaseChallengeUIController _currentBaseChallengeUIController;
+    private VisualElement rootContainer;
     private EChallengeProcess currentProcess;
     private bool isTryingChallenge = false;
 
@@ -92,6 +95,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
     public void TryChallenge()
     {
+        if(uiDocument.enabled) return;
         currentPlayerCharacter = interactiveObject.InteractedObject;
         currentPlayerCharacter.TryGetComponent<PlayerMove>(out var pm);
         if (pm != null)
@@ -124,10 +128,13 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         closeButton = uiDocument.rootVisualElement.Q<Button>("btn_CloseChallenge");
         closeButton.clicked += CloseChallengeUI;
         challengeProcessContainer = uiDocument.rootVisualElement.Q<VisualElement>("ChallengeContainer");
+        rootContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
+        
+        PlayUIShowAnim();
+
+
         for (int i = 0; i < challengeProcessAssets.Length; i++)
         {
-            print(controllers[i]);
-            print(challengeProcessAssets[i]);
             var t = challengeProcessAssets[i]
                 .CloneTree();
             controllers[i]
@@ -135,28 +142,44 @@ public class ChallengeUIControllerV2 : MonoBehaviour
                     t,
                     this
                 );
-            print(t);
         }
 
         isTryingChallenge = true;
         GoToProcess(EChallengeProcess.SelectChallenge);
+        
+    }
+
+    private void PlayUIShowAnim()
+    {
+        //play show anim
+        rootContainer.RemoveFromClassList("hide_left");
+    }
+    
+    private IEnumerator PlayUIHideAnim()
+    {
+        //play hide anim
+        rootContainer.AddToClassList("hide_left");
+        yield return new WaitForSeconds(1.5f);
+        uiDocument.enabled = false;
     }
 
     void CloseChallengeUI()
     {
+        StartCoroutine(PlayUIHideAnim());
+        var cam = Camera.main;
+        cam.cullingMask = ~0;
+        cam.GetUniversalAdditionalCameraData().renderPostProcessing = true;
+        challengeUICamera.gameObject.SetActive(false);
+        
         currentPlayerCharacter.TryGetComponent<PlayerMove>(out var pm);
         if (pm != null)
         {
             pm.controllable = true;
         }
 
-        uiDocument.enabled = false;
         closeButton.clicked -= CloseChallengeUI;
         isTryingChallenge = false;
-        var cam = Camera.main;
-        cam.GetUniversalAdditionalCameraData().renderPostProcessing = true;
-        cam.cullingMask = ~0;
-        challengeUICamera.gameObject.SetActive(false);
+        
     }
 
     private void SetCamera(GameObject playerCharacter)
@@ -169,10 +192,15 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
     private IEnumerator DelayCamOff()
     {
-        yield return new WaitForSeconds(1.8f);
+        yield return new WaitForSeconds(1.5f);
         var cam = Camera.main;
         cam.GetUniversalAdditionalCameraData().renderPostProcessing = false;
         cam.cullingMask = 1 << LayerMask.NameToLayer("Player");
+    }
+
+    private IEnumerator DelayCamOn()
+    {
+        yield return new WaitForSeconds(1.5f);
     }
 
     #endregion
