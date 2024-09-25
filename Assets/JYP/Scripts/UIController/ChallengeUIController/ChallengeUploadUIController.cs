@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using SFB;
 using UnityEngine;
@@ -13,6 +15,9 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
     private VisualElement imageContainer;
     private Button uploadButton;
     private Button selectButton;
+    private VisualElement guideContainer1;
+    private VisualElement guideContainer2;
+
 
     private string selectedImagePath = null;
     BaseDialogUIBuilder dialogBuiler = new BaseDialogUIBuilder();
@@ -29,7 +34,8 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
         imageContainer = root.Q<VisualElement>("img_SelectedImage");
         uploadButton = root.Q<Button>("btn_ChallengeUpload");
         selectButton = root.Q<Button>("btn_ChallengeChooseImage");
-
+        guideContainer1 = root.Q<VisualElement>("guide_1");
+        guideContainer2 = root.Q<VisualElement>("guide_2");
         selectButton.clicked += OnSelectButtonClicked;
         uploadButton.clicked += OnUploadButtonClicked;
     }
@@ -52,10 +58,21 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        parentController.StartCoroutine(AnimateUIShow());
     }
+    
 
     #region Private Methods Block
 
+    private IEnumerator AnimateUIShow()
+    {
+        yield return new WaitForSeconds(0.1f);
+        guideContainer1.RemoveFromClassList("hide--left");
+        yield return new WaitForSeconds(0.1f);
+        guideContainer2.RemoveFromClassList("hide--left");
+ 
+    }
     private void OnSelectButtonClicked()
     {
         string filePath = ChooseImage();
