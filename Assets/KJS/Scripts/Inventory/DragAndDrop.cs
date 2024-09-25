@@ -37,11 +37,9 @@ public class DragAndDrop : MonoBehaviourPun
     private Transform playerTransform; // 로컬 플레이어의 Transform
     private PlayerMove playerMoveScript; // PlayerMove 스크립트 참조
 
-    // 오브젝트가 상승되었는지 여부를 추적하는 플래그
-    private bool isHeightIncreased = false;
-
-    // 드래그 시작 시 오브젝트의 초기 높이를 저장하는 변수 추가
-    private float initialYPosition;
+    // 드래그 중 높이 상승값을 저장
+    private float dragHeightOffset = 5f;
+    private float originalYPosition; // 드래그 시작 시의 원래 Y좌표를 저장
 
     void Start()
     {
@@ -108,23 +106,15 @@ public class DragAndDrop : MonoBehaviourPun
                 // 드래그 시작 시 오브젝트와 카메라 사이의 z 깊이 계산
                 dragDepth = Camera.main.WorldToScreenPoint(transform.position).z;
 
-                // 드래그 시작 시 오브젝트의 초기 높이를 저장
-                initialYPosition = transform.position.y;
+                // 드래그 시작 시 원래 Y좌표 저장
+                originalYPosition = transform.position.y;
 
                 // 드래그 시작 위치에서의 월드 좌표 계산
                 Vector3 screenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dragDepth);
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
 
-                // 정확한 오브젝트 위치로 조정
-                transform.position = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
-
-                // 처음 드래그를 시작할 때만 높이를 5만큼 상승시킴
-                if (!isHeightIncreased)
-                {
-                    // 처음 클릭할 때만 높이를 5만큼 상승
-                    transform.position = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
-                    isHeightIncreased = true; // 한번만 실행되도록 플래그 설정
-                }
+                // X와 Z 좌표를 업데이트하고, Y좌표는 5만큼 상승시킴
+                transform.position = new Vector3(worldPosition.x, originalYPosition + dragHeightOffset, worldPosition.z);
 
                 // 오브젝트를 클릭했을 때 카메라를 이동시킴
                 if (targetCamera != null)
@@ -148,8 +138,8 @@ public class DragAndDrop : MonoBehaviourPun
             Vector3 screenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dragDepth);
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
 
-            // Y축 이동을 Z축 이동으로 반영
-            transform.position = new Vector3(worldPosition.x, transform.position.y, worldPosition.z);
+            // Y축은 드래그 시작 시 5만큼 상승된 값 유지
+            transform.position = new Vector3(worldPosition.x, originalYPosition + dragHeightOffset, worldPosition.z);
 
             // 부모 피봇을 중심으로 자식 오브젝트 회전
             if (Input.GetKeyDown(KeyCode.D))
@@ -213,10 +203,9 @@ public class DragAndDrop : MonoBehaviourPun
             if (draggable)
             {
                 draggable = false;  // 드래그 중지
-                isHeightIncreased = false;  // 드래그를 중지하면 높이 상승 플래그 리셋
 
-                // **드랍 시 높이 초기화**
-                transform.position = new Vector3(transform.position.x, initialYPosition, transform.position.z);
+                // **드랍 시 Y축 상승을 취소하고 원래 높이로 복원**
+                transform.position = new Vector3(transform.position.x, originalYPosition, transform.position.z);
 
                 // **바닥에 스냅 처리**
                 SnapToGround();
@@ -240,13 +229,13 @@ public class DragAndDrop : MonoBehaviourPun
     // **바닥에 스냅하는 함수 추가**
     void SnapToGround()
     {
-        // 자식 오브젝트의 BoxCollider 기준으로 SNAP
-        BoxCollider childCollider = childObject.GetComponent<BoxCollider>();
-        if (childCollider != null)
+        // 현재 오브젝트의 Collider를 기준으로 SNAP
+        Collider objectCollider = GetComponent<Collider>();
+        if (objectCollider != null)
         {
-            // 자식 BoxCollider의 아래에서 레이캐스트를 발사
-            Vector3 raycastStart = childCollider.bounds.center; // 콜라이더의 중심
-            raycastStart.y = childCollider.bounds.min.y; // 콜라이더의 아래쪽 면
+            // 오브젝트의 아래쪽 면에서 레이캐스트 발사
+            Vector3 raycastStart = objectCollider.bounds.center; // 콜라이더의 중심
+            raycastStart.y = objectCollider.bounds.min.y; // 콜라이더의 아래쪽 면
 
             RaycastHit hit;
             if (Physics.Raycast(raycastStart, Vector3.down, out hit))
@@ -254,10 +243,10 @@ public class DragAndDrop : MonoBehaviourPun
                 // 스냅하려는 오브젝트가 있다면 그 위치로 이동
                 Vector3 snapPosition = hit.point;
 
-                // 자식 BoxCollider 크기를 기준으로 부모 위치 조정 (y축)
-                float yOffset = childCollider.bounds.extents.y;  // 자식 오브젝트의 y축 콜라이더 크기 절반
+                // Collider 크기를 기준으로 오브젝트의 위치를 조정 (y축)
+                float yOffset = objectCollider.bounds.extents.y;  // 오브젝트의 y축 콜라이더 크기 절반
 
-                // 부모 오브젝트의 위치를 hit 지점 위로 스냅
+                // 오브젝트의 위치를 hit 지점 위로 스냅
                 transform.position = new Vector3(snapPosition.x, snapPosition.y + yOffset, snapPosition.z);
             }
         }

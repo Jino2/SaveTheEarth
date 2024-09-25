@@ -102,7 +102,6 @@ public class InventoryUI : MonoBehaviourPun
 
             // 스폰 포인트 또는 플레이어 앞에 아이템 생성
             Vector3 spawnPosition = playerTransform.position + playerTransform.forward * 2f;
-            spawnPosition.y -= 1f;
 
             // 네트워크 상에서 객체 생성
             GameObject spawnedPrefab = PhotonNetwork.Instantiate(prefabName, spawnPosition, Quaternion.identity);
