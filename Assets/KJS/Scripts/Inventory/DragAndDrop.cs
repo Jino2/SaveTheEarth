@@ -267,17 +267,13 @@ public class DragAndDrop : MonoBehaviourPun
                     }
                 }
 
-                if (panelProximityMover != null && panelProximityMover)//MouseonPanels())
+                if (panelProximityMover != null && panelProximityMover) // 인벤토리 패널 근처에 있을 때
                 {
                     // 인벤토리에 아이템 추가
                     Inventory_KJS.instance.AddGoods(goodsInfo);
                     Debug.Log($"{goodsInfo.goodsType}이(가) 인벤토리에 저장되었습니다.");
 
-                    // 오브젝트 비활성화
-                    gameObject.SetActive(false);
-
-                    // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
-                    Inventory_KJS.instance.AddGetObject(gameObject);
+                    // **비활성화 코드 제거** (gameObject.SetActive(false); 삭제됨)
                 }
 
                 // PlayerMove 스크립트 다시 활성화
