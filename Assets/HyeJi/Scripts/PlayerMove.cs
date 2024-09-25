@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 using Photon.Voice.PUN;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Photon.Pun.Demo.PunBasics;
+using TMPro;
 
 public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
 {
@@ -55,6 +57,12 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
     PhotonVoiceView voiceView;
     bool isTalking = false;
 
+    PlayerUI playerUI;
+    // 말풍선 관련
+    public TMP_Text text_talkBox;
+    // 말풍선 UI
+    public GameObject img_ChatBallon;
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
@@ -62,7 +70,11 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
         pv = GetComponent<PhotonView>();
         voiceView = GetComponent<PhotonVoiceView>();
 
-        if(pv.IsMine)
+        // PlayerUI
+        playerUI = GetComponentInChildren<PlayerUI>();
+        img_ChatBallon.SetActive(false);
+
+        if (pv.IsMine)
         {
             // 메인 카메라 찾기
             Camera mainCamera = Camera.main;
@@ -271,5 +283,43 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
     public void Collect(int itemId)
     {
         // do nothing
+    }
+
+    // 말풍선 보이게하기
+    public void ShowTalkBox(string msg)
+    {
+
+        photonView.RPC("RPC_ShowTalkBox", RpcTarget.All, msg);
+    }
+
+    [PunRPC]
+    void RPC_ShowTalkBox(string msg)
+    {
+        // 말풍선 이미지 활성화
+        img_ChatBallon.SetActive(true);
+        // 텍스트 내용 활성화
+        text_talkBox.gameObject.SetActive(true);
+        text_talkBox.text = msg;
+
+        // 코루틴 활성화
+        StartCoroutine(HideChatBallon(3f));
+
+    }
+
+    // 말풍선 숨기기
+    IEnumerator HideChatBallon(float t)
+    {
+        yield return new WaitForSeconds(t);
+
+        photonView.RPC("HideChatBallon", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void HideChatBallon()
+    {
+        // 말풍선 이미지 비활성화
+        img_ChatBallon.SetActive(false);
+        // 텍스트 내용 비활성화
+        text_talkBox.gameObject.SetActive(false);
     }
 }

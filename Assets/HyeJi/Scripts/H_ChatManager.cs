@@ -65,9 +65,6 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
     {
         if(input_chat.text.Length > 0)
         {
-            // 메세지 출력하는 함수 자체를 불러온다.
-            
-
             // 이벤트에 보낼 내용
 
             // 현재 시간 출력
@@ -86,8 +83,14 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
             input_chat.text = "";
             // 강제로 넣어주고 다시 null 처리
             EventSystem.current.SetSelectedGameObject(null);
-        }
-        
+
+            // 말풍선 추가추가
+            PlayerMove localPlayer = PhotonNetwork.LocalPlayer.TagObject as PlayerMove;
+            if(localPlayer != null)
+            {
+                localPlayer.ShowTalkBox(msg);
+            }
+        }       
     }
 
     // 같은 룸의 다른 사용자로부터 이벤트가 왔을 때 실행되는 함수
@@ -104,6 +107,17 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
             // 보냈으면 인풋필드 비워주기 꼭
             input_chat.text = currentInput;
             input_chat.ActivateInputField();
+
+            // 플레이어의 말풍선을 표시하는 RPC 호출 (텍스트만 전달)
+            foreach (var playerObject in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                PlayerMove playerMove = playerObject.GetComponent<PlayerMove>();
+                if (playerMove != null && playerMove.photonView.Owner.NickName == receiveObject[0].ToString())
+                {
+                    // RPC로 텍스트 전달
+                    playerMove.ShowTalkBox(receiveObject[1].ToString());  
+                }
+            }
         }
 
         img_chatBackground.color = new Color32(255, 255, 255, 50);

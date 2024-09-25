@@ -553,7 +553,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputField: {fileID: 0}
   nickName: {fileID: 7445281947340724701}
-  img_ChatBallon: {fileID: 4545711872145916434}
 --- !u!1 &8765375452113352518
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,7 +663,6 @@ MonoBehaviour:
   moveSpeed: 2
   walkSpeed: 2
   runSpeed: 10
-  text_talkBox: {fileID: 0}
   cameraTransform: {fileID: 0}
   controllable: 1
   rotationSpeed: 10
@@ -672,6 +670,8 @@ MonoBehaviour:
   jumpMaxCnt: 2
   moveDir: {x: 0, y: 0, z: 0}
   voiceIcon: {fileID: 1137566381435327569}
+  text_talkBox: {fileID: 8983884874801072013}
+  img_ChatBallon: {fileID: 4545711872145916434}
 --- !u!114 &2013469580274029064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -687,7 +687,6 @@ MonoBehaviour:
   moveSpeed: 2
   walkSpeed: 5
   runSpeed: 10
-  text_talkBox: {fileID: 8983884874801072013}
 --- !u!114 &-1944456629142908872
 MonoBehaviour:
   m_ObjectHideFlags: 0
