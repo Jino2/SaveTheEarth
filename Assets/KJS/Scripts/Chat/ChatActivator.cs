@@ -6,181 +6,176 @@ using Photon.Pun;
 using UnityEngine.EventSystems;
 public class ChatActivator : MonoBehaviourPun
 {
-    public float activationDistance = 5f; // UI를 활성화할 거리
-    public string uiPrefabPath = "ChatPanel"; // Resources 폴더 내 패널 프리팹 경로
-    private GameObject uiInstance; // 동적으로 생성된 UI 인스턴스
-    public TextMeshProUGUI pressEText; // "Press E" 텍스트를 표시할 UI 오브젝트
-    private bool isUIActive = false; // UI가 활성화되어 있는지 여부
-    public Transform playerTransform; // 플레이어의 Transform
-    private CharacterController characterController; // 캐릭터 컨트롤러 참조
-    private MonoBehaviour playerMoveScript; // 플레이어 이동 스크립트 참조
+    public float activationDistance = 5f;
+    public string uiPrefabPath = "ChatPanel";
+    private GameObject uiInstance;
+    public TextMeshProUGUI pressEText;
+    private bool isUIActive = false;
+    public Transform playerTransform;
+    private TMP_InputField chatInputField;
 
-    public Vector2 panelPosition = new Vector2(-500f, 0f); // 생성될 패널의 좌표 (X: -1426, Y: -140)
+    public Vector2 panelPosition = new Vector2(-500f, 0f);
+    public Transform cameraTransform;  // 카메라 Transform 추가
+    public float mouseSensitivity = 100f;  // 마우스 감도
 
-    private TMP_InputField chatInputField; // TMP_InputField 참조
+    // 카메라 위치와 회전값을 저장할 변수
+    private Vector3 cameraInitialPosition;
+    private Quaternion cameraInitialRotation;
+
+    private PhotonView pv;
 
     void Start()
     {
-        uiInstance = null;
-
-        if (pressEText != null)
-        {
-            pressEText.gameObject.SetActive(false);
-        }
-
-        // 로컬 플레이어의 Transform과 이동 스크립트를 찾기 위한 코루틴 실행
+        pressEText?.gameObject.SetActive(false);
         StartCoroutine(FindLocalPlayer());
+        Cursor.lockState = CursorLockMode.None;  // 마우스 커서 항상 보이도록 설정
+        Cursor.visible = true;  // 커서 항상 보임
     }
 
     void Update()
     {
-        if (playerTransform != null && pressEText != null)
+        if (playerTransform == null || pressEText == null || pv == null) return;
+
+        float distance = Vector3.Distance(transform.position, playerTransform.position);
+
+        // "Press E" 텍스트 활성화/비활성화 처리
+        if (distance <= activationDistance)
         {
-            float distance = Vector3.Distance(transform.position, playerTransform.position);
+            pressEText.gameObject.SetActive(true);
 
-            if (distance <= activationDistance)
+            // E키를 눌렀을 때 UI를 활성화하거나 비활성화
+            if (Input.GetKeyDown(KeyCode.E) && pv.IsMine && EventSystem.current.currentSelectedGameObject == null)
             {
-                pressEText.gameObject.SetActive(true); // "Press E" 텍스트 표시
+                ToggleUI();
+            }
+        }
+        else
+        {
+            pressEText.gameObject.SetActive(false);
+        }
 
-                // 현재 선택된 오브젝트가 없고, E키를 눌렀을 때만 실행
-                if (Input.GetKeyDown(KeyCode.E) && EventSystem.current.currentSelectedGameObject == null)
+        // UI 활성화 여부와 상관없이 Escape 키를 감지해 UI를 비활성화
+        if (isUIActive && Input.GetKeyDown(KeyCode.Escape))
+        {
+            DeactivateUI();
+        }
+
+        // UI가 활성화된 상태가 아닐 때만 마우스 입력을 처리
+        if (!isUIActive && pv.IsMine && EventSystem.current.currentSelectedGameObject == null)
+        {
+            HandleCameraRotation();  // 카메라 회전 허용
+        }
+        else
+        {
+            BlockMouseInput(); // UI가 활성화되면 마우스 입력 차단
+        }
+    }
+
+    // 마우스 움직임에 따른 카메라 회전 처리
+    void HandleCameraRotation()
+    {
+        // 마우스 이동 입력
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+        Vector3 currentRotation = cameraTransform.localEulerAngles;
+        currentRotation.x -= mouseY;  // 상하 회전
+        currentRotation.y += mouseX;  // 좌우 회전
+
+        cameraTransform.localEulerAngles = currentRotation;
+    }
+
+    // 마우스 이동을 차단하는 함수 (입력값을 0으로)
+    void BlockMouseInput()
+    {
+        // 마우스 X와 Y축 입력을 차단
+        Input.ResetInputAxes();  // 모든 입력 축을 리셋 (마우스 입력 포함)
+    }
+
+    // UI를 켤 때 카메라의 현재 상태를 저장하고 고정
+    void ToggleUI()
+    {
+        if (isUIActive)
+        {
+            DeactivateUI();  // UI가 이미 활성화되어 있으면 비활성화
+        }
+        else
+        {
+            isUIActive = true;
+
+            // UI가 활성화되기 직전의 카메라 위치와 회전을 저장
+            cameraInitialPosition = cameraTransform.position;
+            cameraInitialRotation = cameraTransform.rotation;
+
+            if (uiInstance == null)
+            {
+                GameObject uiPrefab = Resources.Load<GameObject>(uiPrefabPath);
+                if (uiPrefab != null)
                 {
-                    ToggleUI(); // UI 상태를 활성화
+                    GameObject canvas = GameObject.Find("Canvas");
+                    if (canvas != null)
+                    {
+                        uiInstance = Instantiate(uiPrefab, canvas.transform);
+                        SetPanelPosition();
+
+                        chatInputField = uiInstance.GetComponentInChildren<TMP_InputField>();
+                        chatInputField?.ActivateInputField();
+                    }
                 }
             }
             else
             {
-                pressEText.gameObject.SetActive(false);
-            }
-
-            // Esc 키를 누르면 UI 비활성화
-            if (isUIActive && Input.GetKeyDown(KeyCode.Escape))
-            {
-                DeactivateUI(); // UI 비활성화
+                uiInstance.SetActive(true);
+                chatInputField?.ActivateInputField();
             }
         }
     }
 
+    void SetPanelPosition()
+    {
+        RectTransform rectTransform = uiInstance?.GetComponent<RectTransform>();
+        if (rectTransform != null)
+        {
+            rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            rectTransform.anchoredPosition = panelPosition;
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        }
+    }
+
+    // UI 비활성화 함수 (Esc로 비활성화 가능)
+    void DeactivateUI()
+    {
+        isUIActive = false;
+        uiInstance?.SetActive(false);
+        if (chatInputField != null)
+        {
+            chatInputField.DeactivateInputField();
+            chatInputField.text = "";
+        }
+
+        // Esc로 UI 비활성화 시 마우스 입력을 다시 받도록 설정
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    // 로컬 플레이어의 Transform을 찾는 코루틴
     private IEnumerator FindLocalPlayer()
     {
         while (playerTransform == null)
         {
             foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
             {
-                PhotonView pv = player.GetComponent<PhotonView>();
-
-                if (pv != null && pv.IsMine)
+                PhotonView localPv = player.GetComponent<PhotonView>();
+                if (localPv != null && localPv.IsMine)
                 {
                     playerTransform = player.transform;
-                    characterController = player.GetComponent<CharacterController>();
-                    playerMoveScript = player.GetComponent<PlayerMove>();
+                    pv = localPv;  // PhotonView를 저장하여 나중에 사용
                     break;
                 }
             }
-
             yield return null;
-        }
-    }
-
-    void ToggleUI()
-    {
-        if (!isUIActive) // UI가 비활성화 상태일 때만 활성화
-        {
-            isUIActive = true;
-
-            if (uiInstance == null)
-            {
-                GameObject uiPrefab = Resources.Load<GameObject>(uiPrefabPath); // 프리팹 로드
-                if (uiPrefab != null)
-                {
-                    // 씬에 있는 Canvas를 찾아서 그 하위에 패널을 생성
-                    GameObject canvas = GameObject.Find("Canvas"); // 씬에 있는 Canvas를 찾음
-                    if (canvas != null)
-                    {
-                        // 패널을 Canvas의 자식으로 설정하면서 인스턴스화
-                        uiInstance = Instantiate(uiPrefab, canvas.transform);
-
-                        // 패널의 위치를 설정
-                        SetPanelPosition();
-
-                        // TMP_InputField 컴포넌트를 찾음
-                        chatInputField = uiInstance.GetComponentInChildren<TMP_InputField>();
-
-                        if (chatInputField != null)
-                        {
-                            // TMP_InputField 활성화 후 포커스
-                            chatInputField.ActivateInputField();
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("Canvas not found in the scene!");
-                    }
-                }
-                else
-                {
-                    Debug.LogError("UI Prefab not found in Resources folder!");
-                }
-            }
-            else
-            {
-                uiInstance.SetActive(true); // 이미 생성된 UI를 활성화
-
-                if (chatInputField != null)
-                {
-                    chatInputField.ActivateInputField(); // TMP_InputField 활성화 후 포커스
-                }
-            }
-
-            if (playerMoveScript != null)
-            {
-                playerMoveScript.enabled = false; // PlayerMoveScript 비활성화
-            }
-        }
-    }
-
-    // 패널을 특정 위치에 배치하는 함수
-    void SetPanelPosition()
-    {
-        if (uiInstance != null)
-        {
-            RectTransform rectTransform = uiInstance.GetComponent<RectTransform>();
-
-            if (rectTransform != null)
-            {
-                // 캔버스의 가운데를 기준으로 위치 설정
-                rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-                rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-                rectTransform.anchoredPosition = panelPosition;
-                rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            }
-        }
-    }
-
-    void DeactivateUI()
-    {
-        isUIActive = false;
-
-        // UI를 비활성화
-        if (uiInstance != null)
-        {
-            uiInstance.SetActive(false); // UI 패널 비활성화
-        }
-
-        // TMP_InputField 비활성화
-        if (chatInputField != null)
-        {
-            chatInputField.DeactivateInputField(); // 입력 필드 비활성화
-            chatInputField.text = ""; // 필요하다면 입력된 텍스트를 초기화 (선택 사항)
-        }
-
-        // UI 포커스를 해제하여 게임으로 포커스가 돌아가게 함
-        EventSystem.current.SetSelectedGameObject(null);
-
-        // 플레이어 이동 스크립트 다시 활성화
-        if (playerMoveScript != null)
-        {
-            playerMoveScript.enabled = true; // 플레이어 이동 활성화
         }
     }
 }
