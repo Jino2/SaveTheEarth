@@ -21,7 +21,9 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     private Button closeButton;
     public Sprite[] challengeTypeSprites;
     private GameObject currentPlayerCharacter;
-
+    public AudioClip[] challengeResultSounds;
+    public AudioSource audioSource;
+    
     private readonly BaseChallengeUIController[] controllers =
     {
         new ChallengeSelectUIController(),
@@ -97,6 +99,12 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
         OpenChallengeUI();
         SetCamera(currentPlayerCharacter);
+    }
+
+    public void PlaySound(int index)
+    {
+        audioSource.clip = challengeResultSounds[index];
+        audioSource.Play();
     }
 
     #region Private Methods Block
