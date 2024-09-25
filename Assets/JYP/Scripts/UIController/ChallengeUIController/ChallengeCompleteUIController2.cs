@@ -27,6 +27,7 @@ public class ChallengeCompleteUIController2 : BaseChallengeUIController
         if (parentController.isChallengeSuccess)
         {
             parentController.PlaySound(0);
+            parentController.PlayAnim();
             ShowSuccessUI();
         }
         else

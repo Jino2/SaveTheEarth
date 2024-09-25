@@ -103,9 +103,17 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
     public void PlaySound(int index)
     {
-        audioSource.clip = challengeResultSounds[index];
-        audioSource.Play();
+        audioSource.PlayOneShot(challengeResultSounds[index]);
     }
+    
+    public void PlayAnim()
+    {
+        var anim = currentPlayerCharacter.GetComponentInChildren<Animator>();
+        if(anim != null)
+            anim.SetTrigger("Happy");
+    }
+    
+    
 
     #region Private Methods Block
 
