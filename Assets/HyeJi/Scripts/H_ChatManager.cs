@@ -85,7 +85,7 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
             EventSystem.current.SetSelectedGameObject(null);
 
             // 말풍선 추가추가
-            PlayerMove localPlayer = PhotonNetwork.LocalPlayer.TagObject as PlayerMove;
+            H_OpenchatBox localPlayer = PhotonNetwork.LocalPlayer.TagObject as H_OpenchatBox;
             if(localPlayer != null)
             {
                 localPlayer.ShowTalkBox(msg);
@@ -111,11 +111,11 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
             // 플레이어의 말풍선을 표시하는 RPC 호출 (텍스트만 전달)
             foreach (var playerObject in GameObject.FindGameObjectsWithTag("Player"))
             {
-                PlayerMove playerMove = playerObject.GetComponent<PlayerMove>();
-                if (playerMove != null && playerMove.photonView.Owner.NickName == receiveObject[0].ToString())
+                H_OpenchatBox h_OpenchatBox = playerObject.GetComponent<H_OpenchatBox>();
+                if (h_OpenchatBox != null && h_OpenchatBox.photonView.Owner.NickName == receiveObject[0].ToString())
                 {
                     // RPC로 텍스트 전달
-                    playerMove.ShowTalkBox(receiveObject[1].ToString());  
+                    h_OpenchatBox.ShowTalkBox(receiveObject[1].ToString());  
                 }
             }
         }

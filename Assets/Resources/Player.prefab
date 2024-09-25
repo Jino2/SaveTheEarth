@@ -202,7 +202,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 1761.6682, y: -544.5}
-  m_SizeDelta: {x: 1473.67, y: 269.01}
+  m_SizeDelta: {x: 2437.06, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6876011710505072307
 CanvasRenderer:
@@ -260,8 +260,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -335,7 +335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8889635411261133604
 RectTransform:
   m_ObjectHideFlags: 0
@@ -354,7 +354,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 465.3, y: 43}
-  m_SizeDelta: {x: 3523.3364, y: 1089}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &3860851876669295841
 CanvasRenderer:
@@ -568,6 +568,7 @@ GameObject:
   - component: {fileID: 2013469580274029064}
   - component: {fileID: -1944456629142908872}
   - component: {fileID: 7701063047415023319}
+  - component: {fileID: 6796040228618182390}
   - component: {fileID: 8723000368947088730}
   - component: {fileID: 8725878366030874055}
   - component: {fileID: 7816876459236099422}
@@ -670,8 +671,6 @@ MonoBehaviour:
   jumpMaxCnt: 2
   moveDir: {x: 0, y: 0, z: 0}
   voiceIcon: {fileID: 1137566381435327569}
-  text_talkBox: {fileID: 8983884874801072013}
-  img_ChatBallon: {fileID: 4545711872145916434}
 --- !u!114 &2013469580274029064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -712,6 +711,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   avatarRenderer: {fileID: 5283137785029320434}
+--- !u!114 &6796040228618182390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8765375452113352518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6400fabf3f7bed64687af273478578b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text_talkBox: {fileID: 8983884874801072013}
+  img_ChatBallon: {fileID: 4545711872145916434}
 --- !u!114 &8723000368947088730
 MonoBehaviour:
   m_ObjectHideFlags: 0

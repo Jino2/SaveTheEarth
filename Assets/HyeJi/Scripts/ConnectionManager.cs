@@ -68,13 +68,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
 
         LobbyUIManager.lobbyUI.ShowPanel();
-
-        //// 그리구 로그인중 ... 띄우기! 그냥 덮어써도 ㄱㅊ을듯
-        //LobbyUIManager.lobbyUI.img_Logining.enabled = true;
-        //// login 버튼 없애기 (이미 로그인 했응께)
-        //LobbyUIManager.lobbyUI.btn_Check.interactable = false;      
-        //// 로그인 Panel 없애기
-        //LobbyUIManager.lobbyUI.ShowPanel_login();
     }
 
     // 연결에 실패
@@ -120,7 +113,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
 
         // 로그 확인하기
-        LobbyUIManager.lobbyUI.PrintLog("방 만들어짐!");
+        //LobbyUIManager.lobbyUI.PrintLog("방 만들어짐!");
     }
 
     public override void OnJoinedRoom()
@@ -131,7 +124,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
 
         // 로그 확인하기
-        LobbyUIManager.lobbyUI.PrintLog("방 들어가짐!");
+        //LobbyUIManager.lobbyUI.PrintLog("방 들어가짐!");
 
         // 방에 입장한 경우 모두 1번(Lobby) 씬으로 이동한다.
         //PhotonNetwork.LoadLevel(1);
@@ -218,8 +211,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     {
         base.OnPlayerLeftRoom(otherPlayer);
     }
-
-
     // 현재 로비에서 룸의 변경사항을 알려주는 콜백 함수
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
