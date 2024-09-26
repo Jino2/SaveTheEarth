@@ -23,11 +23,9 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     private Button closeButton;
     public Sprite[] challengeTypeSprites;
     private GameObject currentPlayerCharacter;
-    public AudioClip[] challengeResultSounds;
-    public AudioSource audioSource;
     public Sprite[] challengeGuideSprites;
     public string[] challengeGuideTexts;
-    
+
     private readonly BaseChallengeUIController[] controllers =
     {
         new ChallengeSelectUIController(),
@@ -95,7 +93,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
     public void TryChallenge()
     {
-        if(uiDocument.enabled) return;
+        if (uiDocument.enabled) return;
         currentPlayerCharacter = interactiveObject.InteractedObject;
         currentPlayerCharacter.TryGetComponent<PlayerMove>(out var pm);
         if (pm != null)
@@ -107,9 +105,9 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         SetCamera(currentPlayerCharacter);
     }
 
-    public void PlaySound(int index)
+    public void PlaySuccessSound()
     {
-        audioSource.PlayOneShot(challengeResultSounds[index]);
+        SoundManager.Instance.PlaySfx(SoundManager.ESfxType.Success, currentPlayerCharacter.transform.position);
     }
 
     public void PlayAnim()
@@ -129,7 +127,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         closeButton.clicked += CloseChallengeUI;
         challengeProcessContainer = uiDocument.rootVisualElement.Q<VisualElement>("ChallengeContainer");
         rootContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
-        
+
         PlayUIShowAnim();
 
 
@@ -146,7 +144,6 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
         isTryingChallenge = true;
         GoToProcess(EChallengeProcess.SelectChallenge);
-        
     }
 
     private void PlayUIShowAnim()
@@ -154,7 +151,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         //play show anim
         rootContainer.RemoveFromClassList("hide_left");
     }
-    
+
     private IEnumerator PlayUIHideAnim()
     {
         //play hide anim
@@ -168,9 +165,10 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         StartCoroutine(PlayUIHideAnim());
         var cam = Camera.main;
         cam.cullingMask = ~0;
-        cam.GetUniversalAdditionalCameraData().renderPostProcessing = true;
+        cam.GetUniversalAdditionalCameraData()
+            .renderPostProcessing = true;
         challengeUICamera.gameObject.SetActive(false);
-        
+
         currentPlayerCharacter.TryGetComponent<PlayerMove>(out var pm);
         if (pm != null)
         {
@@ -179,7 +177,6 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
         closeButton.clicked -= CloseChallengeUI;
         isTryingChallenge = false;
-        
     }
 
     private void SetCamera(GameObject playerCharacter)
@@ -194,7 +191,8 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
         var cam = Camera.main;
-        cam.GetUniversalAdditionalCameraData().renderPostProcessing = false;
+        cam.GetUniversalAdditionalCameraData()
+            .renderPostProcessing = false;
         cam.cullingMask = 1 << LayerMask.NameToLayer("Player");
     }
 

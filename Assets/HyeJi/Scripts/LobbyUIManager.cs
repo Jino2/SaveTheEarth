@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using System;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -41,6 +42,11 @@ public class LobbyUIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        SoundManager.Instance.PlayBgm(SoundManager.EBgmType.Lobby);
     }
 
 
