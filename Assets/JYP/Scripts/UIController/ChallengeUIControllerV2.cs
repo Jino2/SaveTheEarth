@@ -14,6 +14,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         ChallengeComplete,
     }
 
+    public ChallengeNPCChatController challengeNPCChatController;
     public ButtonInteractiveObject interactiveObject;
     public UIDocument uiDocument;
     public CinemachineVirtualCamera challengeUICamera;
@@ -23,9 +24,10 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     private Button closeButton;
     public Sprite[] challengeTypeSprites;
     private GameObject currentPlayerCharacter;
-    public Sprite[] challengeGuideSprites;
+    public Texture2D[] challengeGuideTextures;
     public string[] challengeGuideTexts;
-
+    public ChallengeFloor challengeFloor;
+    
     private readonly BaseChallengeUIController[] controllers =
     {
         new ChallengeSelectUIController(),
@@ -37,10 +39,11 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     private VisualElement rootContainer;
     private EChallengeProcess currentProcess;
     private bool isTryingChallenge = false;
-
+    private LayerMask prevCullMask;
     public ChallengeType currentChallengeType { get; set; } = ChallengeType.None;
     public bool isChallengeSuccess = false;
-
+    
+    private Coroutine cameraSettingCoroutine;
     void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -105,26 +108,42 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         SetCamera(currentPlayerCharacter);
     }
 
+    
+    public void OnChallengeSuccess()
+    {
+        isChallengeSuccess = true;
+        PlaySuccessSound();
+        StartCoroutine(DanceWhile15Seconds());
+    }
     public void PlaySuccessSound()
     {
         SoundManager.Instance.PlaySfx(SoundManager.ESfxType.Success, currentPlayerCharacter.transform.position);
     }
 
-    public void PlayAnim()
-    {
-        var anim = currentPlayerCharacter.GetComponentInChildren<Animator>();
-        if (anim != null)
-            anim.SetTrigger("Happy");
-    }
-
 
     #region Private Methods Block
+    
+    private IEnumerator DanceWhile15Seconds()
+    {
+        SoundManager.Instance.PlayBgm(SoundManager.EBgmType.Dance);
+        var anim = currentPlayerCharacter.GetComponentInChildren<Animator>();
+        if (anim != null)
+        {
+            anim.SetTrigger("Happy");
+            challengeFloor.TurnOnLights();
+        }
 
+        yield return new WaitForSeconds(15f);
+        anim.SetTrigger("Idle");
+        SoundManager.Instance.PlayBgm(SoundManager.EBgmType.Lobby);
+        challengeFloor.TurnOffLights();
+    }
     private void OpenChallengeUI()
     {
+        challengeFloor.TurnOffLights();
+        
         uiDocument.enabled = true;
         closeButton = uiDocument.rootVisualElement.Q<Button>("btn_CloseChallenge");
-        closeButton.clicked += CloseChallengeUI;
         challengeProcessContainer = uiDocument.rootVisualElement.Q<VisualElement>("ChallengeContainer");
         rootContainer = uiDocument.rootVisualElement.Q<VisualElement>("Container");
 
@@ -162,9 +181,18 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
     void CloseChallengeUI()
     {
+        StopAllCoroutines();
+        if (isChallengeSuccess)
+        {
+            challengeNPCChatController.GreetPlayer();
+        }
+        var anim = currentPlayerCharacter.GetComponentInChildren<Animator>();
+        anim.SetTrigger("Idle");
+        challengeFloor.TurnOffLights();
+        SoundManager.Instance.PlayBgm(SoundManager.EBgmType.Lobby);
         StartCoroutine(PlayUIHideAnim());
         var cam = Camera.main;
-        cam.cullingMask = ~0;
+        cam.cullingMask = prevCullMask;
         cam.GetUniversalAdditionalCameraData()
             .renderPostProcessing = true;
         challengeUICamera.gameObject.SetActive(false);
@@ -184,22 +212,25 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         challengeUICamera.LookAt = playerCharacter.transform;
 
         challengeUICamera.gameObject.SetActive(true);
-        StartCoroutine(DelayCamOff());
+        cameraSettingCoroutine = StartCoroutine(DelayCamOff(
+            () =>
+            {
+                closeButton.clicked += CloseChallengeUI;
+            }
+            ));
     }
 
-    private IEnumerator DelayCamOff()
+    private IEnumerator DelayCamOff(Action onComplete = null)
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
         var cam = Camera.main;
         cam.GetUniversalAdditionalCameraData()
             .renderPostProcessing = false;
-        cam.cullingMask = 1 << LayerMask.NameToLayer("Player");
+        prevCullMask = cam.cullingMask;
+        cam.cullingMask =  1<< LayerMask.NameToLayer("ChallengeFloor") | 1 << LayerMask.NameToLayer("Player");
+        onComplete?.Invoke();
+        
     }
-
-    private IEnumerator DelayCamOn()
-    {
-        yield return new WaitForSeconds(1.5f);
-    }
-
+    
     #endregion
 }

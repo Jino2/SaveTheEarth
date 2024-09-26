@@ -48,6 +48,7 @@ MonoBehaviour:
   bgm:
   - {fileID: 8300000, guid: 4cac18a2a7429e14d8dc8e95ecec4d5c, type: 3}
   - {fileID: 8300000, guid: 4dc9d92272b0cdd4ab408877474a6cb7, type: 3}
+  - {fileID: 8300000, guid: 508f357396f4e89488062bf922f1d6a0, type: 3}
   sfx:
   - {fileID: 8300000, guid: 414e0a0e078ab4a35912a758bdad16b7, type: 3}
   bgmSource: {fileID: 0}

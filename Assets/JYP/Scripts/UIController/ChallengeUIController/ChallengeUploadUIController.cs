@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using SFB;
 using UnityEngine;
@@ -17,6 +16,11 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
     private Button selectButton;
     private VisualElement guideContainer1;
     private VisualElement guideContainer2;
+
+    private Label guideText1;
+    private Label guideText2;
+    private VisualElement guideImage1;
+    private VisualElement guideImage2;
 
 
     private string selectedImagePath = null;
@@ -36,24 +40,41 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
         selectButton = root.Q<Button>("btn_ChallengeChooseImage");
         guideContainer1 = root.Q<VisualElement>("guide_1");
         guideContainer2 = root.Q<VisualElement>("guide_2");
+        guideText1 = root.Q<Label>("lbl_guide_1");
+        guideText2 = root.Q<Label>("lbl_guide_2");
+        guideImage1 = root.Q<VisualElement>("img_guide_1");
+        guideImage2 = root.Q<VisualElement>("img_guide_2");
         selectButton.clicked += OnSelectButtonClicked;
         uploadButton.clicked += OnUploadButtonClicked;
     }
 
     public override void BindType(ChallengeType type)
     {
-        if(type != ChallengeType.None)
+        if (type != ChallengeType.None)
             typeIcon.style.backgroundImage = parentController.challengeTypeSprites[(int)type].texture;
         switch (type)
         {
             case ChallengeType.Transport:
                 title.text = "이동수단 챌린지";
+                guideText1.text = parentController.challengeGuideTexts[0];
+                guideText2.text = parentController.challengeGuideTexts[1];
+                guideImage1.style.backgroundImage = parentController.challengeGuideTextures[0];
+                guideImage2.style.backgroundImage = parentController.challengeGuideTextures[1];
                 break;
             case ChallengeType.Tumbler:
                 title.text = "텀블러 챌린지";
+                guideText1.text = parentController.challengeGuideTexts[2];
+                guideText2.text = parentController.challengeGuideTexts[3];
+                guideImage1.style.backgroundImage = parentController.challengeGuideTextures[2];
+                guideImage2.style.backgroundImage = parentController.challengeGuideTextures[3];
                 break;
             case ChallengeType.Recycle:
                 title.text = "재활용 챌린지";
+                guideText1.text = parentController.challengeGuideTexts[4];
+                guideText2.text = parentController.challengeGuideTexts[5];
+                guideImage1.style.backgroundImage = parentController.challengeGuideTextures[4];
+                guideImage2.style.backgroundImage = parentController.challengeGuideTextures[5];
+
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -61,7 +82,7 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
 
         parentController.StartCoroutine(AnimateUIShow());
     }
-    
+
 
     #region Private Methods Block
 
@@ -71,8 +92,8 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
         guideContainer1.RemoveFromClassList("hide--left");
         yield return new WaitForSeconds(0.1f);
         guideContainer2.RemoveFromClassList("hide--left");
- 
     }
+
     private void OnSelectButtonClicked()
     {
         string filePath = ChooseImage();
@@ -88,8 +109,12 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
             "xbm", "tif", "jfif", "ico", "tiff", "gif", "svg", "jpeg", "svgz", "jpg", "webp", "png", "bmp", "pjp",
             "apng", "pjpeg", "avif"
         };
-        var paths = StandaloneFileBrowser.OpenFilePanel("열기", "",
-            new ExtensionFilter[1] { new ExtensionFilter("이미지 파일", ex) }, false);
+        var paths = StandaloneFileBrowser.OpenFilePanel(
+            "열기",
+            "",
+            new ExtensionFilter[1] { new ExtensionFilter("이미지 파일", ex) },
+            false
+        );
         if (paths.Length == 0) return null;
         return paths[0];
     }
@@ -132,17 +157,23 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
         {
             case ChallengeType.Transport:
                 challengeApi.TryChallengeTransport(
-                    UserCache.GetInstance().Id,
+                    UserCache.GetInstance()
+                        .Id,
                     selectedImagePath,
                     (result) =>
                     {
                         uploadButton.SetEnabled(true);
-                        UserApi.AddPoint(UserCache.GetInstance().Id, 200,
+                        UserApi.AddPoint(
+                            UserCache.GetInstance()
+                                .Id,
+                            200,
                             (t) =>
                             {
-                                UserCache.GetInstance().Point = t.point;
+                                UserCache.GetInstance()
+                                    .Point = t.point;
                                 NextPage(true);
-                            });
+                            }
+                        );
                     },
                     () =>
                     {
@@ -153,43 +184,57 @@ public class BaseChallengeUploadUIController2 : BaseChallengeUIController
                 break;
             case ChallengeType.Tumbler:
                 challengeApi.TryChallengeTumbler(
-                    UserCache.GetInstance().Id,
+                    UserCache.GetInstance()
+                        .Id,
                     selectedImagePath,
                     (result) =>
                     {
                         uploadButton.SetEnabled(true);
-                        UserApi.AddPoint(UserCache.GetInstance().Id, 200,
+                        UserApi.AddPoint(
+                            UserCache.GetInstance()
+                                .Id,
+                            200,
                             (t) =>
                             {
-                                UserCache.GetInstance().Point = t.point;
+                                UserCache.GetInstance()
+                                    .Point = t.point;
                                 NextPage(true);
-                            });
+                            }
+                        );
                     },
                     () =>
                     {
                         NextPage(false);
                         uploadButton.SetEnabled(true);
-                    });
+                    }
+                );
                 break;
             case ChallengeType.Recycle:
                 challengeApi.TryChallengeRecycling(
-                    UserCache.GetInstance().Id,
+                    UserCache.GetInstance()
+                        .Id,
                     selectedImagePath,
                     (result) =>
                     {
                         uploadButton.SetEnabled(true);
-                        UserApi.AddPoint(UserCache.GetInstance().Id, 200,
+                        UserApi.AddPoint(
+                            UserCache.GetInstance()
+                                .Id,
+                            200,
                             (t) =>
                             {
-                                UserCache.GetInstance().Point = t.point;
+                                UserCache.GetInstance()
+                                    .Point = t.point;
                                 NextPage(true);
-                            });
+                            }
+                        );
                     },
                     () =>
                     {
                         NextPage(false);
                         uploadButton.SetEnabled(true);
-                    });
+                    }
+                );
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

@@ -10,8 +10,10 @@ public class SoundManager : MonoBehaviour
 
     public enum EBgmType
     {
+        None = -1,
         Lobby = 0,
         Main,
+        Dance,
     }
 
     const string SoundManagerPath = "Prefabs/UX/SoundManager";
@@ -21,6 +23,7 @@ public class SoundManager : MonoBehaviour
 
     public AudioSource bgmSource;
 
+    private EBgmType currentBgmType = EBgmType.None;
     private static SoundManager instance;
 
     public static SoundManager Instance
@@ -78,6 +81,9 @@ public class SoundManager : MonoBehaviour
 
     public void PlayBgm(EBgmType type)
     {
+        if (type == EBgmType.None) return;
+        if (currentBgmType == type) return;
+        currentBgmType = type;
         StartCoroutine(PlayBgmCoroutine(type));
     }
 

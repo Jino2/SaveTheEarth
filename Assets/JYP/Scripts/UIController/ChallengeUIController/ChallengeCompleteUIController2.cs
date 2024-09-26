@@ -20,14 +20,23 @@ public class ChallengeCompleteUIController2 : BaseChallengeUIController
         challengeFinishMessage = root.Q<Label>("lbl_challengeFinishMessage");
         tryAgainButton = root.Q<Button>("btn_challengeAgain");
         goToChallengeSelectionButton = root.Q<Button>("btn_backToChallenges");
+        
+        tryAgainButton.clicked += () =>
+        {
+            parentController.GoToProcess(ChallengeUIControllerV2.EChallengeProcess.ChallengeUploadImage);
+        };
+        
+        goToChallengeSelectionButton.clicked += () =>
+        {
+            parentController.GoToProcess(ChallengeUIControllerV2.EChallengeProcess.SelectChallenge);
+        };
     }
 
     public override void BindType(ChallengeType type)
     {
         if (parentController.isChallengeSuccess)
         {
-            parentController.PlaySuccessSound();
-            parentController.PlayAnim();
+            parentController.OnChallengeSuccess();
             ShowSuccessUI();
         }
         else

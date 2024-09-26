@@ -21,6 +21,18 @@ public class ChallengeNPCChatController : MonoBehaviour
 
     [SerializeField]
     private TMP_Text chatText;
+    
+    [SerializeField]
+    private RectTransform chatBubbleRectTransform;
+
+    
+    private readonly string[] defaultMetChatList =
+    {
+        "보상으로 받은 포인트는 해적샵에서 장식품으로 교환할 수 있어요!",
+        "앞으로도 바다를 지키는 여정을 함께해요!",
+        "다음에도 또 만나요!",
+        "아직 바다를 지킬 수 있는 챌린지가 남아있어요!"
+    };
 
     private readonly string[] chatList =
     {
@@ -29,27 +41,49 @@ public class ChallengeNPCChatController : MonoBehaviour
         "오늘도 바다를 보호하는 챌린지에 도전해보시는 건 어떠세요?"
     };
 
+
     [SerializeField]
     private float chatDelayPerWord = 0.2f;
 
 
     private bool interactable = false;
-    
-
+    private Animator animator;
+    public bool IsChatted { get; set; } = false;
+    private bool isCurrentUserOverlapped = false;
+    private bool isPlayerComing = false;
+    private float distanceToPlayer = 0f;
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
+        chatText.text = "여기에요!!";
     }
 
     // Update is called once per frame
     void Update()
     {
         CheckPlayer();
+        if (isCurrentUserOverlapped) return;
+        CheckPlayerComing();
+
+        if (isPlayerComing)
+        {
+            // interpolate chatBubbleRectTransform by distance
+            var targetScale = Mathf.Clamp( interactRange * 2f / distanceToPlayer, 0.5f, 1.0f);
+            chatBubbleRectTransform.localScale = Vector3.one * targetScale;
+        }
     }
 
     #region Public Methods
 
     public void CloseChatBubble()
     {
+        
+    }
+
+    public void GreetPlayer()
+    {
+        IsChatted = true;
+        animator.SetTrigger("Greeting");
     }
 
     #endregion
@@ -60,7 +94,7 @@ public class ChallengeNPCChatController : MonoBehaviour
     {
         var colliders = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
 
-        var isCurrentUserOverlapped = false;
+        isCurrentUserOverlapped = false;
         foreach (var collider in colliders)
         {
             if (collider.TryGetComponent<PhotonView>(out var pv))
@@ -75,17 +109,19 @@ public class ChallengeNPCChatController : MonoBehaviour
         if (isCurrentUserOverlapped && !interactable)
         {
             interactable = true;
-            chatBubbleObject.SetActive(true);
             StartCoroutine(ShowChat());
         }
         else if (!isCurrentUserOverlapped && interactable)
         {
             interactable = false;
-            chatBubbleObject.SetActive(false);
             StopAllCoroutines();
+            if(IsChatted)
+                StartCoroutine(ShowChatDefault());
+            else 
+                chatText.text = "여기에요!!";
         }
-        
     }
+    
 
     private IEnumerator ShowChat()
     {
@@ -98,7 +134,7 @@ public class ChallengeNPCChatController : MonoBehaviour
             {
                 sb.Append(c);
                 chatText.text = sb.ToString();
-                if(c == ' ') continue;
+                if (c == ' ') continue;
                 yield return new WaitForSeconds(chatDelayPerWord);
             }
 
@@ -106,5 +142,55 @@ public class ChallengeNPCChatController : MonoBehaviour
         }
     }
 
+    private IEnumerator ShowChatDefault(int i = 0)
+    {
+        var sb = new StringBuilder();
+        var chat = defaultMetChatList[i];
+        {
+            chatText.text = "";
+            sb.Clear();
+            foreach (char c in chat)
+            {
+                sb.Append(c);
+                chatText.text = sb.ToString();
+                if (c == ' ') continue;
+                yield return new WaitForSeconds(chatDelayPerWord);
+            }
+
+            yield return new WaitForSeconds(1.5f);
+        }
+
+        StartCoroutine(ShowChatDefault((i + 1) % defaultMetChatList.Length));
+    }
+
+
+    private void CheckPlayerComing()
+    {
+        var colliders = Physics.OverlapSphere(transform.position, interactRange * 3f, interactLayer);
+
+        foreach (var collider in colliders)
+        {
+            if (collider.TryGetComponent<PhotonView>(out var pv))
+            {
+                if (pv.IsMine)
+                {
+                    isPlayerComing = true;
+                    distanceToPlayer = Vector3.Distance(transform.position, collider.transform.position);
+                }
+            }
+        }
+
+        if (isPlayerComing && !chatBubbleObject.activeSelf)
+        {
+            chatBubbleObject.SetActive(true);
+            if(IsChatted)
+                StartCoroutine(ShowChatDefault());
+        }
+        else if(!isPlayerComing)
+        {
+            StopAllCoroutines();
+            chatBubbleObject.SetActive(false);
+        }
+    }
     #endregion
 }
