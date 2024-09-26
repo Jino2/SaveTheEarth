@@ -68,7 +68,7 @@ public class ChatActivator : MonoBehaviourPun
         }
 
         // UI가 활성화된 상태가 아닐 때만 마우스 입력을 처리
-        if (!isUIActive && pv.IsMine)
+        if (!isUIActive && pv.IsMine && EventSystem.current.currentSelectedGameObject == null)
         {
             HandleCameraRotation();  // 카메라 회전 허용
         }

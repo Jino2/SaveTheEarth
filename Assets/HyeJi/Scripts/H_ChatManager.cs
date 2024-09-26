@@ -63,6 +63,7 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
 
     void SendMyMessage(string msg)
     {
+        Cursor.lockState = CursorLockMode.Locked;
         if(input_chat.text.Length > 0)
         {
             // 이벤트에 보낼 내용
