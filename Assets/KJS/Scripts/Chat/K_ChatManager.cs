@@ -23,6 +23,8 @@ public class ChatManager : MonoBehaviour
     // 챗봇 타입을 저장
     public ChatInfo.ChatType chatType;
 
+    H_RewardManager h_RewardManager;
+
     void Start()
     {
         ID = UserCache.GetInstance().Id;
@@ -32,6 +34,9 @@ public class ChatManager : MonoBehaviour
 
         // TMP_InputField 컴포넌트에서 채팅 입력 이벤트 리스너 등록
         input.GetComponent<TMP_InputField>().onSubmit.AddListener(SubmitChatMessage);
+
+        h_RewardManager = GameObject.Find("RewardManager").GetComponent<H_RewardManager>();
+        GameObject.Find("RewardManager").GetComponent<H_RewardManager>().chatManager = this;
     }
 
     void SubmitChatMessage(string message)
@@ -50,6 +55,11 @@ public class ChatManager : MonoBehaviour
         }
     }
 
+    public bool help = false;
+    public bool clear = false;
+    bool clearEventview = false;
+    bool helpEventview = false;
+
     // AI 서버에 사용자의 메시지를 전달하고 응답을 받음
     void SendMessageToAI(string userMessage, int trashCount = 0)
     {
@@ -59,6 +69,7 @@ public class ChatManager : MonoBehaviour
         {
             user_message = userMessage // 사용자 메시지 설정
         };
+        help = userMessage.Contains("도움");
 
         string jsonRequestBody = JsonUtility.ToJson(aiRequest); // JSON으로 직렬화
         Debug.Log("Request Body: " + jsonRequestBody); // 로그로 JSON 출력
@@ -76,6 +87,19 @@ public class ChatManager : MonoBehaviour
             {
                 var aiResponse = JsonUtility.FromJson<AIResponse>(response); // JSON 응답을 객체로 역직렬화
                 StartCoroutine(DisplayResponseOnUI(aiResponse.message)); // 응답을 UI에 한 글자씩 표시하는 메서드 호출
+
+                if(help && helpEventview == false)
+                {
+                    helpEventview = true;
+                    h_RewardManager.GameStart();
+                }
+
+                if (clear && clearEventview == false)
+                {
+                    clearEventview = true;
+                    h_RewardManager.ClearEvent();
+                }
+
             },
             onError = (() =>
             {
