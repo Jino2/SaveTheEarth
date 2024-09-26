@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class H_GameManager : MonoBehaviourPun
 {
@@ -12,15 +13,37 @@ public class H_GameManager : MonoBehaviourPun
     void Start()
     {
         StartCoroutine(SpawnPlayer());
-
+        StartCoroutine(PlayBgm());
+        
         // OnPhotonSerializeView 에서 데이터 전송 빈도 수 설정하기 (per seconds)
         PhotonNetwork.SerializationRate = 30;
         // 대부분의 데이터 전송 빈도 수 설정하기(per seconds)
         PhotonNetwork.SendRate = 30;
+        
+        
     }
 
     void Update()
     {
+    }
+
+    IEnumerator PlayBgm()
+    {
+        
+        yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
+        int currentSceneNumber = SceneManager.GetActiveScene().buildIndex;
+        switch (currentSceneNumber)
+        {
+            case 1:
+                SoundManager.Instance.PlayBgm(SoundManager.EBgmType.Lobby);
+                break;
+            
+            case 2:
+                SoundManager.Instance.PlayBgm(SoundManager.EBgmType.Main);
+                break;
+                
+        }
+        SoundManager.Instance.PlayBgm(SoundManager.EBgmType.Lobby);
     }
 
     IEnumerator SpawnPlayer()
