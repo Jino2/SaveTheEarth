@@ -698,6 +698,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f644d4834fe34691b709bf94b785bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currTrashCount: {fileID: 0}
+  maxTrashCount: {fileID: 0}
 --- !u!114 &7701063047415023319
 MonoBehaviour:
   m_ObjectHideFlags: 0

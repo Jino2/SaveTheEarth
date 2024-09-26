@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static ChatInfo;
 
-public class H_RewardManager : MonoBehaviour
+public class H_RewardManager : MonoBehaviourPun, IPunObservable
 {
+    PhotonView pv;
+
     // 미션 완료 여부 체크
     private bool missionCompleted = false;
     public int trashCount = 0;
@@ -21,11 +25,26 @@ public class H_RewardManager : MonoBehaviour
     // 퀘스트 관련 이미지
     public Image TrashStart;
     public Image TrashComplete;
+    // 현재 퀘스트 진행 상황 텍스트
+    public GameObject panel_trashCount;
+    public TMP_Text text_currTrashCount;
+
+    ParticleSystem ps;
+
+    // 현재 스코어를 담을 변수
+    int currScore;
+    public int CurrScore
+    {
+        get { return currScore; }
+        set { AddScore(value); }
+    }
 
     public ChatManager chatManager;
 
     private void Start()
     {
+        pv = GetComponent<PhotonView>();
+
         // 선택된 챗봇 타입에 따른 URL 설정
         aiUrl = ChatInfo.GetApiUrl(chatType);
 
@@ -34,23 +53,30 @@ public class H_RewardManager : MonoBehaviour
             Debug.LogError("ChatManager를 찾을 수 없습니다!");
         }
 
-        
+        //UpdateTrashUI();
     }
 
     public void AddTrashCount()
     {
         trashCount++;
+        AddScore(trashCount);
 
         // 플레이어가 trash 오브젝트를 5개 이상 줍고
         if (trashCount >= clearThreshold)
         {
             chatManager.clear = true;
 
-            // ClearEvent();
-            //ChatManager clear = new ChatManager();
-            //chatManager.clear = true;
         }
     }
+
+    private void AddScore(int addValue)
+    {
+        // 현재 점수를 addValue 만큼 증가
+        currScore += 1;
+        // 현재 점수 UI를 갱신시킨다
+        text_currTrashCount.text = "현재 주운 쓰레기 : " + currScore;
+    }
+
     public void ClearEvent()
     {
         print("쓰줍 완료");
@@ -88,7 +114,6 @@ public class H_RewardManager : MonoBehaviour
             //trash_count = trashCount
         };
 
-
         var requestInfo = new HttpRequestInfo<Dictionary<string, string>, string>()
         {
             url = requestUrl,
@@ -120,6 +145,8 @@ public class H_RewardManager : MonoBehaviour
         if(TrashStart != null)
         {
             TrashStart.gameObject.SetActive(true);
+            // 쓰레기 카운트 하는 panel도 활성화
+            panel_trashCount.gameObject.SetActive(true);
             // 띄우고 3초 뒤에 숨기기
             StartCoroutine(HideOnImage(TrashStart, 3f));
         }
@@ -130,6 +157,8 @@ public class H_RewardManager : MonoBehaviour
         if(TrashComplete != null)
         {
             TrashComplete.gameObject.SetActive(true);
+            // 쓰레기 카운트 하는 panel도 비활성화
+            panel_trashCount.gameObject.SetActive(false);
             // 띄우고 3초 뒤에 숨기기 
             StartCoroutine(HideOnImage(TrashComplete, 3f));
         }
@@ -140,5 +169,21 @@ public class H_RewardManager : MonoBehaviour
         yield return new WaitForSeconds(time);
         image.gameObject.SetActive(false);
 
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        // isWriting -> isMine 이 나 일때 주겠다
+        if (stream.IsWriting)
+        {
+            stream.SendNext(trashCount);
+
+        }
+        // isReading -> isMine 이 내가 아닐 때 주겠다
+        else if (stream.IsReading)
+        {
+            trashCount = (int)stream.ReceiveNext();
+            //UpdateTrashUI();
+        }
     }
 }

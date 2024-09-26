@@ -1,12 +1,17 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerGetTrash : MonoBehaviourPun
 {
     H_RewardManager rewardManager;
+
+    // 쓰레기의 카운트를 관하는 텍스트
+    public TMP_Text currTrashCount;
+    public TMP_Text maxTrashCount;
 
     void Start()
     {
