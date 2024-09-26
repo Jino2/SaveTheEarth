@@ -59,6 +59,9 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
 
     void Start()
     {
+        // 마우스 잠그자.
+        Cursor.lockState = CursorLockMode.Locked;
+
         cc = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         pv = GetComponent<PhotonView>();
