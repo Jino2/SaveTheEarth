@@ -81,25 +81,27 @@ public class ChatActivator : MonoBehaviourPun
     // 마우스 움직임에 따른 카메라 회전 처리
     void HandleCameraRotation()
     {
-        // 마우스 이동 입력
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        EventSystem.current.SetSelectedGameObject(null);
+        //// 마우스 이동 입력
+        //float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        //float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        Vector3 currentRotation = cameraTransform.localEulerAngles;
-        currentRotation.x -= mouseY;  // 상하 회전
-        currentRotation.y += mouseX;  // 좌우 회전
+        //Vector3 currentRotation = cameraTransform.localEulerAngles;
+        //currentRotation.x -= mouseY;  // 상하 회전
+        //currentRotation.y += mouseX;  // 좌우 회전
 
-        // 상하 회전 범위를 제한하기 위한 방법 (optional)
-        currentRotation.x = Mathf.Clamp(currentRotation.x, -90f, 90f);
+        //// 상하 회전 범위를 제한하기 위한 방법 (optional)
+        //currentRotation.x = Mathf.Clamp(currentRotation.x, -90f, 90f);
 
-        cameraTransform.localEulerAngles = currentRotation;
+        //cameraTransform.localEulerAngles = currentRotation;
     }
 
     // 마우스 이동을 차단하는 함수 (입력값을 0으로)
     void BlockMouseInput()
     {
+        EventSystem.current.SetSelectedGameObject(gameObject);
         // 마우스 X와 Y축 입력을 차단
-        Input.ResetInputAxes();  // 모든 입력 축을 리셋 (마우스 입력 포함)
+        //Input.ResetInputAxes();  // 모든 입력 축을 리셋 (마우스 입력 포함)
     }
 
     // UI를 켤 때 카메라의 현재 상태를 저장하고 고정

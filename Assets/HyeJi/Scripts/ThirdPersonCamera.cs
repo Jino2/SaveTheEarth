@@ -3,6 +3,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
@@ -45,14 +46,19 @@ public class ThirdPersonCamera : MonoBehaviour
             return;
         }
 
-        mouseX += Input.GetAxis("Mouse X") * rotSpeed * Time.deltaTime;
-        mouseY -= Input.GetAxis("Mouse Y") * rotSpeed * Time.deltaTime;
-        // 카메라 상하 각도 제한
-        mouseY = Mathf.Clamp(mouseY, 0, 30);
+        if(EventSystem.current.currentSelectedGameObject == null)
+        {
+            mouseX += Input.GetAxis("Mouse X") * rotSpeed * Time.deltaTime;
+            mouseY -= Input.GetAxis("Mouse Y") * rotSpeed * Time.deltaTime;
+            // 카메라 상하 각도 제한
+            mouseY = Mathf.Clamp(mouseY, 0, 30);
 
 
-        virtualCamera.transform.position = player.position;
-        virtualCamera.transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+            virtualCamera.transform.position = player.position;
+            virtualCamera.transform.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+        }
+
+        
 
     }
 
