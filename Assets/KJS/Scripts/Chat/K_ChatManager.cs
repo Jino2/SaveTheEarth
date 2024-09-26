@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -91,13 +92,33 @@ public class ChatManager : MonoBehaviour
                 if(help && helpEventview == false)
                 {
                     helpEventview = true;
-                    h_RewardManager.GameStart();
+
+                    PlayerGetTrash[] players = FindObjectsByType<PlayerGetTrash>(FindObjectsSortMode.None);
+                    foreach(PlayerGetTrash player in players)
+                    {
+                        if(player.transform.GetComponent<PhotonView>().IsMine)
+                        {
+                            //h_RewardManager.GameStart();
+                            player.ShowUI();
+                        }
+                    }
+
+                    
                 }
 
                 if (clear && clearEventview == false)
                 {
                     clearEventview = true;
-                    h_RewardManager.ClearEvent();
+
+                    PlayerGetTrash[] players = FindObjectsByType<PlayerGetTrash>(FindObjectsSortMode.None);
+                    foreach (PlayerGetTrash player in players)
+                    {
+                        if (player.transform.GetComponent<PhotonView>().IsMine)
+                        {
+                            //h_RewardManager.GameStart();
+                            player.ClearUI();
+                        }
+                    }
                 }
 
             },

@@ -7,10 +7,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using static ChatInfo;
 
-public class H_RewardManager : MonoBehaviourPun, IPunObservable
+public class H_RewardManager : MonoBehaviour
 {
-    PhotonView pv;
-
     // 미션 완료 여부 체크
     private bool missionCompleted = false;
     public int trashCount = 0;
@@ -43,8 +41,6 @@ public class H_RewardManager : MonoBehaviourPun, IPunObservable
 
     private void Start()
     {
-        pv = GetComponent<PhotonView>();
-
         // 선택된 챗봇 타입에 따른 URL 설정
         aiUrl = ChatInfo.GetApiUrl(chatType);
 
@@ -69,6 +65,7 @@ public class H_RewardManager : MonoBehaviourPun, IPunObservable
         }
     }
 
+    [PunRPC]
     private void AddScore(int addValue)
     {
         // 현재 점수를 addValue 만큼 증가
@@ -77,6 +74,7 @@ public class H_RewardManager : MonoBehaviourPun, IPunObservable
         text_currTrashCount.text = "현재 주운 쓰레기 : " + currScore;
     }
 
+    [PunRPC]
     public void ClearEvent()
     {
         print("쓰줍 완료");
@@ -152,7 +150,7 @@ public class H_RewardManager : MonoBehaviourPun, IPunObservable
         }
     }
 
-    private void GameDone()
+    public void GameDone()
     {
         if(TrashComplete != null)
         {
@@ -171,19 +169,5 @@ public class H_RewardManager : MonoBehaviourPun, IPunObservable
 
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        // isWriting -> isMine 이 나 일때 주겠다
-        if (stream.IsWriting)
-        {
-            stream.SendNext(trashCount);
 
-        }
-        // isReading -> isMine 이 내가 아닐 때 주겠다
-        else if (stream.IsReading)
-        {
-            trashCount = (int)stream.ReceiveNext();
-            //UpdateTrashUI();
-        }
-    }
 }

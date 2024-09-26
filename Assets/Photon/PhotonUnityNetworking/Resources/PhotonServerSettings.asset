@@ -58,6 +58,10 @@ MonoBehaviour:
   - HideChatBallon
   - ClearEvent
   - SycnTrashCount
+  - AddScore
+  - RPC_ShowUI
+  - RPC_TrashCountUP
+  - RPC_ClearUI
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
