@@ -37,7 +37,6 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
 
         // 인풋 필드의 제출 이벤트에 SendMyMessage 함수를 바인딩한다.
         input_chat.onSubmit.AddListener(SendMyMessage);
-
         // 좌측 하단으로 콘텐츠 오브젝트의 피벗을 변경한다.
         scrollChatWindow.content.pivot = Vector2.zero;
         img_chatBackground = scrollChatWindow.transform.GetComponent<Image>();
@@ -47,6 +46,7 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
 
     void Update()
     {
+        
         // 탭 키를 누르면 인풋 필드를 선택하게 한다. 
         if(Input.GetKeyDown(KeyCode.Tab))
         {
@@ -55,15 +55,20 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
             
             input_chat.OnPointerClick(new PointerEventData(EventSystem.current));    
             Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;      
-        }  
+            Cursor.visible = true;
+        }
+        print(EventSystem.current.currentSelectedGameObject);
+        if(EventSystem.current.currentSelectedGameObject == null)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
         // 기존에 작성하던 채팅 창 내용 유지하기
-        currentInput = input_chat.text;   
+        currentInput = input_chat.text; 
     }
 
     void SendMyMessage(string msg)
     {
-        Cursor.lockState = CursorLockMode.Locked;
         if(input_chat.text.Length > 0)
         {
             // 이벤트에 보낼 내용

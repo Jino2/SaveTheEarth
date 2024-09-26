@@ -67,21 +67,12 @@ public class ChatActivator : MonoBehaviourPun
             DeactivateUI();
         }
 
-        // UI가 활성화된 상태가 아닐 때만 마우스 입력을 처리
-        if (!isUIActive && pv.IsMine && EventSystem.current.currentSelectedGameObject == null)
-        {
-            HandleCameraRotation();  // 카메라 회전 허용
-        }
-        else
-        {
-            BlockMouseInput();  // UI가 활성화되면 마우스 입력 차단
-        }
+
     }
 
     // 마우스 움직임에 따른 카메라 회전 처리
     void HandleCameraRotation()
     {
-        EventSystem.current.SetSelectedGameObject(null);
         //// 마우스 이동 입력
         //float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         //float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
@@ -110,9 +101,13 @@ public class ChatActivator : MonoBehaviourPun
         if (isUIActive)
         {
             DeactivateUI();  // UI가 이미 활성화되어 있으면 비활성화
+            EventSystem.current.SetSelectedGameObject(null);
+
         }
         else
         {
+            BlockMouseInput();  // UI가 활성화되면 마우스 입력 차단
+
             isUIActive = true;
 
             // NPCMovement와 NavMeshAgent 비활성화
