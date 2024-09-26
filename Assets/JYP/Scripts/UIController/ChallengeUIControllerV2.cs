@@ -4,6 +4,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 
 public class ChallengeUIControllerV2 : MonoBehaviour
 {
@@ -141,7 +142,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
     private void OpenChallengeUI()
     {
         challengeFloor.TurnOffLights();
-        
+        Cursor.lockState = CursorLockMode.None; 
         uiDocument.enabled = true;
         closeButton = uiDocument.rootVisualElement.Q<Button>("btn_CloseChallenge");
         challengeProcessContainer = uiDocument.rootVisualElement.Q<VisualElement>("ChallengeContainer");
@@ -181,6 +182,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
 
     void CloseChallengeUI()
     {
+        Cursor.lockState = CursorLockMode.Locked; 
         StopAllCoroutines();
         if (isChallengeSuccess)
         {

@@ -2,6 +2,7 @@ using System.Collections;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 
 public class ShopUIController : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class ShopUIController : MonoBehaviour
     public void ShowShopUI()
     {
         if (uiDocument.enabled) return;
+        Cursor.lockState = CursorLockMode.None;
         this.shoppingPlayerObject = interactiveObject.InteractedObject;
         shoppingPlayerObject.TryGetComponent<PlayerMove>(out var playerMove);
         if(playerMove != null)
@@ -74,6 +76,7 @@ public class ShopUIController : MonoBehaviour
 
     private void OnCloseButtonClicked()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         print("Close button clicked");
         closeButton.clicked -= OnCloseButtonClicked;
         StartCoroutine(DelayedHideShopUI());
