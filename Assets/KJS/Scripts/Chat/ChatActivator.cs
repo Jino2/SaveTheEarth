@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.EventSystems;
+using UnityEngine.AI;
 public class ChatActivator : MonoBehaviourPun
 {
     public float activationDistance = 5f;
@@ -14,15 +15,19 @@ public class ChatActivator : MonoBehaviourPun
     public Transform playerTransform;
     private TMP_InputField chatInputField;
 
+    public Mark markScript;  // Mark 스크립트를 참조하기 위한 변수 추가
+
     public Vector2 panelPosition = new Vector2(-500f, 0f);
     public Transform cameraTransform;  // 카메라 Transform 추가
     public float mouseSensitivity = 100f;  // 마우스 감도
+    public float rotationSpeed = 5f;  // Lerp를 위한 회전 속도
 
-    // 카메라 위치와 회전값을 저장할 변수
     private Vector3 cameraInitialPosition;
     private Quaternion cameraInitialRotation;
 
     private PhotonView pv;
+    private NPCMovement npcMovement;  // NPCMovement 스크립트 참조
+    private NavMeshAgent navMeshAgent;  // NavMeshAgent 참조
 
     void Start()
     {
@@ -30,6 +35,8 @@ public class ChatActivator : MonoBehaviourPun
         StartCoroutine(FindLocalPlayer());
         Cursor.lockState = CursorLockMode.None;  // 마우스 커서 항상 보이도록 설정
         Cursor.visible = true;  // 커서 항상 보임
+        npcMovement = GetComponent<NPCMovement>();  // NPCMovement 스크립트 가져오기
+        navMeshAgent = GetComponent<NavMeshAgent>();  // NavMeshAgent 가져오기
     }
 
     void Update()
@@ -67,7 +74,7 @@ public class ChatActivator : MonoBehaviourPun
         }
         else
         {
-            BlockMouseInput(); // UI가 활성화되면 마우스 입력 차단
+            BlockMouseInput();  // UI가 활성화되면 마우스 입력 차단
         }
     }
 
@@ -81,6 +88,9 @@ public class ChatActivator : MonoBehaviourPun
         Vector3 currentRotation = cameraTransform.localEulerAngles;
         currentRotation.x -= mouseY;  // 상하 회전
         currentRotation.y += mouseX;  // 좌우 회전
+
+        // 상하 회전 범위를 제한하기 위한 방법 (optional)
+        currentRotation.x = Mathf.Clamp(currentRotation.x, -90f, 90f);
 
         cameraTransform.localEulerAngles = currentRotation;
     }
@@ -103,9 +113,24 @@ public class ChatActivator : MonoBehaviourPun
         {
             isUIActive = true;
 
+            // NPCMovement와 NavMeshAgent 비활성화
+            if (npcMovement != null)
+            {
+                npcMovement.enabled = false;
+            }
+            if (navMeshAgent != null)
+            {
+                navMeshAgent.enabled = false;
+            }
+
             // UI가 활성화되기 직전의 카메라 위치와 회전을 저장
             cameraInitialPosition = cameraTransform.position;
             cameraInitialRotation = cameraTransform.rotation;
+
+            // 오브젝트의 Z축을 플레이어 방향으로 부드럽게 회전
+            Vector3 direction = (playerTransform.position - transform.position).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            StartCoroutine(SmoothRotation(targetRotation));
 
             if (uiInstance == null)
             {
@@ -128,7 +153,24 @@ public class ChatActivator : MonoBehaviourPun
                 uiInstance.SetActive(true);
                 chatInputField?.ActivateInputField();
             }
+
+            // Mark 스크립트의 ClearText() 메서드를 호출
+            if (markScript != null)
+            {
+                markScript.ClearText();
+            }
         }
+    }
+
+    // 부드럽게 회전하는 코루틴
+    IEnumerator SmoothRotation(Quaternion targetRotation)
+    {
+        while (Quaternion.Angle(transform.rotation, targetRotation) > 0.1f)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            yield return null;
+        }
+        transform.rotation = targetRotation;  // 최종적으로 목표 회전에 맞춤
     }
 
     void SetPanelPosition()
@@ -156,6 +198,16 @@ public class ChatActivator : MonoBehaviourPun
         // Esc로 UI 비활성화 시 마우스 입력을 다시 받도록 설정
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        // NPCMovement와 NavMeshAgent 활성화
+        if (npcMovement != null)
+        {
+            npcMovement.enabled = true;
+        }
+        if (navMeshAgent != null)
+        {
+            navMeshAgent.enabled = true;
+        }
 
         EventSystem.current.SetSelectedGameObject(null);
     }
