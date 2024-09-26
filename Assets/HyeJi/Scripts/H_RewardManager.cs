@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static ChatInfo;
 
 public class H_RewardManager : MonoBehaviour
@@ -17,10 +18,23 @@ public class H_RewardManager : MonoBehaviour
     // 챗봇 타입을 저장
     public ChatInfo.ChatType chatType;
 
+    // 퀘스트 관련 이미지
+    public Image TrashStart;
+    public Image TrashComplete;
+
+    public ChatManager chatManager;
+
     private void Start()
     {
         // 선택된 챗봇 타입에 따른 URL 설정
         aiUrl = ChatInfo.GetApiUrl(chatType);
+
+        if (chatManager == null)
+        {
+            Debug.LogError("ChatManager를 찾을 수 없습니다!");
+        }
+
+        
     }
 
     public void AddTrashCount()
@@ -30,10 +44,14 @@ public class H_RewardManager : MonoBehaviour
         // 플레이어가 trash 오브젝트를 5개 이상 줍고
         if (trashCount >= clearThreshold)
         {
-            ClearEvent();
+            chatManager.clear = true;
+
+            // ClearEvent();
+            //ChatManager clear = new ChatManager();
+            //chatManager.clear = true;
         }
     }
-    void ClearEvent()
+    public void ClearEvent()
     {
         print("쓰줍 완료");
 
@@ -49,6 +67,10 @@ public class H_RewardManager : MonoBehaviour
             {
                 UserCache.GetInstance().Point += rewardPoint;
                 Debug.Log($"보상 {rewardPoint} 포인트 적용 완료, 사용자 총 포인트: {updatedUserInfo.point}");
+                 
+                // 퀘스트 완료 이미지 활성화 함수
+                GameDone();
+
             });
         });
     }
@@ -91,5 +113,32 @@ public class H_RewardManager : MonoBehaviour
             }
         };
         HTTPManager.GetInstance().PostWWWForm(requestInfo);
+    }
+
+    public void GameStart()
+    {
+        if(TrashStart != null)
+        {
+            TrashStart.gameObject.SetActive(true);
+            // 띄우고 3초 뒤에 숨기기
+            StartCoroutine(HideOnImage(TrashStart, 3f));
+        }
+    }
+
+    private void GameDone()
+    {
+        if(TrashComplete != null)
+        {
+            TrashComplete.gameObject.SetActive(true);
+            // 띄우고 3초 뒤에 숨기기 
+            StartCoroutine(HideOnImage(TrashComplete, 3f));
+        }
+    }
+
+    IEnumerator HideOnImage(Image image, float time)
+    {
+        yield return new WaitForSeconds(time);
+        image.gameObject.SetActive(false);
+
     }
 }
