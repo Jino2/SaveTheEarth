@@ -186,6 +186,7 @@ public class ChallengeUIControllerV2 : MonoBehaviour
         {
             challengeNPCChatController.GreetPlayer();
         }
+        
         var anim = currentPlayerCharacter.GetComponentInChildren<Animator>();
         anim.SetTrigger("Idle");
         challengeFloor.TurnOffLights();
