@@ -405,7 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c137efc76fc56f84fa3abdb07f7c9573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  droppedScale: 0.1
+  droppedScale: 0.05
   dropPower: 2
   floatingHeight: 0.2
   floatingRange: 0.5
