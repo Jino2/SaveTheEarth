@@ -63,6 +63,7 @@ public class ShopUIController : MonoBehaviour
         {
             point = info.point;
             pointLabel.text = point.ToString();
+            UserCache.GetInstance().Point = info.point;
         });
         StartCoroutine(AnimateUI());
     }
