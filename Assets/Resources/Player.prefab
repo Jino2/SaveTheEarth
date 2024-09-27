@@ -232,7 +232,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC548\uB155\uD558\uC138\uC694 \u3147\uC785\uB2C8\uB2E4 \n\uBC18\uAC11\uC2B5\uB2C8\uB2E4"
+  m_text: "\uC548\uB155\uD558\uC138\uC694 \u3147\uC785\uB2C8\uB2E4 \n\uBC18\uAC11\uC2B5\uB2C8\uB2E4\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8c7e89ad1f077d14c8b77fe65b15b7cf, type: 2}
   m_sharedMaterial: {fileID: 3074293785448181969, guid: 8c7e89ad1f077d14c8b77fe65b15b7cf,
@@ -354,7 +354,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 465.3, y: 43}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 3523.3364, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &3860851876669295841
 CanvasRenderer:
@@ -432,7 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
+  m_HorizontalFit: 0
   m_VerticalFit: 2
 --- !u!1 &6626589043545424680
 GameObject:
