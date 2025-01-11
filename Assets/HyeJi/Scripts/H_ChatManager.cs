@@ -45,8 +45,7 @@ public class H_ChatManager : MonoBehaviourPun, IOnEventCallback
     }
 
     void Update()
-    {
-        
+    {      
         // 탭 키를 누르면 인풋 필드를 선택하게 한다. 
         if(Input.GetKeyDown(KeyCode.Tab))
         {

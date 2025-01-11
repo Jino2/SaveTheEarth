@@ -5,9 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/JYP/Scenes/JYP_Test.unity
-    guid: acfaa85888119564292ce1ceeee1ccc5
   - enabled: 1
     path: Assets/Scenes/LoginScene.unity
     guid: bd95e324fbf4d8a45a0233a26b40d68a
@@ -17,7 +14,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 62753037159bb8242a66084687237b54
-  - enabled: 0
-    path: Assets/Scenes/MainScene 2.unity
-    guid: 6d8403adadfc2264e91d18920142cdaf
   m_configObjects: {}

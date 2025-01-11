@@ -6,14 +6,6 @@ public class PlayerGetItem : MonoBehaviour, ICollectible
 {
     private GameObject inventory;
 
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Item"))
@@ -33,10 +25,6 @@ public class PlayerGetItem : MonoBehaviour, ICollectible
                 // 비활성화된 오브젝트를 Inventory_KJS의 리스트에 추가
                 Inventory_KJS.instance.AddGetObject(other.gameObject);
             }
-
-            //Destroy(other.gameObject);
-
-            print("먹었다!");
         }
     }
 

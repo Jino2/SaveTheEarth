@@ -35,7 +35,6 @@ public class PlayerGetTrash : MonoBehaviourPun
             }
             // 쓰줍 카운트 업데이트
             photonView.RPC("RPC_TrashCountUP", RpcTarget.AllBuffered);
-            print("먹음");
         }
         
     }

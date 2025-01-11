@@ -9,11 +9,6 @@ public class CameraFollow : MonoBehaviour
     public bool hasDelay = false;
     public float delaySpeed = 3;
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         if (lookAtTarget != null)

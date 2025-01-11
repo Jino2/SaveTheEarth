@@ -77,8 +77,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
         // 네임 서버에 접속 실패 원인을 알려주기
         Debug.LogError("Disconnected from Server - " + cause);
-        // 로그인 버튼 UI 활성화
-        //LobbyUIManager.lobbyUI.btn_Login.interactable = true;
     }
 
     // 마스터 서버에 연결
@@ -111,9 +109,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
         // 성공적으로 방이 개설되었음을 알려준다.
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
-
-        // 로그 확인하기
-        //LobbyUIManager.lobbyUI.PrintLog("방 만들어짐!");
     }
 
     public override void OnJoinedRoom()
@@ -123,11 +118,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         // 성공적으로 방에 입장되었음을 알려준다.
         print(MethodInfo.GetCurrentMethod().Name + " is Call!");
 
-        // 로그 확인하기
-        //LobbyUIManager.lobbyUI.PrintLog("방 들어가짐!");
-
         // 방에 입장한 경우 모두 1번(Lobby) 씬으로 이동한다.
-        //PhotonNetwork.LoadLevel(1);
         StartCoroutine(SwitchScene(1));
     }
 
@@ -136,6 +127,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(1.0f);
         PhotonNetwork.LoadLevel(num);
     }
+    
     // 방 입장에 실패한 이유 출력
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -183,16 +175,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public void JoinRoom()
     {
         // Join 관련 패널을 활성화
-        ChangePanel(1, 2);
-        //// 룸 네임 받아오기
-        //roomName = LobbyUIManager.lobbyUI.roomSetting[0].text;
-
-        //// 방 이름의 길이는 0 이상이어야 한다
-        //if(roomName.Length > 0)
-        //{
-        //    // 작성한 방 이름으로 참가한다.
-        //    PhotonNetwork.JoinRoom(roomName);
-        //}     
+        ChangePanel(1, 2);  
     }
 
     void ChangePanel(int offIndex, int onIndex )

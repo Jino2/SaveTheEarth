@@ -37,7 +37,6 @@ public class H_OpenchatBox : MonoBehaviourPun
 
         // 코루틴 활성화
         StartCoroutine(HideChatBallon(3f));
-
     }
 
     // 말풍선 숨기기

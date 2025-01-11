@@ -9,8 +9,6 @@ using static ChatInfo;
 
 public class H_RewardManager : MonoBehaviour
 {
-    // 미션 완료 여부 체크
-    private bool missionCompleted = false;
     public int trashCount = 0;
     public int clearThreshold = 5;
     public int rewardPoint = 10;
@@ -26,8 +24,6 @@ public class H_RewardManager : MonoBehaviour
     // 현재 퀘스트 진행 상황 텍스트
     public GameObject panel_trashCount;
     public TMP_Text text_currTrashCount;
-
-    ParticleSystem ps;
 
     // 현재 스코어를 담을 변수
     int currScore;
@@ -48,8 +44,6 @@ public class H_RewardManager : MonoBehaviour
         {
             Debug.LogError("ChatManager를 찾을 수 없습니다!");
         }
-
-        //UpdateTrashUI();
     }
 
     public void AddTrashCount()
@@ -168,6 +162,4 @@ public class H_RewardManager : MonoBehaviour
         image.gameObject.SetActive(false);
 
     }
-
-
 }

@@ -12,18 +12,8 @@ public class CameraController : MonoBehaviour
     public float distance = 5;
     public float rotSpeed = 300;
 
-    Vector3 minLocalPos;
-    Vector3 maxLocalPos;
-
-    // 회전 값
-    float rotY;
-    float rotX;
-    public bool useRotY;
-    public bool useRotX;
-
 
     // 내가 다시 씀
-
     public Transform player;
 
     public float xSpeed = 120f;
@@ -43,8 +33,6 @@ public class CameraController : MonoBehaviour
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
-
-
     }
 
     void Update()
@@ -62,21 +50,6 @@ public class CameraController : MonoBehaviour
             transform.rotation = rotation;
             transform.position = position;
         }
-
-        //// 마우스 움직임 값 받아오기
-        //float mx = Input.GetAxis("Mouse X");
-        //float my = Input.GetAxis("Mouse Y");
-
-        //// 회전 각도를 누적
-        //if (useRotY) rotY += mx * rotSpeed * Time.deltaTime;
-        //if (useRotX) rotX += my * rotSpeed * Time.deltaTime;
-
-        //rotX = Mathf.Clamp(rotX, -30, 30);
-        //rotY = Mathf.Clamp(rotY, -180, 180);
-
-        //transform.rotation = Quaternion.Euler(rotX, rotY, 0);
-        //transform.localEulerAngles = new Vector3(-rotX, rotY, 0);
-
     }
 
     float ClampAngle(float angle, float min, float max)

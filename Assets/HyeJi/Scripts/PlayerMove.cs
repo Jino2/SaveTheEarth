@@ -26,23 +26,9 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
     Animator anim;
 
     public bool controllable = true; 
-    // 회전 속도 조절할 변수
-    public float rotationSpeed = 10f;
-    
-    // 점프에 관한 변수 
-    public float jumpPower = 2f;
-    private float gravity = -9.81f;
-    private float yVelocity;
-    public int jumpMaxCnt = 2;
-    int jumpCurrCnt;
 
     // 움직이는 방향
     public Vector3 moveDir;
-
-    // 뛰는 속도 주기
-    float speedValue = 1;
-    private bool isRunning = false;
-    private float runningTime = 0;
     
     // 도착 위치
     Vector3 receivePos;
@@ -74,11 +60,6 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
             if(mainCamera != null)
             {
                 cameraTransform = mainCamera.transform;
-                print("메인 카메라 있다");
-            }
-            else
-            {
-                print("메인 카메라 내놔");
             }
 
             // 버츄얼 카메라 찾기
@@ -87,19 +68,13 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
             {
                 virtualCamera.SetPlayer(this.transform);
             }
-            else
-            {
-                print("버츄얼 카메라 내놔");
-            }
         }
     }
 
     void Update()
-    {
-        
+    {       
         float v = Input.GetAxis("Vertical");
         float h = Input.GetAxis("Horizontal");
-        //Vector3 dir = new Vector3(h, 0, v);
 
         // 카메라의 방향을 기준으로 이동 방향을 설정
         if (pv.IsMine && EventSystem.current.currentSelectedGameObject == null)
@@ -134,7 +109,6 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
                 jumpCurrCnt = 0;
             }
             // 스페이스바 누르면 점프
-            // 스페이스바를 누르면 점프한다
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (jumpCurrCnt < jumpMaxCnt)
@@ -153,9 +127,7 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
 
             // 애니메이션 연동처리
             if (anim != null)
-            {
-                //anim.SetFloat("speed", moveDir.magnitude * speedValue);
-                
+            {           
                 // 애니메이션 블렌드 처리
                 float animationSpeed = moveDir.magnitude * speedValue;
                 anim.SetFloat("speed", Mathf.Lerp(anim.GetFloat("speed"), animationSpeed, Time.deltaTime * 5f));
@@ -201,8 +173,7 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
         else
         {
             voiceIcon.gameObject.SetActive(isTalking);
-        }
-        
+        }       
     }
    
 
@@ -227,7 +198,6 @@ public class PlayerMove : PlayerStateBase, IPunObservable, ICollectible
             isRunning = false;
             runningTime = 0f;
         }
-
         anim.SetFloat("speed", moveDir.magnitude * speedValue);
     }
 

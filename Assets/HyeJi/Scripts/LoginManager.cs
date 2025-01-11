@@ -11,21 +11,14 @@ public class LoginManager : MonoBehaviour
 
     // UI 재입력
     public GameObject panel_Login;
-    public GameObject panel_Logout;
-    public GameObject panel_Logouting;
     public GameObject panel_Main;
-    public GameObject panel_MainLogout;
     public GameObject panel_Remain;
     public GameObject panel_ServiceExit;
 
     public Button btn_Check;
     // 이미지 게임오브젝트?
     public Image img_Logining;
-
-    //// InputField를 연결할 변수
-    //public InputField inputField_ID;
-    //// 출력할 Text를 연결할 변수
-    //public Text outputText_ID;        
+      
 
     private void Awake()
     {
@@ -45,21 +38,10 @@ public class LoginManager : MonoBehaviour
         btn_Check.onClick.AddListener(Login_Check);
     }
 
-    void Update()
-    {
-        
-    }
-
     // 씬 딜레이 주기
     public void SceneDelay(float time)
     {
         Invoke("SceneChange", time);
-    }
-
-    // 씬 이동 하는 함수 
-    public void SceneChange()
-    {        
-        SceneManager.LoadScene("HyeJi");
     }
 
     // 패널을 활성화/비활성화하는 함수
@@ -82,10 +64,7 @@ public class LoginManager : MonoBehaviour
     {
         // 로그인중 ... 어쩌고 이미지 뜨게하고
         img_Logining.enabled = true;
-
-        // 입력된 텍스트를 출력 텍스트에 설정
-        //outputText_ID.text = inputField_ID.text;
-
+        
         // 로그인 판넬 꺼버리고
         ShowPanel(panel_Login, false);
         // 로그인 성공 Remain 판넬 키자
@@ -102,12 +81,5 @@ public class LoginManager : MonoBehaviour
         ShowPanel(panel_Main, false);
         // 서비스 나가기 진짜함? 이 판넬 뜸
         ShowPanel(panel_ServiceExit, true);
-    }
-
-
-    // 나가기 버튼 활성화 (임시 false)
-    public void Exit_btn()
-    {
-        // 누르면 나가
     }
 }
